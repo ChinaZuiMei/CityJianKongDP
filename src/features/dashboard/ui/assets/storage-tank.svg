@@ -1,0 +1,45 @@
+<svg width="476" height="766" viewBox="0 0 476 766" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="tankBody" x1="0" y1="0" x2="476" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8EA4B2"/>
+      <stop offset="0.52" stop-color="#B6CCDA"/>
+      <stop offset="0.78" stop-color="#D5E6F0"/>
+      <stop offset="1" stop-color="#A7C0CF"/>
+    </linearGradient>
+    <linearGradient id="tankBand" x1="0" y1="0" x2="476" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#6E8DA1"/>
+      <stop offset="0.55" stop-color="#D4E5EF"/>
+      <stop offset="1" stop-color="#85A8BA"/>
+    </linearGradient>
+    <linearGradient id="tankLeg" x1="0" y1="0" x2="42" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#B0C9D8"/>
+      <stop offset="0.48" stop-color="#EEF7FD"/>
+      <stop offset="1" stop-color="#B5CDDB"/>
+    </linearGradient>
+    <linearGradient id="tankHighlight" x1="305" y1="0" x2="372" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F6FBFF" stop-opacity="0"/>
+      <stop offset="0.52" stop-color="#F6FBFF" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#F6FBFF" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="tankShadow" x="0" y="0" width="476" height="766" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#09101B" flood-opacity="0.28"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#tankShadow)">
+    <path d="M0 28C0 12.536 12.536 0 28 0H448C463.464 0 476 12.536 476 28V469H0V28Z" fill="url(#tankBody)"/>
+    <rect x="0" y="55" width="476" height="12" fill="#6B8799" fill-opacity="0.38"/>
+    <rect x="0" y="67" width="476" height="6" fill="#DDECF5" fill-opacity="0.65"/>
+    <rect x="0" y="424" width="476" height="10" fill="#6B8799" fill-opacity="0.48"/>
+    <rect x="0" y="450" width="476" height="9" fill="#DDECF5" fill-opacity="0.44"/>
+    <path d="M0 469H476L256 603H220L0 469Z" fill="url(#tankBody)"/>
+    <rect x="194" y="578" width="88" height="11" rx="4" fill="url(#tankBand)"/>
+    <rect x="224" y="589" width="28" height="143" fill="url(#tankLeg)"/>
+    <rect x="0" y="429" width="46" height="40" rx="3" fill="url(#tankBand)"/>
+    <rect x="430" y="429" width="46" height="40" rx="3" fill="url(#tankBand)"/>
+    <rect x="14" y="469" width="28" height="297" fill="url(#tankLeg)"/>
+    <rect x="434" y="469" width="28" height="297" fill="url(#tankLeg)"/>
+    <rect x="42" y="730" width="392" height="28" rx="4" fill="url(#tankLeg)"/>
+    <rect x="326" y="0" width="52" height="758" fill="url(#tankHighlight)"/>
+  </g>
+</svg>

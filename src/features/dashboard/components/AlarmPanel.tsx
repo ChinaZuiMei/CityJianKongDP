@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { AlertTriangle, Activity, Database, Settings } from 'lucide-react';
-import { Alarm, AlarmData } from '../types';
-import { ALARM_MAPPING, formatAlarmDisplayName } from '../utils/alarmUtils';
+import { ALARM_MAPPING, formatAlarmDisplayName } from '../lib/alarmUtils';
+import { Alarm, AlarmData } from '../model/types';
 
 export const AlarmPanel = ({ alarms, alarmData, isOpen, onClose }: { alarms: Alarm[], alarmData: AlarmData, isOpen: boolean, onClose: () => void }) => {
   const activeAlarmCount = Object.values(alarmData).filter(v => v === true).length;

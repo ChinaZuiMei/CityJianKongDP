@@ -1,0 +1,33 @@
+<svg width="499" height="768" viewBox="0 0 499 768" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="coneBody" x1="0" y1="0" x2="499" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8DA4B2"/>
+      <stop offset="0.5" stop-color="#C2D6E1"/>
+      <stop offset="0.78" stop-color="#DDEBF4"/>
+      <stop offset="1" stop-color="#A8C1D0"/>
+    </linearGradient>
+    <linearGradient id="coneBand" x1="0" y1="0" x2="499" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#79A6BE"/>
+      <stop offset="0.52" stop-color="#B8E3F9"/>
+      <stop offset="1" stop-color="#87B2C8"/>
+    </linearGradient>
+    <linearGradient id="coneNozzle" x1="0" y1="0" x2="74" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#B8B9BF"/>
+      <stop offset="0.5" stop-color="#FAF7F7"/>
+      <stop offset="1" stop-color="#A6A7AC"/>
+    </linearGradient>
+    <linearGradient id="coneHighlight" x1="330" y1="0" x2="398" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0"/>
+      <stop offset="0.48" stop-color="#FFFFFF" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <path d="M0 0H499V464H0V0Z" fill="url(#coneBody)"/>
+  <rect y="28" width="499" height="28" fill="#84B3CC" fill-opacity="0.55"/>
+  <rect y="437" width="499" height="28" fill="#84B3CC" fill-opacity="0.55"/>
+  <path d="M0 464H499L293 723H206L0 464Z" fill="url(#coneBody)"/>
+  <rect x="212" y="723" width="74" height="45" rx="8" fill="url(#coneNozzle)"/>
+  <rect x="203" y="755" width="92" height="13" rx="6.5" fill="url(#coneNozzle)"/>
+  <rect x="343" width="54" height="723" fill="url(#coneHighlight)"/>
+</svg>

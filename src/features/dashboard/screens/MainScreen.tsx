@@ -1,7 +1,7 @@
 import React from 'react';
-import { hasAlarm, getAlarmNames } from '../utils/alarmUtils';
-import { ScadaData, AlarmData } from '../types';
-import { Tank, FlowBox } from './SharedComponents';
+import { getAlarmNames, hasAlarm } from '../lib/alarmUtils';
+import { AlarmData, ScadaData } from '../model/types';
+import { FlowBox, Tank } from '../ui/SharedComponents';
 
 export const MainScreen = ({ data, alarmData }: { data: ScadaData, alarmData: AlarmData }) => {
   const tank1Alarms = getAlarmNames('tank1', alarmData);
@@ -30,6 +30,7 @@ export const MainScreen = ({ data, alarmData }: { data: ScadaData, alarmData: Al
               label="1# 反应槽" 
               level={1.5} 
               temp={data.tank1_temp} 
+              variant="reactor"
               hasAlarm={hasAlarm('tank1', alarmData)} 
             />
           </div>
@@ -40,6 +41,7 @@ export const MainScreen = ({ data, alarmData }: { data: ScadaData, alarmData: Al
               label="2# 反应槽" 
               level={1.4} 
               temp={data.tank2_temp} 
+              variant="reactor"
               hasAlarm={hasAlarm('tank2', alarmData)} 
             />
             {tank2Alarms.length > 0 && (

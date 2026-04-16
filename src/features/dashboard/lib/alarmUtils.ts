@@ -1,4 +1,4 @@
-import { AlarmData } from '../types';
+import { AlarmData } from '../model/types';
 
 // 报警映射配置：将报警名称映射到具体的界面和部件
 export const ALARM_MAPPING: Record<string, { screen: string; component: string; label: string }> = {

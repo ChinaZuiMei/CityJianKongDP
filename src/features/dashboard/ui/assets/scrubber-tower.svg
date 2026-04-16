@@ -1,0 +1,49 @@
+<svg width="348" height="768" viewBox="0 0 348 768" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="scrubberBody" x1="0" y1="0" x2="348" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8E9FAA"/>
+      <stop offset="0.52" stop-color="#BFD2DE"/>
+      <stop offset="0.82" stop-color="#D8E7F1"/>
+      <stop offset="1" stop-color="#A9C0CF"/>
+    </linearGradient>
+    <linearGradient id="scrubberFrame" x1="0" y1="0" x2="40" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#617B8A"/>
+      <stop offset="0.5" stop-color="#B5D4E5"/>
+      <stop offset="1" stop-color="#5D7887"/>
+    </linearGradient>
+    <linearGradient id="scrubberPanel" x1="0" y1="0" x2="212" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#5D7987"/>
+      <stop offset="0.5" stop-color="#A5D8F1"/>
+      <stop offset="1" stop-color="#4F6C79"/>
+    </linearGradient>
+    <linearGradient id="scrubberHighlight" x1="230" y1="0" x2="292" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0"/>
+      <stop offset="0.48" stop-color="#FFFFFF" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <path d="M16 48C16 21.49 81.96 0 174 0C266.04 0 332 21.49 332 48V734H16V48Z" fill="url(#scrubberBody)"/>
+  <rect x="0" y="732" width="348" height="36" rx="6" fill="#8FB0C1"/>
+  <rect x="0" y="66" width="348" height="4" fill="#5A89A7"/>
+  <rect x="0" y="88" width="348" height="4" fill="#5A89A7"/>
+  <rect x="47" y="166" width="254" height="432" fill="#6B8594"/>
+  <rect x="82" y="204" width="184" height="38" fill="#90AEBD"/>
+  <rect x="82" y="466" width="184" height="38" fill="#90AEBD"/>
+  <rect x="72" y="204" width="21" height="392" fill="url(#scrubberFrame)"/>
+  <rect x="104" y="204" width="21" height="392" fill="url(#scrubberFrame)"/>
+  <rect x="136" y="204" width="21" height="392" fill="url(#scrubberFrame)"/>
+  <rect x="168" y="204" width="21" height="392" fill="url(#scrubberFrame)"/>
+  <rect x="200" y="204" width="21" height="392" fill="url(#scrubberFrame)"/>
+  <rect x="232" y="204" width="21" height="392" fill="url(#scrubberFrame)"/>
+  <rect x="264" y="204" width="21" height="392" fill="url(#scrubberFrame)"/>
+  <rect x="225" y="0" width="62" height="768" fill="url(#scrubberHighlight)"/>
+  <g opacity="0.95">
+    <path d="M174 110L191 118L199 135L191 152L174 160L157 152L149 135L157 118L174 110Z" fill="#51ACE2"/>
+    <circle cx="174" cy="135" r="18" fill="#55C4F4"/>
+  </g>
+  <g opacity="0.95">
+    <path d="M174 620L191 628L199 645L191 662L174 670L157 662L149 645L157 628L174 620Z" fill="#51ACE2"/>
+    <circle cx="174" cy="645" r="18" fill="#55C4F4"/>
+  </g>
+</svg>

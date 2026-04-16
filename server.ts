@@ -109,7 +109,8 @@ async function startServer() {
   app.get("/api/sensor/history", async (req, res) => {
     try {
       const { startTime, endTime, limit } = req.query;
-      const data = await getHistoryData(startTime, endTime, limit);
+      const parsedLimit = typeof limit === 'string' ? Number(limit) : 100;
+      const data = await getHistoryData(startTime, endTime, Number.isFinite(parsedLimit) ? parsedLimit : 100);
       res.json({ success: true, data });
     } catch (error) {
       res.status(500).json({ success: false, error: error.message });

@@ -1,9 +1,10 @@
 import React from 'react';
-import { Activity, Truck } from 'lucide-react';
-import { AlarmData, ScadaData } from '../types';
-import { ExternalEquipmentScreen } from './ExternalEquipmentScreen';
-import { MainScreen } from './MainScreen';
-import { TankAreaScreen } from './TankAreaScreen';
+import { Activity } from 'lucide-react';
+import type { AlarmData, ScadaData } from '../model/types';
+import { ExternalEquipmentScreen } from '../screens/ExternalEquipmentScreen';
+import { MainScreen } from '../screens/MainScreen';
+import { TankAreaScreen } from '../screens/TankAreaScreen';
+import loadingTruckImage from '../../../images/油罐车.png';
 
 const Section = ({
   title,
@@ -22,9 +23,19 @@ const Section = ({
   </section>
 );
 
-export const ScrollDashboard = ({ data, alarmData }: { data: ScadaData; alarmData: AlarmData }) => {
+export const ScrollDashboard = ({
+  data,
+  alarmData,
+  sidePanelPreviewEnabled = false,
+}: {
+  data: ScadaData;
+  alarmData: AlarmData;
+  sidePanelPreviewEnabled?: boolean;
+}) => {
+  const outerClassName = sidePanelPreviewEnabled ? 'pl-[420px] pr-[420px] py-4' : 'px-4 py-4';
+
   return (
-    <div className="h-full overflow-y-auto overflow-x-hidden px-4 py-4">
+    <div className={`h-full overflow-y-auto overflow-x-hidden ${outerClassName}`}>
       <div className="mx-auto grid h-full max-w-[1800px] grid-cols-1 gap-4 pb-4 2xl:grid-cols-2">
         <div className="grid gap-4" style={{ gridTemplateRows: 'minmax(360px, 46vh) minmax(420px, 54vh)' }}>
           <Section title="主画面" minHeight="h-full">
@@ -50,7 +61,7 @@ export const ScrollDashboard = ({ data, alarmData }: { data: ScadaData; alarmDat
                           : 'animate-truck-standby text-sky-300'
                       }
                     >
-                      <Truck size={88} strokeWidth={1.75} aria-hidden />
+                      <img src={loadingTruckImage} alt="装车罐车" className="h-auto w-[12.5rem] object-contain" draggable="false" />
                     </div>
                     <div
                       className={

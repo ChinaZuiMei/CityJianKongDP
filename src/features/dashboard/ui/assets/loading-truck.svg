@@ -1,0 +1,97 @@
+<svg width="696" height="258" viewBox="0 0 696 258" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="truckTank" x1="16" y1="4" x2="548" y2="4" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#D6D6D8"/>
+      <stop offset="0.5" stop-color="#F8F8F9"/>
+      <stop offset="1" stop-color="#9D9D9F"/>
+    </linearGradient>
+    <linearGradient id="truckCab" x1="548" y1="14" x2="692" y2="14" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFC33F"/>
+      <stop offset="0.5" stop-color="#FFE29A"/>
+      <stop offset="1" stop-color="#F3AD10"/>
+    </linearGradient>
+    <linearGradient id="truckWheel" x1="0" y1="0" x2="64" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#121212"/>
+      <stop offset="0.5" stop-color="#686868"/>
+      <stop offset="1" stop-color="#111111"/>
+    </linearGradient>
+    <linearGradient id="truckWheelHub" x1="0" y1="0" x2="42" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#B6B6B7"/>
+      <stop offset="0.5" stop-color="#F1F1F1"/>
+      <stop offset="1" stop-color="#8B8B8C"/>
+    </linearGradient>
+  </defs>
+
+  <path d="M16 14H544V172H16C7.16344 172 0 126.333 0 93C0 59.6675 7.16344 14 16 14Z" fill="url(#truckTank)"/>
+  <rect x="30" y="74" width="506" height="11" fill="#FFCB57"/>
+  <rect x="30" y="97" width="506" height="11" fill="#FFCB57"/>
+  <rect x="28" y="0" width="516" height="8" fill="#9A9A9B"/>
+  <rect x="28" y="172" width="540" height="8" fill="#BCBEC2"/>
+
+  <path d="M548 16L603 6H673L692 20L696 28V204C696 212.837 688.837 220 680 220H548V16Z" fill="url(#truckCab)"/>
+  <path d="M603 26H654L680 82V98H603V26Z" fill="#DCE7E2"/>
+  <path d="M654 26L680 82V98H640L603 26H654Z" fill="#F4FAF8" fill-opacity="0.68"/>
+  <rect x="548" y="113" width="144" height="4" fill="#D39B22"/>
+  <rect x="670" y="76" width="9" height="36" rx="2" fill="#131313"/>
+  <rect x="675" y="99" width="3" height="33" fill="#131313"/>
+  <circle cx="676.5" cy="106.5" r="8.5" fill="#D0D3D6"/>
+  <circle cx="676.5" cy="106.5" r="6" stroke="#2C2C2C" stroke-width="2"/>
+
+  <rect x="28" y="180" width="541" height="12" fill="#9FA1A5"/>
+
+  <g transform="translate(56 180)">
+    <circle cx="32" cy="32" r="32" fill="url(#truckWheel)"/>
+    <circle cx="32" cy="32" r="21" fill="url(#truckWheelHub)"/>
+    <circle cx="32" cy="32" r="5" fill="#5A5A5B"/>
+    <circle cx="19" cy="19" r="4" fill="#555"/>
+    <circle cx="45" cy="19" r="4" fill="#555"/>
+    <circle cx="19" cy="45" r="4" fill="#555"/>
+    <circle cx="45" cy="45" r="4" fill="#555"/>
+    <circle cx="13" cy="32" r="4" fill="#555"/>
+    <circle cx="51" cy="32" r="4" fill="#555"/>
+  </g>
+  <g transform="translate(138 180)">
+    <circle cx="32" cy="32" r="32" fill="url(#truckWheel)"/>
+    <circle cx="32" cy="32" r="21" fill="url(#truckWheelHub)"/>
+    <circle cx="32" cy="32" r="5" fill="#5A5A5B"/>
+    <circle cx="19" cy="19" r="4" fill="#555"/>
+    <circle cx="45" cy="19" r="4" fill="#555"/>
+    <circle cx="19" cy="45" r="4" fill="#555"/>
+    <circle cx="45" cy="45" r="4" fill="#555"/>
+    <circle cx="13" cy="32" r="4" fill="#555"/>
+    <circle cx="51" cy="32" r="4" fill="#555"/>
+  </g>
+  <g transform="translate(382 180)">
+    <circle cx="32" cy="32" r="32" fill="url(#truckWheel)"/>
+    <circle cx="32" cy="32" r="21" fill="url(#truckWheelHub)"/>
+    <circle cx="32" cy="32" r="5" fill="#5A5A5B"/>
+    <circle cx="19" cy="19" r="4" fill="#555"/>
+    <circle cx="45" cy="19" r="4" fill="#555"/>
+    <circle cx="19" cy="45" r="4" fill="#555"/>
+    <circle cx="45" cy="45" r="4" fill="#555"/>
+    <circle cx="13" cy="32" r="4" fill="#555"/>
+    <circle cx="51" cy="32" r="4" fill="#555"/>
+  </g>
+  <g transform="translate(463 180)">
+    <circle cx="32" cy="32" r="32" fill="url(#truckWheel)"/>
+    <circle cx="32" cy="32" r="21" fill="url(#truckWheelHub)"/>
+    <circle cx="32" cy="32" r="5" fill="#5A5A5B"/>
+    <circle cx="19" cy="19" r="4" fill="#555"/>
+    <circle cx="45" cy="19" r="4" fill="#555"/>
+    <circle cx="19" cy="45" r="4" fill="#555"/>
+    <circle cx="45" cy="45" r="4" fill="#555"/>
+    <circle cx="13" cy="32" r="4" fill="#555"/>
+    <circle cx="51" cy="32" r="4" fill="#555"/>
+  </g>
+  <g transform="translate(578 180)">
+    <circle cx="32" cy="32" r="32" fill="url(#truckWheel)"/>
+    <circle cx="32" cy="32" r="21" fill="url(#truckWheelHub)"/>
+    <circle cx="32" cy="32" r="5" fill="#5A5A5B"/>
+    <circle cx="19" cy="19" r="4" fill="#555"/>
+    <circle cx="45" cy="19" r="4" fill="#555"/>
+    <circle cx="19" cy="45" r="4" fill="#555"/>
+    <circle cx="45" cy="45" r="4" fill="#555"/>
+    <circle cx="13" cy="32" r="4" fill="#555"/>
+    <circle cx="51" cy="32" r="4" fill="#555"/>
+  </g>
+</svg>

@@ -1,0 +1,99 @@
+<svg width="628" height="744" viewBox="0 0 628 744" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="reactorBody" x1="100" y1="134" x2="539" y2="134" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#94988F"/>
+      <stop offset="0.5" stop-color="#C9CEC3"/>
+      <stop offset="0.8" stop-color="#E2E7E0"/>
+      <stop offset="1" stop-color="#B6BCB1"/>
+    </linearGradient>
+    <linearGradient id="reactorPipe" x1="0" y1="0" x2="27" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#BDC2C7"/>
+      <stop offset="0.5" stop-color="#F7FAFD"/>
+      <stop offset="1" stop-color="#B3B8BE"/>
+    </linearGradient>
+    <linearGradient id="reactorMachine" x1="0" y1="0" x2="119" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#9D7A46"/>
+      <stop offset="0.5" stop-color="#C1A577"/>
+      <stop offset="1" stop-color="#8D6A38"/>
+    </linearGradient>
+    <linearGradient id="reactorPanel" x1="0" y1="0" x2="192" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#D6CAC3"/>
+      <stop offset="0.45" stop-color="#E0D6D1"/>
+      <stop offset="1" stop-color="#C8BBB4"/>
+    </linearGradient>
+    <linearGradient id="reactorBase" x1="0" y1="0" x2="628" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#262121"/>
+      <stop offset="0.52" stop-color="#5A5454"/>
+      <stop offset="1" stop-color="#252122"/>
+    </linearGradient>
+    <linearGradient id="reactorHighlight" x1="386" y1="134" x2="450" y2="134" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#FFFFFF" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="33" y="706" width="22" height="20" fill="#B1B5BA"/>
+  <rect x="121" y="706" width="22" height="20" fill="#B1B5BA"/>
+  <rect x="0" y="703" width="628" height="41" fill="url(#reactorBase)"/>
+
+  <rect x="32" y="80" width="18" height="626" fill="url(#reactorPipe)"/>
+  <rect x="120" y="80" width="18" height="626" fill="url(#reactorPipe)"/>
+  <rect x="32" y="49" width="18" height="31" fill="url(#reactorPipe)"/>
+  <rect x="120" y="49" width="18" height="31" fill="url(#reactorPipe)"/>
+  <rect x="44" y="175" width="78" height="12" fill="url(#reactorPipe)"/>
+  <rect x="44" y="266" width="78" height="12" fill="url(#reactorPipe)"/>
+  <rect x="44" y="357" width="78" height="12" fill="url(#reactorPipe)"/>
+  <rect x="44" y="448" width="78" height="12" fill="url(#reactorPipe)"/>
+  <rect x="44" y="539" width="78" height="12" fill="url(#reactorPipe)"/>
+  <rect x="44" y="630" width="78" height="12" fill="url(#reactorPipe)"/>
+
+  <rect x="100" y="134" width="439" height="578" rx="8" fill="url(#reactorBody)"/>
+  <rect x="100" y="134" width="439" height="14" fill="#AAB79C"/>
+  <rect x="100" y="687" width="439" height="15" fill="#AAB79C"/>
+  <rect x="386" y="134" width="64" height="568" fill="url(#reactorHighlight)"/>
+
+  <rect x="149" y="276" width="192" height="117" fill="url(#reactorPanel)"/>
+  <rect x="149" y="393" width="192" height="319" fill="url(#reactorPanel)"/>
+  <rect x="158" y="286" width="174" height="99" fill="#D9CEC8"/>
+  <rect x="177" y="325" width="70" height="37" rx="6" fill="#1E1A1B"/>
+  <rect x="177" y="325" width="70" height="37" rx="6" stroke="#0A0909" stroke-width="4"/>
+  <rect x="262" y="321" width="53" height="25" fill="#D4CAC5" stroke="#F3F0EE"/>
+  <rect x="262" y="357" width="53" height="25" fill="#D4CAC5" stroke="#F3F0EE"/>
+  <circle cx="279" cy="333" r="9" fill="#AB2C34"/>
+  <circle cx="279" cy="333" r="7" fill="#8F1D25"/>
+  <circle cx="279" cy="333" r="5" fill="#D66B71"/>
+  <circle cx="279" cy="369" r="9" fill="#64C9D6"/>
+  <circle cx="279" cy="369" r="7" fill="#3FB0BC"/>
+  <circle cx="279" cy="369" r="5" fill="#A2E5EC"/>
+
+  <rect x="255" y="2" width="129" height="132" rx="18" fill="url(#reactorMachine)"/>
+  <path d="M269 22H370C378.837 22 386 29.1634 386 38V45H269V22Z" fill="#D6BE8F"/>
+  <path d="M278 22L289 134H350L363 22H278Z" fill="#C0A373"/>
+  <rect x="282" y="33" width="15" height="33" rx="7.5" fill="#FFFDF8" stroke="#BAA078" stroke-width="4"/>
+  <rect x="315" y="33" width="15" height="33" rx="7.5" fill="#FFFDF8" stroke="#BAA078" stroke-width="4"/>
+  <rect x="348" y="33" width="15" height="33" rx="7.5" fill="#FFFDF8" stroke="#BAA078" stroke-width="4"/>
+
+  <ellipse cx="327" cy="130" rx="74" ry="10" fill="#C9CED4"/>
+  <rect x="382" y="46" width="77" height="91" fill="#BFC4BE"/>
+  <ellipse cx="459" cy="91.5" rx="10" ry="45.5" fill="#9BA19D"/>
+  <rect x="387" y="59" width="66" height="66" fill="#D2D6D1"/>
+  <path d="M392 64H449" stroke="#ABB1AD" stroke-width="2"/>
+  <path d="M392 71H449" stroke="#ABB1AD" stroke-width="2"/>
+  <path d="M392 78H449" stroke="#ABB1AD" stroke-width="2"/>
+  <path d="M392 85H449" stroke="#ABB1AD" stroke-width="2"/>
+  <path d="M392 92H449" stroke="#ABB1AD" stroke-width="2"/>
+  <path d="M392 99H449" stroke="#ABB1AD" stroke-width="2"/>
+
+  <rect x="501" y="47" width="14" height="87" fill="#D7D9DE"/>
+  <path d="M494 134H522V157C522 167.493 515.493 176 505 176H511.5C501.007 176 494 167.493 494 157V134Z" fill="#C6CAD0"/>
+  <rect x="499" y="176" width="18" height="36" fill="#D0D3D8"/>
+
+  <rect x="147" y="134" width="67" height="17" fill="#BFC3C8"/>
+  <rect x="284" y="124" width="65" height="18" fill="#BFC3C8"/>
+  <rect x="435" y="136" width="67" height="16" fill="#BFC3C8"/>
+
+  <rect x="570" y="420" width="40" height="188" fill="url(#reactorPipe)"/>
+  <rect x="539" y="420" width="72" height="63" rx="18" fill="#C9CEC5"/>
+  <rect x="539" y="546" width="72" height="63" rx="18" fill="#C9CEC5"/>
+</svg>

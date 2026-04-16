@@ -1,18 +1,18 @@
 import React from 'react';
 import { AlertTriangle } from 'lucide-react';
-import { cn } from '../utils/cn';
-import { hasAlarm, getAlarmNames } from '../utils/alarmUtils';
-import { ScadaData, AlarmData } from '../types';
-import { Tank } from './SharedComponents';
+import { cn } from '../../../utils/cn';
+import { getAlarmNames, hasAlarm } from '../lib/alarmUtils';
+import { AlarmData, ScadaData } from '../model/types';
+import { Tank } from '../ui/SharedComponents';
 
 export const TankAreaScreen = ({ data, alarmData }: { data: ScadaData, alarmData: AlarmData }) => (
   <div className="flex h-full w-full flex-col gap-2 px-4 py-3">
     <div className="flex justify-center gap-10 items-end">
       {[
-        { id: 'hcl_tank1', label: '1# 盐酸罐', level: data.hcl_tank1_level, max: 3.6 },
-        { id: 'hcl_tank2', label: '2# 盐酸罐', level: data.hcl_tank2_level, max: 3.6 },
-        { id: 'hcl_tank3', label: '3# 盐酸罐', level: data.hcl_tank3_level, max: 3.6 },
-        { id: 'h2so4_tank1', label: '1# 硫酸罐', level: data.h2so4_tank1_level, max: 6.2 }
+        { id: 'hcl_tank1', label: '1# 盐酸罐', level: data.hcl_tank1_level, max: 3.6, variant: 'storage' as const },
+        { id: 'hcl_tank2', label: '2# 盐酸罐', level: data.hcl_tank2_level, max: 3.6, variant: 'storage' as const },
+        { id: 'hcl_tank3', label: '3# 盐酸罐', level: data.hcl_tank3_level, max: 3.6, variant: 'storage' as const },
+        { id: 'h2so4_tank1', label: '1# 硫酸罐', level: data.h2so4_tank1_level, max: 6.2, variant: 'cone' as const }
       ].map(tank => {
         const alarmNames = getAlarmNames(tank.id, alarmData);
         const outsideAlarms = alarmNames.slice(0, 1);
@@ -41,6 +41,7 @@ export const TankAreaScreen = ({ data, alarmData }: { data: ScadaData, alarmData
               label={tank.label} 
               level={tank.level} 
               max={tank.max} 
+              variant={tank.variant}
               hasAlarm={hasAlarm(tank.id, alarmData)} 
             />
           </div>

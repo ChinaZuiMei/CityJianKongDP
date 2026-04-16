@@ -1,0 +1,61 @@
+<svg width="320" height="320" viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="fanTop" x1="74" y1="42" x2="246" y2="42" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#5A74A3"/>
+      <stop offset="0.52" stop-color="#7D9FE0"/>
+      <stop offset="1" stop-color="#3C5382"/>
+    </linearGradient>
+    <linearGradient id="fanBodyLeft" x1="65" y1="84" x2="160" y2="247" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#6383BC"/>
+      <stop offset="1" stop-color="#40526F"/>
+    </linearGradient>
+    <linearGradient id="fanBodyRight" x1="160" y1="84" x2="255" y2="247" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#50658E"/>
+      <stop offset="1" stop-color="#29364C"/>
+    </linearGradient>
+    <linearGradient id="fanGlass" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#5DE7FF" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#112A3D" stop-opacity="0.2"/>
+    </linearGradient>
+    <linearGradient id="fanGrid" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#1B2436"/>
+      <stop offset="0.5" stop-color="#30435D"/>
+      <stop offset="1" stop-color="#131C2D"/>
+    </linearGradient>
+  </defs>
+
+  <path d="M160 22L246 72L160 121L74 72L160 22Z" fill="url(#fanTop)"/>
+  <path d="M74 72L160 121V299L74 247V72Z" fill="url(#fanBodyLeft)"/>
+  <path d="M246 72L160 121V299L246 247V72Z" fill="url(#fanBodyRight)"/>
+  <path d="M83 83L160 127V239L83 197V83Z" fill="url(#fanGlass)" fill-opacity="0.88"/>
+  <path d="M160 127L237 83V197L160 239V127Z" fill="url(#fanGlass)" fill-opacity="0.92"/>
+
+  <g stroke="url(#fanGrid)" stroke-width="3">
+    <path d="M96 90V206"/>
+    <path d="M116 102V217"/>
+    <path d="M136 114V228"/>
+    <path d="M156 126V239"/>
+    <path d="M224 90V206"/>
+    <path d="M204 102V217"/>
+    <path d="M184 114V228"/>
+    <path d="M164 126V239"/>
+    <path d="M83 112H160"/>
+    <path d="M83 139H160"/>
+    <path d="M83 166H160"/>
+    <path d="M83 193H160"/>
+    <path d="M160 112H237"/>
+    <path d="M160 139H237"/>
+    <path d="M160 166H237"/>
+    <path d="M160 193H237"/>
+  </g>
+
+  <circle cx="160" cy="47" r="36" fill="#1F3657" fill-opacity="0.45"/>
+  <circle cx="160" cy="47" r="34" stroke="#93B8F4" stroke-width="2"/>
+  <circle cx="160" cy="47" r="27" stroke="#648AD9" stroke-width="2"/>
+  <circle cx="160" cy="47" r="20" fill="#66AFFF"/>
+  <circle cx="160" cy="47" r="5" fill="#9ED3FF"/>
+  <path d="M160 25C168 25 176 29 181 35C176 36 170 39 166 44C164 39 161 31 160 25Z" fill="#3B9CFF"/>
+  <path d="M180 48C180 56 176 64 170 69C168 64 164 58 159 55C165 53 174 50 180 48Z" fill="#3B9CFF"/>
+  <path d="M158 69C150 69 142 65 137 59C142 58 148 55 152 50C154 55 157 63 158 69Z" fill="#3B9CFF"/>
+  <path d="M137 45C137 37 141 29 147 24C149 29 153 35 158 38C152 40 143 43 137 45Z" fill="#3B9CFF"/>
+</svg>

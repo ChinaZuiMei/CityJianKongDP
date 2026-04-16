@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Clock, AlertTriangle } from 'lucide-react';
-import { cn } from '../utils/cn';
+import { cn } from '../../../utils/cn';
 
 export const Header = ({
+  currentTime,
   connected,
   alarmCount,
   onAlarmClick,
@@ -12,23 +13,17 @@ export const Header = ({
 }: {
   connected: boolean,
   alarmCount: number,
+  currentTime: Date,
   onAlarmClick: () => void,
   workshops: string[],
   selectedWorkshop: string,
   onWorkshopChange: (workshop: string) => void,
 }) => {
-  const [time, setTime] = useState(new Date());
-  
-  useEffect(() => {
-    const timer = setInterval(() => setTime(new Date()), 1000);
-    return () => clearInterval(timer);
-  }, []);
-
   return (
     <div className="panel-frame z-50 flex items-center justify-between border-b bg-transparent px-6 py-2 text-sm font-mono text-slate-100">
       <div className="flex items-center gap-2">
         <Clock size={16} className="text-sky-300" />
-        {time.toLocaleDateString()} {time.toLocaleTimeString()}
+        {currentTime.toLocaleDateString()} {currentTime.toLocaleTimeString()}
       </div>
       <div className="flex items-center gap-4">
         <span className={cn("flex items-center gap-1.5", connected ? "text-emerald-300" : "text-amber-300")}>

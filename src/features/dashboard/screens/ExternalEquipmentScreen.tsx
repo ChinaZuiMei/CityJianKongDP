@@ -1,8 +1,10 @@
 import React from 'react';
 import { Factory, Activity, Settings, LayoutDashboard } from 'lucide-react';
-import { cn } from '../utils/cn';
-import { hasAlarm, getAlarmNames } from '../utils/alarmUtils';
-import { ScadaData, AlarmData } from '../types';
+import { cn } from '../../../utils/cn';
+import { getAlarmNames, hasAlarm } from '../lib/alarmUtils';
+import { AlarmData, ScadaData } from '../model/types';
+import fanDrumImage from '../../../images/风机_滚筒.png';
+import scrubberTowerImage from '../../../images/洗涤塔.png';
 
 const equipmentValueClass = "rounded-md border px-3 py-1 text-sm font-black";
 const bottomAlarmBadgeClass = "absolute -bottom-9 left-1/2 z-20 w-max max-w-[170px] -translate-x-1/2 rounded border border-red-500 bg-transparent px-2.5 py-1 text-center text-xs font-bold text-red-100";
@@ -90,7 +92,7 @@ export const ExternalEquipmentScreen = ({ data, alarmData }: { data: ScadaData, 
             <div className={externalEquipmentAreaStyles.oldPlantGrid}>
               {/* 风机 */}
               <div className={cn("relative flex flex-col items-center gap-2 rounded-lg p-2 transition-all", hasAlarm('old_fan', alarmData) && "border-2 border-red-500 bg-transparent animate-pulse-border")}>
-                <img src="/src/images/风机.png" alt="风机" className={externalEquipmentAreaStyles.fanIcon} referrerPolicy="no-referrer" />
+                <img src={fanDrumImage} alt="风机" className={externalEquipmentAreaStyles.fanIcon} />
                 <div className={cn("text-xs font-bold", hasAlarm('old_fan', alarmData) ? "text-red-200 animate-pulse" : "panel-title-glow")}>风机</div>
                 <div className={cn(equipmentValueClass, hasAlarm('old_fan', alarmData) ? "border-red-500 bg-transparent text-red-100 animate-pulse" : "panel-frame data-glow bg-transparent")}>
                   {data.old_fan_v.toFixed(1)} A
@@ -102,7 +104,7 @@ export const ExternalEquipmentScreen = ({ data, alarmData }: { data: ScadaData, 
 
               {/* 洗涤塔1 + 循环泵1 */}
               <div className="relative flex flex-col items-center gap-1">
-                <img src="/src/images/洗涤塔.png" alt="洗涤塔" className={externalEquipmentAreaStyles.towerIcon} referrerPolicy="no-referrer" />
+                <img src={scrubberTowerImage} alt="洗涤塔" className={externalEquipmentAreaStyles.towerIcon} />
                 <div className="panel-title-glow text-xs font-bold">洗涤塔1</div>
                 <div className="flex flex-col items-center gap-1 mt-1">
                   <Settings className={cn(hasAlarm('old_pump1', alarmData) ? "text-red-600 animate-spin-slow" : "text-sky-600", data.old_pump1_v > 0 && !hasAlarm('old_pump1', alarmData) && "animate-spin-slow")} size={20} />
@@ -118,7 +120,7 @@ export const ExternalEquipmentScreen = ({ data, alarmData }: { data: ScadaData, 
 
               {/* 洗涤塔2 + 循环泵2 */}
               <div className="relative flex flex-col items-center gap-1">
-                <img src="/src/images/洗涤塔.png" alt="洗涤塔" className={externalEquipmentAreaStyles.towerIcon} referrerPolicy="no-referrer" />
+                <img src={scrubberTowerImage} alt="洗涤塔" className={externalEquipmentAreaStyles.towerIcon} />
                 <div className="panel-title-glow text-xs font-bold">洗涤塔2</div>
                 <div className="flex flex-col items-center gap-1 mt-1">
                   <Settings className={cn(hasAlarm('old_pump2', alarmData) ? "text-red-600 animate-spin-slow" : "text-sky-600", data.old_pump2_v > 0 && !hasAlarm('old_pump2', alarmData) && "animate-spin-slow")} size={20} />
@@ -134,7 +136,7 @@ export const ExternalEquipmentScreen = ({ data, alarmData }: { data: ScadaData, 
 
               {/* 洗涤塔3 + 循环泵3 */}
               <div className="relative flex flex-col items-center gap-1">
-                <img src="/src/images/洗涤塔.png" alt="洗涤塔" className={externalEquipmentAreaStyles.towerIcon} referrerPolicy="no-referrer" />
+                <img src={scrubberTowerImage} alt="洗涤塔" className={externalEquipmentAreaStyles.towerIcon} />
                 <div className="panel-title-glow text-xs font-bold">洗涤塔3</div>
                 <div className="flex flex-col items-center gap-1 mt-1">
                   <Settings className={cn(hasAlarm('old_pump3', alarmData) ? "text-red-600 animate-spin-slow" : "text-sky-600", data.old_pump3_v > 0 && !hasAlarm('old_pump3', alarmData) && "animate-spin-slow")} size={20} />
@@ -209,7 +211,7 @@ export const ExternalEquipmentScreen = ({ data, alarmData }: { data: ScadaData, 
             <div className={externalEquipmentAreaStyles.drumGrid}>
               {/* 风机 */}
               <div className={cn("relative flex flex-col items-center gap-2 rounded-lg p-2 transition-all", hasAlarm('drum_fan', alarmData) && "border-2 border-red-500 bg-transparent animate-pulse-border")}>
-                <img src="/src/images/风机.png" alt="风机" className={externalEquipmentAreaStyles.fanIcon} referrerPolicy="no-referrer" />
+                <img src={fanDrumImage} alt="风机" className={externalEquipmentAreaStyles.fanIcon} />
                 <div className={cn("text-xs font-bold", hasAlarm('drum_fan', alarmData) ? "text-red-200 animate-pulse" : "panel-title-glow-cyan")}>风机</div>
                 <div className={cn(equipmentValueClass, hasAlarm('drum_fan', alarmData) ? "border-red-500 bg-transparent text-red-100 animate-pulse" : "panel-frame-cyan data-glow-cyan bg-transparent")}>
                   {data.drum_fan_v.toFixed(1)} A
@@ -221,7 +223,7 @@ export const ExternalEquipmentScreen = ({ data, alarmData }: { data: ScadaData, 
 
               {/* 洗涤塔1 + 循环泵1 */}
               <div className="relative flex flex-col items-center gap-1">
-                <img src="/src/images/洗涤塔.png" alt="洗涤塔" className={externalEquipmentAreaStyles.towerIcon} referrerPolicy="no-referrer" />
+                <img src={scrubberTowerImage} alt="洗涤塔" className={externalEquipmentAreaStyles.towerIcon} />
                 <div className="panel-title-glow-cyan text-xs font-bold">洗涤塔1</div>
                 <div className="flex flex-col items-center gap-1 mt-1">
                   <Settings className={cn(hasAlarm('drum_pump1', alarmData) ? "text-red-600 animate-spin-slow" : "text-cyan-600", data.drum_pump1_v > 0 && !hasAlarm('drum_pump1', alarmData) && "animate-spin-slow")} size={20} />
@@ -237,7 +239,7 @@ export const ExternalEquipmentScreen = ({ data, alarmData }: { data: ScadaData, 
 
               {/* 洗涤塔2 + 循环泵2 */}
               <div className="relative flex flex-col items-center gap-1">
-                <img src="/src/images/洗涤塔.png" alt="洗涤塔" className={externalEquipmentAreaStyles.towerIcon} referrerPolicy="no-referrer" />
+                <img src={scrubberTowerImage} alt="洗涤塔" className={externalEquipmentAreaStyles.towerIcon} />
                 <div className="panel-title-glow-cyan text-xs font-bold">洗涤塔2</div>
                 <div className="flex flex-col items-center gap-1 mt-1">
                   <Settings className={cn(hasAlarm('drum_pump2', alarmData) ? "text-red-600 animate-spin-slow" : "text-cyan-600", data.drum_pump2_v > 0 && !hasAlarm('drum_pump2', alarmData) && "animate-spin-slow")} size={20} />
