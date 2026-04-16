@@ -1,0 +1,5 @@
+{
+  "name": "工业组态监控系统",
+  "description": "基于React开发的工业SCADA组态监控界面，包含主画面、罐区监控、装车管理及外部设备监控。",
+  "requestFramePermissions": []
+}
