@@ -14,8 +14,8 @@ const Section = ({
   children: React.ReactNode;
   minHeight: string;
 }) => (
-  <section className="relative rounded-[28px] border border-sky-200/55 bg-transparent shadow-none">
-    <h2 className="pointer-events-none absolute left-5 top-3 z-10 text-lg font-black tracking-[0.18em] text-sky-800 uppercase">
+  <section className="panel-frame relative rounded-[28px] border bg-transparent shadow-none">
+    <h2 className="panel-title-glow pointer-events-none absolute left-5 top-3 z-10 text-lg font-black tracking-[0.18em] uppercase">
       {title}
     </h2>
     <div className={minHeight}>{children}</div>
@@ -37,8 +37,8 @@ export const ScrollDashboard = ({ data, alarmData }: { data: ScadaData; alarmDat
 
           <Section title="装车" minHeight="h-full">
             <div className="flex h-full min-h-0 flex-col px-5 pb-4 pt-11">
-              <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-3 border-b border-sky-200/70">
-                <div className="text-base font-black tracking-[0.14em] text-sky-800 uppercase sm:text-lg">
+              <div className="panel-frame flex min-h-0 flex-1 flex-col items-center justify-center gap-3 border-b">
+                <div className="panel-title-glow text-base font-black tracking-[0.14em] uppercase sm:text-lg">
                   聚铝装车状态
                 </div>
                 <div className="flex items-end justify-center gap-5">
@@ -47,10 +47,10 @@ export const ScrollDashboard = ({ data, alarmData }: { data: ScadaData; alarmDat
                       className={
                         data.loading_instant > 0
                           ? 'animate-truck-loading text-emerald-600'
-                          : 'animate-truck-standby text-sky-500'
+                          : 'animate-truck-standby text-sky-300'
                       }
                     >
-                      <Truck size={88} strokeWidth={1.75} className="drop-shadow-md" aria-hidden />
+                      <Truck size={88} strokeWidth={1.75} aria-hidden />
                     </div>
                     <div
                       className={
@@ -61,7 +61,7 @@ export const ScrollDashboard = ({ data, alarmData }: { data: ScadaData; alarmDat
                   </div>
                   <div
                     className={
-                      data.loading_instant > 0 ? 'pb-1 text-2xl font-black text-emerald-800' : 'pb-1 text-2xl font-black text-slate-700'
+                      data.loading_instant > 0 ? 'data-glow-emerald pb-1 text-2xl font-black' : 'data-glow pb-1 text-2xl font-black'
                     }
                   >
                     {data.loading_instant > 0 ? '装载中' : '待机中'}
@@ -70,20 +70,20 @@ export const ScrollDashboard = ({ data, alarmData }: { data: ScadaData; alarmDat
               </div>
 
               <div className="flex min-h-0 flex-1 flex-col justify-center gap-4 px-1 pt-4">
-                <div className="flex items-center justify-between border-b border-sky-200 pb-2 text-sm font-black text-sky-800">
+                <div className="panel-frame panel-title-glow flex items-center justify-between border-b pb-2 text-sm font-black">
                   <span>聚铝装车</span>
                   <Activity size={14} className="text-sky-500" />
                 </div>
                 <div className="flex items-center justify-between gap-4">
-                  <span className="text-slate-700 text-sm font-medium">瞬时流量:</span>
-                  <div className="min-w-[120px] rounded border border-sky-200 bg-sky-50 px-3 py-2 text-right font-mono text-base font-bold text-sky-900 shadow-inner">
-                    {data.loading_instant.toFixed(1)} <span className="text-xs text-slate-600">m³/h</span>
+                  <span className="text-sm font-medium text-slate-200">瞬时流量:</span>
+                  <div className="panel-frame data-glow min-w-[120px] rounded border bg-transparent px-3 py-2 text-right font-mono text-base font-bold">
+                    {data.loading_instant.toFixed(1)} <span className="text-xs text-slate-300">m³/h</span>
                   </div>
                 </div>
                 <div className="flex items-center justify-between gap-4">
-                  <span className="text-slate-700 text-sm font-medium">累计流量:</span>
-                  <div className="min-w-[120px] rounded border border-emerald-200 bg-emerald-50 px-3 py-2 text-right font-mono text-base font-bold text-emerald-900 shadow-inner">
-                    {data.loading_total.toFixed(1)} <span className="text-xs text-slate-600">m³</span>
+                  <span className="text-sm font-medium text-slate-200">累计流量:</span>
+                  <div className="data-glow-emerald min-w-[120px] rounded border border-emerald-200/45 bg-transparent px-3 py-2 text-right font-mono text-base font-bold">
+                    {data.loading_total.toFixed(1)} <span className="text-xs text-slate-300">m³</span>
                   </div>
                 </div>
               </div>

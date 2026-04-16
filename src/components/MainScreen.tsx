@@ -20,7 +20,7 @@ export const MainScreen = ({ data, alarmData }: { data: ScadaData, alarmData: Al
             {tank1Alarms.length > 0 && (
               <div className="flex flex-col gap-1.5 w-max max-w-[180px]">
                 {tank1Alarms.map((name, idx) => (
-                  <div key={idx} className="border border-red-500 bg-red-100 text-red-900 text-sm px-3 py-1.5 rounded shadow-md animate-pulse font-bold whitespace-nowrap">
+                  <div key={idx} className="rounded border border-red-500 bg-transparent px-3 py-1.5 text-sm font-bold text-red-100 whitespace-nowrap animate-pulse">
                     {name}
                   </div>
                 ))}
@@ -45,7 +45,7 @@ export const MainScreen = ({ data, alarmData }: { data: ScadaData, alarmData: Al
             {tank2Alarms.length > 0 && (
               <div className="flex flex-col gap-1.5 w-max max-w-[180px]">
                 {tank2Alarms.map((name, idx) => (
-                  <div key={idx} className="border border-red-500 bg-red-100 text-red-900 text-sm px-3 py-1.5 rounded shadow-md animate-pulse font-bold whitespace-nowrap">
+                  <div key={idx} className="rounded border border-red-500 bg-transparent px-3 py-1.5 text-sm font-bold text-red-100 whitespace-nowrap animate-pulse">
                     {name}
                   </div>
                 ))}
@@ -66,7 +66,7 @@ export const MainScreen = ({ data, alarmData }: { data: ScadaData, alarmData: Al
             {acidFlowAlarms.length > 0 && (
               <div className="flex flex-col gap-1.5 w-max max-w-[180px]">
                 {acidFlowAlarms.map((name, idx) => (
-                  <div key={idx} className="border border-red-500 bg-red-100 text-red-900 text-sm px-3 py-1.5 rounded shadow-md animate-pulse font-bold whitespace-nowrap">
+                  <div key={idx} className="rounded border border-red-500 bg-transparent px-3 py-1.5 text-sm font-bold text-red-100 whitespace-nowrap animate-pulse">
                     {name}
                   </div>
                 ))}

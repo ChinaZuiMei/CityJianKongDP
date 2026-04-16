@@ -35,6 +35,39 @@ body {
   background: transparent;
 }
 
+.panel-frame {
+  border-color: rgba(125, 211, 252, 0.28);
+}
+
+.panel-frame-cyan {
+  border-color: rgba(103, 232, 249, 0.28);
+}
+
+.panel-title-glow {
+  color: #d6f4ff;
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.28);
+}
+
+.panel-title-glow-cyan {
+  color: #d5fbff;
+  text-shadow: 0 0 10px rgba(34, 211, 238, 0.28);
+}
+
+.data-glow {
+  color: #e6f7ff;
+  text-shadow: 0 0 12px rgba(56, 189, 248, 0.22);
+}
+
+.data-glow-cyan {
+  color: #ddfbff;
+  text-shadow: 0 0 12px rgba(34, 211, 238, 0.22);
+}
+
+.data-glow-emerald {
+  color: #e8fff6;
+  text-shadow: 0 0 12px rgba(16, 185, 129, 0.2);
+}
+
 /* Light scrollbars */
 ::-webkit-scrollbar {
   width: 8px;
