@@ -76,7 +76,6 @@ export default function App() {
           subtitle="LOADING VISUALIZATION PANEL"
           mode="loading"
           embedded
-          style={{ marginTop: 'auto' }}
         />
       </div>
       <div className="tank-data-column tank-data-column--right">
