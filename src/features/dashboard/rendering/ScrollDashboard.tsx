@@ -1,24 +1,24 @@
 import React, { useRef, useState } from 'react';
-import { Activity } from 'lucide-react';
 import type { AlarmData, ScadaData } from '../model/types';
 import { ExternalEquipmentScreen } from '../screens/ExternalEquipmentScreen';
 import { MainScreen } from '../screens/MainScreen';
 import { TankAreaScreen } from '../screens/TankAreaScreen';
-import loadingTruckImage from '../../../images/油罐车.png';
 
 const Section = ({
   title,
   children,
   minHeight,
 }: {
-  title: string;
+  title?: string;
   children: React.ReactNode;
   minHeight: string;
 }) => (
   <section className="relative rounded-[28px] bg-transparent shadow-none">
-    <h2 className="panel-title-glow pointer-events-none absolute left-3 top-2 z-10 text-lg font-black tracking-[0.18em] uppercase">
-      {title}
-    </h2>
+    {title ? (
+      <h2 className="panel-title-glow pointer-events-none absolute left-3 top-2 z-10 text-lg font-black tracking-[0.18em] uppercase">
+        {title}
+      </h2>
+    ) : null}
     <div className={minHeight}>{children}</div>
   </section>
 );
@@ -73,7 +73,7 @@ export const ScrollDashboard = ({
   return (
     <div className={`h-full overflow-y-auto overflow-x-hidden ${outerClassName}`}>
       <div
-        className={`dashboard-workspace panel-frame relative mx-auto h-[calc(100vh-118px)] max-w-[1800px] overflow-visible rounded-[32px] border ${dragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+        className={`dashboard-workspace relative mx-auto h-[calc(100vh-118px)] max-w-[1800px] overflow-visible rounded-[32px] ${dragging ? 'cursor-grabbing' : 'cursor-grab'}`}
         onWheel={handleWheel}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
@@ -99,63 +99,6 @@ export const ScrollDashboard = ({
                 </div>
               </Section>
 
-              <Section title="装车" minHeight="h-full">
-                <div className="flex h-full min-h-0 flex-col px-3 pb-2 pt-8">
-                  <div className="panel-frame flex min-h-0 flex-1 flex-col items-center justify-center gap-2 border-b">
-                    <div className="panel-title-glow text-sm font-black tracking-[0.12em] uppercase sm:text-base">
-                      聚铝装车状态
-                    </div>
-                    <div className="flex items-end justify-center gap-4">
-                      <div className="flex flex-col items-center gap-1">
-                        <div
-                          className={
-                            data.loading_instant > 0
-                              ? 'animate-truck-loading text-emerald-600'
-                              : 'animate-truck-standby text-sky-300'
-                          }
-                        >
-                          <img src={loadingTruckImage} alt="装车罐车" className="h-auto w-[10.5rem] object-contain" draggable="false" />
-                        </div>
-                        <div
-                          className={
-                            data.loading_instant > 0 ? 'truck-road truck-road--fast' : 'truck-road truck-road--slow'
-                          }
-                          aria-hidden
-                        />
-                      </div>
-                      <div
-                        className={
-                          data.loading_instant > 0 ? 'data-glow-emerald pb-1 text-xl font-black' : 'data-glow pb-1 text-xl font-black'
-                        }
-                      >
-                        {data.loading_instant > 0 ? '装载中' : '待机中'}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex min-h-0 flex-1 flex-col justify-center gap-3 px-1 pt-3">
-                    <div className="panel-frame panel-title-glow flex items-center justify-between border-b pb-2 text-xs font-black">
-                      <span>聚铝装车</span>
-                      <Activity size={12} className="text-sky-500" />
-                    </div>
-                    <div className="flex items-center justify-between gap-4">
-                      <span className="text-xs font-medium text-slate-200">瞬时流量:</span>
-                      <div className="panel-frame data-glow min-w-[110px] rounded border bg-transparent px-3 py-1.5 text-right font-mono text-sm font-bold">
-                        {data.loading_instant.toFixed(1)} <span className="text-[10px] text-slate-300">m³/h</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between gap-4">
-                      <span className="text-xs font-medium text-slate-200">累计流量:</span>
-                      <div className="data-glow-emerald min-w-[110px] rounded border border-emerald-200/45 bg-transparent px-3 py-1.5 text-right font-mono text-sm font-bold">
-                        {data.loading_total.toFixed(1)} <span className="text-[10px] text-slate-300">m³</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </Section>
-            </div>
-
-            <div className="grid gap-4" style={{ gridTemplateRows: 'minmax(320px, 40vh) minmax(340px, 42vh)' }}>
               <Section title="罐区" minHeight="h-full">
                 <div className="flex h-full items-center justify-center overflow-hidden pt-8">
                   <div className="dashboard-module-scale dashboard-module-scale--tank">
@@ -163,13 +106,19 @@ export const ScrollDashboard = ({
                   </div>
                 </div>
               </Section>
+            </div>
 
+            <div className="grid gap-4" style={{ gridTemplateRows: 'minmax(320px, 40vh) minmax(340px, 42vh)' }}>
               <Section title="外部设备" minHeight="h-full">
                 <div className="h-full overflow-visible px-2 pt-8 pb-2">
                   <div className="dashboard-module-scale dashboard-module-scale--external">
                     <ExternalEquipmentScreen data={data} alarmData={alarmData} />
                   </div>
                 </div>
+              </Section>
+
+              <Section minHeight="h-full">
+                <div className="h-full" />
               </Section>
             </div>
           </div>

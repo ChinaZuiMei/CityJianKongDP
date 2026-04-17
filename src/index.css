@@ -6,6 +6,7 @@
 }
 
 :root {
+  --app-scale: 0.9;
   background-color: #050d27;
 }
 
@@ -29,10 +30,18 @@ body {
 }
 
 #root {
-  width: 100%;
-  height: 100vh;
-  min-height: 100vh;
+  width: calc(100% / var(--app-scale));
+  height: calc(100vh / var(--app-scale));
+  min-height: calc(100vh / var(--app-scale));
   background: transparent;
+  zoom: var(--app-scale);
+}
+
+@supports not (zoom: 1) {
+  #root {
+    transform: scale(var(--app-scale));
+    transform-origin: top left;
+  }
 }
 
 .panel-frame {

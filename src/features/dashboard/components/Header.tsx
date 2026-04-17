@@ -20,10 +20,13 @@ export const Header = ({
   onWorkshopChange: (workshop: string) => void,
 }) => {
   return (
-    <div className="panel-frame z-50 flex items-center justify-between border-b bg-transparent px-6 py-2 text-sm font-mono text-slate-100">
+    <div className="panel-frame relative z-50 flex items-center justify-between border-b bg-transparent px-6 py-2 text-sm font-mono text-slate-100">
       <div className="flex items-center gap-2">
         <Clock size={16} className="text-sky-300" />
         {currentTime.toLocaleDateString()} {currentTime.toLocaleTimeString()}
+      </div>
+      <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-lg font-black tracking-[0.18em] text-sky-100">
+        建衡实业IOT看板
       </div>
       <div className="flex items-center gap-4">
         <span className={cn("flex items-center gap-1.5", connected ? "text-emerald-300" : "text-amber-300")}>

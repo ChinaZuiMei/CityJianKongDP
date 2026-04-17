@@ -39,15 +39,18 @@ export const Tank = ({
     <div className="flex flex-col items-center gap-2">
       {isImageTank ? (
         <div className={cn("relative transition-all", imageTankSizeClass)}>
-          {hasAlarm ? (
-            <>
-              <div className="absolute -left-3 top-8 z-10 h-24 w-2 rounded-full bg-red-500/75 blur-[2px] animate-pulse" />
-              <div className="absolute -left-2 top-10 z-10 h-20 w-8 rounded-full bg-red-500/25 blur-xl animate-pulse" />
-              <div className="absolute -right-3 top-8 z-10 h-24 w-2 rounded-full bg-red-500/75 blur-[2px] animate-pulse" />
-              <div className="absolute -right-2 top-10 z-10 h-20 w-8 rounded-full bg-red-500/25 blur-xl animate-pulse" />
-            </>
-          ) : null}
-          <img src={tankImage} alt={label} className="h-full w-full object-contain" draggable="false" />
+          {hasAlarm ? <div className="absolute inset-0 z-10 rounded-[28px] bg-red-500/8 blur-xl animate-pulse pointer-events-none" /> : null}
+          <img
+            src={tankImage}
+            alt={label}
+            className={cn(
+              "h-full w-full object-contain transition-all duration-300",
+              hasAlarm &&
+                "drop-shadow-[0_0_20px_rgba(239,68,68,0.75)] saturate-[1.15] brightness-[0.92] sepia-[0.35] hue-rotate-[-18deg]",
+            )}
+            draggable="false"
+          />
+          {hasAlarm ? <div className="absolute inset-0 z-10 bg-red-500/10 mix-blend-screen pointer-events-none animate-pulse" /> : null}
           <div className={cn("absolute inset-x-0 z-20 flex justify-center", variant === 'reactor' ? 'bottom-[1.8rem]' : 'bottom-[3rem]')}>
             <div className={cn("rounded border px-2 py-0.5 text-xs font-bold shadow-[0_0_12px_rgba(15,23,42,0.35)]", hasAlarm ? "border-red-400 bg-slate-950/50 text-red-100" : "panel-frame bg-slate-950/40 data-glow")}>
               {level.toFixed(2)} {unit}

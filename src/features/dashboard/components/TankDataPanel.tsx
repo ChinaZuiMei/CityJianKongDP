@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react';
 import * as echarts from 'echarts';
 import type { EChartsOption } from 'echarts';
+import 'echarts-liquidfill';
 import { ScadaData } from '../model/types';
 import './TankDataPanel.css';
 import titleBg from '../../../images/小标题图片.png';
@@ -13,8 +14,11 @@ interface TankDataPanelProps {
   title?: string;
   subtitle?: string;
   position?: 'left' | 'right';
-  mode?: 'level' | 'temperature' | 'external' | 'loading';
+  mode?: 'level' | 'temperature' | 'external' | 'loading' | 'flow' | 'leak';
   top?: number;
+  bottom?: number;
+  embedded?: boolean;
+  style?: React.CSSProperties;
 }
 
 interface TankMetric {
@@ -252,6 +256,272 @@ function createLoadingPanelOption(data: ScadaData): EChartsOption {
         },
         silent: true,
       },
+    ],
+  };
+}
+
+function createLeakPanelOption(data: ScadaData): EChartsOption {
+  const rows = [
+    {
+      label: '1# 泄漏',
+      value: Math.max(Number.isFinite(data.leak1) ? data.leak1 : 0, 0),
+      rawValue: Number.isFinite(data.leak1) ? data.leak1 : 0,
+      unit: 'ppm',
+    },
+    {
+      label: '2# 泄漏',
+      value: Math.max(Number.isFinite(data.leak2) ? data.leak2 : 0, 0),
+      rawValue: Number.isFinite(data.leak2) ? data.leak2 : 0,
+      unit: 'ppm',
+    },
+    {
+      label: '3# 泄漏',
+      value: Math.max(Number.isFinite(data.leak3) ? data.leak3 : 0, 0),
+      rawValue: Number.isFinite(data.leak3) ? data.leak3 : 0,
+      unit: 'ppm',
+    },
+  ];
+
+  const values = rows.map((row) => row.value);
+  const maxValue = Math.max(...values.map((v) => Math.abs(v)), 0.2);
+  const backgroundValues = rows.map(() => maxValue);
+
+  return {
+    grid: {
+      left: '5%',
+      right: '5%',
+      bottom: '8%',
+      top: '10%',
+      containLabel: true,
+    },
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'none',
+      },
+      formatter: (params: any) => {
+        const list = Array.isArray(params) ? params : [];
+        const point = list[0];
+        const idx = typeof point?.dataIndex === 'number' ? point.dataIndex : 0;
+        const row = rows[idx];
+        return `${row.label}<br/>数值 : ${row.rawValue.toFixed(3)} ${row.unit}`;
+      },
+    },
+    xAxis: {
+      show: false,
+      type: 'value',
+      max: maxValue,
+    },
+    yAxis: [
+      {
+        type: 'category',
+        inverse: true,
+        axisLabel: {
+          show: true,
+          color: '#fff',
+          fontSize: 12,
+        },
+        splitLine: {
+          show: false,
+        },
+        axisTick: {
+          show: false,
+        },
+        axisLine: {
+          show: false,
+        },
+        data: rows.map((row) => row.label),
+      },
+      {
+        type: 'category',
+        inverse: true,
+        axisTick: { show: false },
+        axisLine: { show: false },
+        show: true,
+        axisLabel: {
+          color: '#ffffff',
+          fontSize: 12,
+          formatter: (_value: string, index: number) => `${rows[index].rawValue.toFixed(3)} ppm`,
+        },
+        data: values,
+      },
+    ],
+    series: [
+      {
+        name: '泄漏值',
+        type: 'bar',
+        zlevel: 1,
+        itemStyle: {
+          borderRadius: 30,
+          color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+            { offset: 0, color: 'rgb(57,89,255,1)' },
+            { offset: 1, color: 'rgb(46,200,207,1)' },
+          ]),
+        },
+        barWidth: 8,
+        data: values,
+      },
+      {
+        name: '背景',
+        type: 'bar',
+        barWidth: 8,
+        barGap: '-100%',
+        data: backgroundValues,
+        itemStyle: {
+          color: 'rgba(24,31,68,1)',
+          borderRadius: 30,
+        },
+        silent: true,
+      },
+    ],
+  };
+}
+
+function createFlowLiquidFillOption(data: ScadaData): EChartsOption {
+  return createFlowLiquidFillOptionByValues('', data.acid_flow_instant, data.acid_flow_total);
+}
+
+function createFlowLiquidFillOptionByValues(title: string, instantRaw: number, totalRaw: number): EChartsOption {
+  const instantValue = Number.isFinite(instantRaw) ? instantRaw : 0;
+  const totalValue = Number.isFinite(totalRaw) ? totalRaw : 0;
+  const instantMax = Math.max(instantValue * 1.4, 10);
+  const totalMax = Math.max(totalValue * 1.2, 100);
+  const instantPercent = Math.max(0, Math.min(instantValue / instantMax, 1));
+  const totalPercent = Math.max(0, Math.min(totalValue / totalMax, 1));
+
+  const buildLabel = (value: number, unit: string, fontSize: number) => ({
+    formatter: () => `{value|${value.toFixed(2)}}\n{unit|${unit}}`,
+    rich: {
+      value: {
+        fontSize,
+        fontWeight: 700,
+        color: '#ffffff',
+        lineHeight: fontSize + 6,
+      },
+      unit: {
+        fontSize: 10,
+        fontWeight: 500,
+        color: '#9fdcff',
+        lineHeight: 14,
+      },
+    },
+  });
+
+  return {
+    backgroundColor: 'transparent',
+    title: [
+      {
+        text: title,
+        left: 'center',
+        top: '3%',
+        textAlign: 'center',
+        textStyle: {
+          fontSize: 13,
+          fontWeight: 700,
+          color: '#8fdfff',
+          lineHeight: 16,
+        },
+      },
+      {
+        text: '瞬时流量',
+        left: '22%',
+        top: '74%',
+        textAlign: 'center',
+        textStyle: {
+          fontSize: 14,
+          fontWeight: 400,
+          color: '#5dc3ea',
+          lineHeight: 16,
+        },
+      },
+      {
+        text: '累计流量',
+        left: '73%',
+        top: '74%',
+        textAlign: 'center',
+        textStyle: {
+          fontSize: 14,
+          fontWeight: 400,
+          color: '#5dc3ea',
+          lineHeight: 16,
+        },
+      },
+    ],
+    tooltip: {
+      trigger: 'item',
+      formatter: (params: any) => {
+        const seriesIndex = typeof params?.seriesIndex === 'number' ? params.seriesIndex : 0;
+        if (seriesIndex === 0) {
+          return `瞬时流量<br/>数值 : ${instantValue.toFixed(2)} m³/h`;
+        }
+        return `累计流量<br/>数值 : ${totalValue.toFixed(2)} m³`;
+      },
+    },
+    series: [
+      {
+        type: 'liquidFill',
+        radius: '47%',
+        center: ['25%', '45%'],
+        color: [
+          {
+            type: 'linear',
+            x: 0,
+            y: 0,
+            x2: 0,
+            y2: 1,
+            colorStops: [
+              { offset: 0, color: '#446bf5' },
+              { offset: 1, color: '#2ca3e2' },
+            ],
+            globalCoord: false,
+          },
+        ],
+        data: [instantPercent, instantPercent],
+        backgroundStyle: {
+          borderWidth: 1,
+          color: 'rgba(51, 66, 127, 0.7)',
+        },
+        label: buildLabel(instantValue, 'm³/h', 22),
+        outline: {
+          borderDistance: 0,
+          itemStyle: {
+            borderWidth: 2,
+            borderColor: '#112165',
+          },
+        },
+      } as any,
+      {
+        type: 'liquidFill',
+        radius: '47%',
+        center: ['75%', '45%'],
+        color: [
+          {
+            type: 'linear',
+            x: 0,
+            y: 0,
+            x2: 0,
+            y2: 1,
+            colorStops: [
+              { offset: 0, color: '#2aa1e3' },
+              { offset: 1, color: '#08bbc9' },
+            ],
+            globalCoord: false,
+          },
+        ],
+        data: [totalPercent, totalPercent],
+        backgroundStyle: {
+          borderWidth: 1,
+          color: 'rgba(51, 66, 127, 0.7)',
+        },
+        label: buildLabel(totalValue, 'm³', 18),
+        outline: {
+          borderDistance: 0,
+          itemStyle: {
+            borderWidth: 2,
+            borderColor: '#112165',
+          },
+        },
+      } as any,
     ],
   };
 }
@@ -608,10 +878,16 @@ export const TankDataPanel: React.FC<TankDataPanelProps> = ({
   position = 'left',
   mode = 'level',
   top,
+  bottom,
+  embedded = false,
+  style,
 }) => {
   const [externalVariant, setExternalVariant] = React.useState<ExternalPanelVariant>('old');
   const [externalVisible, setExternalVisible] = React.useState(true);
+  const [flowVariant, setFlowVariant] = React.useState<'acid' | 'waste'>('acid');
+  const [flowVisible, setFlowVisible] = React.useState(true);
   const externalSwitchTimeoutRef = React.useRef<number | null>(null);
+  const flowSwitchTimeoutRef = React.useRef<number | null>(null);
 
   React.useEffect(() => {
     if (mode !== 'external') return;
@@ -637,6 +913,30 @@ export const TankDataPanel: React.FC<TankDataPanelProps> = ({
     };
   }, [mode]);
 
+  React.useEffect(() => {
+    if (mode !== 'flow') return;
+
+    const timer = window.setInterval(() => {
+      setFlowVisible(false);
+      if (flowSwitchTimeoutRef.current !== null) {
+        window.clearTimeout(flowSwitchTimeoutRef.current);
+      }
+      flowSwitchTimeoutRef.current = window.setTimeout(() => {
+        setFlowVariant((current) => (current === 'acid' ? 'waste' : 'acid'));
+        setFlowVisible(true);
+        flowSwitchTimeoutRef.current = null;
+      }, 220);
+    }, 3500);
+
+    return () => {
+      window.clearInterval(timer);
+      if (flowSwitchTimeoutRef.current !== null) {
+        window.clearTimeout(flowSwitchTimeoutRef.current);
+        flowSwitchTimeoutRef.current = null;
+      }
+    };
+  }, [mode]);
+
   const option = React.useMemo(() => createTankPanelOption(data), [data]);
   const tank1TempOption = React.useMemo(
     () => createTemperatureGaugeOption(data.tank1_temp, '1# 反应槽'),
@@ -646,7 +946,15 @@ export const TankDataPanel: React.FC<TankDataPanelProps> = ({
     () => createTemperatureGaugeOption(data.tank2_temp, '2# 反应槽'),
     [data.tank2_temp],
   );
+  const flowOption = React.useMemo(
+    () =>
+      flowVariant === 'acid'
+        ? createFlowLiquidFillOption(data)
+        : createFlowLiquidFillOptionByValues('', data.waste_flow_instant, data.waste_flow_total),
+    [data, flowVariant],
+  );
   const loadingOption = React.useMemo(() => createLoadingPanelOption(data), [data]);
+  const leakOption = React.useMemo(() => createLeakPanelOption(data), [data]);
   const externalEquipmentOption = React.useMemo(
     () => createExternalEquipmentOption(data, externalVariant),
     [data, externalVariant],
@@ -656,7 +964,14 @@ export const TankDataPanel: React.FC<TankDataPanelProps> = ({
   }, []);
 
   return (
-    <aside className={`tank-data-panel tank-data-panel--${position}`} style={top !== undefined ? { top } : undefined}>
+    <aside
+      className={`tank-data-panel tank-data-panel--${position}${embedded ? ' tank-data-panel--embedded' : ''}`}
+      style={{
+        ...(!embedded && top !== undefined ? { top } : {}),
+        ...(!embedded && bottom !== undefined ? { top: 'auto', bottom } : {}),
+        ...style,
+      }}
+    >
       <section className="sci-panel tank-panel-top">
         <div className="sci-panel-header">
           <img src={titleBg} alt="" className="title-bg-image" />
@@ -755,6 +1070,43 @@ export const TankDataPanel: React.FC<TankDataPanelProps> = ({
                 <Suspense fallback={<div className="tank-chart-fallback" />}>
                   <ReactECharts
                     option={loadingOption}
+                    notMerge
+                    lazyUpdate
+                    opts={{ renderer: 'canvas' }}
+                    style={{ width: '100%', height: '100%' }}
+                  />
+                </Suspense>
+              </div>
+            </>
+          ) : mode === 'flow' ? (
+            <>
+              <div className="tank-panel-chart-meta">
+                <span>{flowVariant === 'acid' ? '盐酸硫酸流量' : '东氟废水流量'}</span>
+              </div>
+              <div className={flowVisible ? 'external-panel-content' : 'external-panel-content external-panel-content--hidden'}>
+                <div className="tank-panel-chart" style={{ height: 210 }}>
+                  <Suspense fallback={<div className="tank-chart-fallback" />}>
+                    <ReactECharts
+                      option={flowOption}
+                      notMerge
+                      lazyUpdate
+                      opts={{ renderer: 'canvas' }}
+                      style={{ width: '100%', height: '100%' }}
+                    />
+                  </Suspense>
+                </div>
+              </div>
+            </>
+          ) : mode === 'leak' ? (
+            <>
+              <div className="tank-panel-chart-meta">
+                <span>盐酸泄漏监测</span>
+                <span>单位 / ppm</span>
+              </div>
+              <div className="tank-panel-chart" style={{ height: 150 }}>
+                <Suspense fallback={<div className="tank-chart-fallback" />}>
+                  <ReactECharts
+                    option={leakOption}
                     notMerge
                     lazyUpdate
                     opts={{ renderer: 'canvas' }}
