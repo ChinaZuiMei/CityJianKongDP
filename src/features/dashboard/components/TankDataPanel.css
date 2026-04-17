@@ -1,7 +1,7 @@
 /* 罐区数据面板样式 */
 .tank-data-panel {
   position: fixed;
-  top: 60px;
+  top: 50px;
   width: 380px;
   z-index: 30;
   pointer-events: auto;
@@ -76,7 +76,7 @@
 }
 
 .sci-panel-body {
-  padding: 6px 6px 6px;
+  padding: 2px 4px;
 }
 
 .tank-panel-top {
@@ -128,8 +128,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 8px;
-  padding: 0 4px;
+  margin-bottom: 2px;
+  padding: 0 2px;
   font-family: "Segoe UI", "Arial", sans-serif;
   font-size: 12px;
   font-weight: 700;
@@ -141,6 +141,77 @@
 .tank-panel-chart {
   width: 100%;
   height: auto;
+}
+
+.external-panel-content {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+.external-panel-content--hidden {
+  opacity: 0;
+  transform: translateX(12px);
+}
+
+.loading-panel-status {
+  display: flex;
+  min-height: 112px;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 18px;
+  padding: 6px 4px 8px;
+}
+
+.loading-panel-truck-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.loading-panel-truck {
+  width: 9.5rem;
+  height: auto;
+  object-fit: contain;
+}
+
+.loading-panel-state {
+  padding-bottom: 0.25rem;
+  font-size: 1.15rem;
+  font-weight: 900;
+}
+
+.temp-gauge-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.temp-gauge-card {
+  position: relative;
+  padding: 4px 4px 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.temp-gauge-label {
+  padding-top: 2px;
+  font-family: "Segoe UI", "Arial", sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: rgba(220, 239, 255, 0.92);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.temp-gauge-chart {
+  width: 100%;
+  height: 120px;
 }
 
 .tank-chart-fallback {
