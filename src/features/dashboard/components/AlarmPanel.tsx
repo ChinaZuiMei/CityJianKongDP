@@ -24,15 +24,15 @@ export const AlarmPanel = ({ alarms, alarmData, isOpen, onClose }: { alarms: Ala
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: -20 }}
         transition={{ duration: 0.2 }}
-        className="fixed right-4 top-20 z-50 w-96 overflow-hidden rounded-xl border border-red-400/70 bg-transparent"
+        className="fixed right-4 top-20 z-50 w-96 overflow-hidden rounded-xl border border-red-400/70 bg-slate-950 shadow-[0_18px_44px_rgba(2,8,23,0.55)]"
       >
-        <div className="flex items-center justify-between border-b border-red-400/60 bg-transparent px-4 py-3">
+        <div className="flex items-center justify-between border-b border-red-400/60 bg-[#17090c] px-4 py-3">
           <div className="flex items-center gap-2">
             <AlertTriangle size={20} className="text-red-700 animate-pulse" />
             <span className="text-base font-black text-red-200">活动报警</span>
           </div>
           <div className="flex items-center gap-3">
-            <span className="rounded-full border border-red-400/70 bg-transparent px-2.5 py-1 text-xs font-black text-red-100">
+            <span className="rounded-full border border-red-400/70 bg-[#2b0e14] px-2.5 py-1 text-xs font-black text-red-100">
               {activeAlarmCount}
             </span>
             <button onClick={onClose} className="text-red-200 transition-colors hover:text-white">
@@ -43,7 +43,7 @@ export const AlarmPanel = ({ alarms, alarmData, isOpen, onClose }: { alarms: Ala
           </div>
         </div>
         
-        <div className="overflow-y-auto max-h-[calc(100vh-200px)] p-4 space-y-2">
+        <div className="max-h-[calc(100vh-200px)] space-y-2 overflow-y-auto bg-slate-950 p-4">
           {Object.entries(alarmData)
             .filter(([_, isActive]) => isActive)
             .map(([alarmName, _], index) => {
@@ -78,7 +78,7 @@ export const AlarmPanel = ({ alarms, alarmData, isOpen, onClose }: { alarms: Ala
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.05 }}
-                  className="rounded-lg border border-red-400/55 bg-transparent p-3 transition-colors"
+                  className="rounded-lg border border-red-400/55 bg-[#160b12] p-3 transition-colors"
                 >
                   <div className="flex items-start gap-3">
                     <div className="mt-1 flex-shrink-0 text-red-300">{icon}</div>

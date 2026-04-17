@@ -80,7 +80,7 @@ export const ScrollDashboard = ({
         onMouseUp={stopDragging}
         onMouseLeave={stopDragging}
       >
-        <div className="pointer-events-none absolute right-4 top-4 z-20 rounded-full border border-sky-300/20 bg-slate-950/35 px-3 py-1 text-[11px] font-black tracking-[0.14em] text-sky-100">
+        <div className="pointer-events-none fixed bottom-5 left-5 z-20 rounded-full border border-sky-300/35 bg-slate-950 px-3.5 py-1.5 text-[11px] font-black tracking-[0.14em] text-sky-100 shadow-[0_10px_30px_rgba(2,8,23,0.45)]">
           缩放 {Math.round(scale * 100)}%
         </div>
         <div

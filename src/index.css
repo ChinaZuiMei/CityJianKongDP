@@ -39,10 +39,25 @@ body {
   z-index: 0;
   pointer-events: none;
   background-color: transparent;
-  background-image: url("images/网站背景.png");
+  background-image: url("images/beijing.png");
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
+}
+
+.site-background::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  pointer-events: none;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 16px 100%, 0 calc(100% - 16px));
+  border: 1px solid rgba(68, 170, 255, 0.95);
+  background:
+    linear-gradient(180deg, rgba(7, 16, 64, 0.78) 0%, rgba(8, 18, 70, 0.76) 52%, rgba(18, 43, 116, 0.58) 100%),
+    linear-gradient(0deg, rgba(87, 137, 255, 0.14) 0%, rgba(87, 137, 255, 0) 40%);
+  box-shadow:
+    inset 0 0 0 1px rgba(22, 90, 220, 0.16),
+    inset 0 -80px 120px rgba(76, 128, 255, 0.08);
 }
 
 @supports not (zoom: 1) {
