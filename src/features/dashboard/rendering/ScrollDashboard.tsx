@@ -40,7 +40,7 @@ export const ScrollDashboard = ({
 
   const handleWheel: React.WheelEventHandler<HTMLDivElement> = (event) => {
     event.preventDefault();
-    const nextScale = Math.max(0.72, Math.min(1.28, scale - event.deltaY * 0.001));
+    const nextScale = Math.max(0.2, Math.min(1.28, scale - event.deltaY * 0.001));
     setScale(Number(nextScale.toFixed(3)));
   };
 
@@ -71,16 +71,16 @@ export const ScrollDashboard = ({
   };
 
   return (
-    <div className={`h-full overflow-y-auto overflow-x-hidden ${outerClassName}`}>
+    <div className={`dashboard-scroll-shell h-full overflow-y-auto overflow-x-hidden ${outerClassName}`}>
       <div
-        className={`dashboard-workspace relative mx-auto h-[calc(100vh-118px)] max-w-[1800px] overflow-visible rounded-[32px] ${dragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+        className={`dashboard-workspace relative mx-auto flex h-[calc(100vh-118px)] max-w-[1800px] items-center justify-center overflow-visible rounded-[32px] ${dragging ? 'cursor-grabbing' : 'cursor-grab'}`}
         onWheel={handleWheel}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={stopDragging}
         onMouseLeave={stopDragging}
       >
-        <div className="pointer-events-none fixed bottom-5 left-5 z-20 rounded-full border border-sky-300/35 bg-slate-950 px-3.5 py-1.5 text-[11px] font-black tracking-[0.14em] text-sky-100 shadow-[0_10px_30px_rgba(2,8,23,0.45)]">
+        <div className="pointer-events-none fixed bottom-5 right-5 z-20 rounded-full border border-sky-300/35 bg-slate-950 px-3.5 py-1.5 text-[11px] font-black tracking-[0.14em] text-sky-100 shadow-[0_10px_30px_rgba(2,8,23,0.45)]">
           缩放 {Math.round(scale * 100)}%
         </div>
         <div

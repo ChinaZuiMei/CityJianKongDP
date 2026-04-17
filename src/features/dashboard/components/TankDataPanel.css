@@ -50,7 +50,7 @@
 /* 科技面板基础样式 */
 .sci-panel {
   position: relative;
-  background: transparent;
+  background: rgba(6, 21, 48, 0.3);
   border: 1px solid rgba(58, 118, 198, 0.35);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), inset 0 0 30px rgba(45, 95, 180, 0.08);
   overflow: hidden;
@@ -106,6 +106,7 @@
 
 .sci-panel-body {
   padding: 2px 4px;
+  background: rgba(4, 16, 38, 0.15);
 }
 
 .tank-panel-top {
