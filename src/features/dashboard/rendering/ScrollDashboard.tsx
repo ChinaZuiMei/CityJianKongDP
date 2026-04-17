@@ -32,7 +32,7 @@ export const ScrollDashboard = ({
   alarmData: AlarmData;
   sidePanelPreviewEnabled?: boolean;
 }) => {
-  const outerClassName = sidePanelPreviewEnabled ? 'pl-[420px] pr-[420px] py-4' : 'px-4 py-4';
+  const outerClassName = sidePanelPreviewEnabled ? 'pl-[420px] pr-[420px] py-[15px]' : 'px-4 py-[15px]';
   const [scale, setScale] = useState(0.92);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
@@ -89,8 +89,8 @@ export const ScrollDashboard = ({
             transform: `translate(calc(-50% + ${offset.x}px), calc(-50% + ${offset.y}px)) scale(${scale})`,
           }}
         >
-          <div className="grid grid-cols-1 gap-4 2xl:grid-cols-2">
-            <div className="grid gap-4" style={{ gridTemplateRows: 'minmax(320px, 40vh) minmax(340px, 42vh)' }}>
+          <div className="grid grid-cols-1 gap-[15px] 2xl:grid-cols-2">
+            <div className="grid gap-[15px]" style={{ gridTemplateRows: 'minmax(320px, 40vh) minmax(340px, 42vh)' }}>
               <Section title="主画面" minHeight="h-full">
                 <div className="flex h-full items-center justify-center overflow-hidden pt-8">
                   <div className="dashboard-module-scale dashboard-module-scale--main">
@@ -108,7 +108,7 @@ export const ScrollDashboard = ({
               </Section>
             </div>
 
-            <div className="grid gap-4" style={{ gridTemplateRows: 'minmax(320px, 40vh) minmax(340px, 42vh)' }}>
+            <div className="grid gap-[15px]" style={{ gridTemplateRows: 'minmax(320px, 40vh) minmax(340px, 42vh)' }}>
               <Section title="外部设备" minHeight="h-full">
                 <div className="h-full overflow-visible px-2 pt-8 pb-2">
                   <div className="dashboard-module-scale dashboard-module-scale--external">

@@ -7,7 +7,7 @@
   pointer-events: auto;
   display: flex;
   flex-direction: column;
-  gap: 13px;
+  gap: 15px;
 }
 
 .tank-data-panel--left {
@@ -35,7 +35,7 @@
   z-index: 30;
   display: flex;
   flex-direction: column;
-  gap: 13px;
+  gap: 15px;
   pointer-events: auto;
 }
 
@@ -50,7 +50,7 @@
 /* 科技面板基础样式 */
 .sci-panel {
   position: relative;
-  background: linear-gradient(180deg, rgba(6, 18, 48, 0.85), rgba(3, 10, 30, 0.92));
+  background: transparent;
   border: 1px solid rgba(58, 118, 198, 0.35);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), inset 0 0 30px rgba(45, 95, 180, 0.08);
   overflow: hidden;

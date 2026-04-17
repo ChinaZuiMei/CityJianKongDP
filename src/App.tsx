@@ -9,6 +9,9 @@ import {
   useDashboardRuntime,
 } from './features/dashboard';
 import { TankDataPanel } from './features/dashboard/components/TankDataPanel';
+import topDecorImage from './images/网站顶部图片.png';
+import bottomDecorImage from './images/网站底部图.png';
+import sideDecorImage from './images/网站侧边图.png';
 
 export default function App() {
   const enableSidePanelPreview = shouldEnableSidePanelPreview();
@@ -27,7 +30,15 @@ export default function App() {
   } = useDashboardRuntime();
 
   return (
-    <div className="flex h-screen w-screen flex-col overflow-hidden bg-transparent text-slate-900 font-sans selection:bg-sky-300/50">
+    <div className="relative flex h-screen w-screen flex-col overflow-hidden bg-transparent text-slate-900 font-sans selection:bg-sky-300/50">
+      <div className="site-background" aria-hidden />
+      <div className="site-decor-layer" aria-hidden>
+        <img src={topDecorImage} alt="" className="site-decor site-decor--top" draggable="false" />
+        <img src={bottomDecorImage} alt="" className="site-decor site-decor--bottom" draggable="false" />
+        <img src={sideDecorImage} alt="" className="site-decor site-decor--left" draggable="false" />
+        <img src={sideDecorImage} alt="" className="site-decor site-decor--right" draggable="false" />
+      </div>
+      <div className="site-title">建衡实业IOT看板</div>
       <Header
         currentTime={currentTime}
         connected={mqttConnected}
@@ -95,7 +106,7 @@ export default function App() {
         />
       </div>
 
-      <main className="relative flex-1 overflow-hidden bg-transparent">
+      <main className="relative z-10 flex-1 overflow-hidden bg-transparent">
         <ScrollDashboard data={scadaData} alarmData={alarmData} sidePanelPreviewEnabled={enableSidePanelPreview} />
         {enableSidePanelPreview ? (
           <SidePanelPreview data={scadaData} alarmData={alarmData} mqttConnected={mqttConnected} />

@@ -873,7 +873,7 @@ function createTemperatureGaugeOption(value: number, name: string): EChartsOptio
 
 export const TankDataPanel: React.FC<TankDataPanelProps> = ({
   data,
-  title = '罐区可视化参数',
+  title = '罐区可视化面板',
   subtitle = 'TANK AREA PARAMETERS',
   position = 'left',
   mode = 'level',
