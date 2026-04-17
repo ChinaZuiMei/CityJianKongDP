@@ -49,6 +49,12 @@ export default function App() {
       
       {/* 左侧罐区数据面板 */}
       <TankDataPanel data={scadaData} />
+      <TankDataPanel
+        data={scadaData}
+        position="right"
+        title="主画面可视化面板"
+        subtitle="MAIN SCREEN VISUALIZATION"
+      />
       
       <main className="relative flex-1 overflow-hidden bg-transparent">
         <ScrollDashboard data={scadaData} alarmData={alarmData} sidePanelPreviewEnabled={enableSidePanelPreview} />

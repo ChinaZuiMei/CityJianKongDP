@@ -1,7 +1,6 @@
 /* 罐区数据面板样式 */
 .tank-data-panel {
   position: fixed;
-  left: 60px;
   top: 60px;
   width: 380px;
   z-index: 30;
@@ -9,6 +8,14 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
+}
+
+.tank-data-panel--left {
+  left: 60px;
+}
+
+.tank-data-panel--right {
+  right: 60px;
 }
 
 /* 科技面板基础样式 */

@@ -9,6 +9,9 @@ const ReactECharts = React.lazy(() => import('echarts-for-react'));
 
 interface TankDataPanelProps {
   data: ScadaData;
+  title?: string;
+  subtitle?: string;
+  position?: 'left' | 'right';
 }
 
 interface TankMetric {
@@ -139,19 +142,24 @@ function createTankPanelOption(data: ScadaData): EChartsOption {
   };
 }
 
-export const TankDataPanel: React.FC<TankDataPanelProps> = ({ data }) => {
+export const TankDataPanel: React.FC<TankDataPanelProps> = ({
+  data,
+  title = '罐区可视化参数',
+  subtitle = 'TANK AREA PARAMETERS',
+  position = 'left',
+}) => {
   const option = React.useMemo(() => createTankPanelOption(data), [data]);
   const chartHeight = React.useMemo(() => {
     return Math.max(tankMetrics.length * 46 + 56, 240);
   }, []);
 
   return (
-    <aside className="tank-data-panel">
+    <aside className={`tank-data-panel tank-data-panel--${position}`}>
       <section className="sci-panel tank-panel-top">
         <div className="sci-panel-header">
           <img src={titleBg} alt="" className="title-bg-image" />
-          <div className="sci-panel-title">罐区可视化参数</div>
-          <div className="sci-panel-subtitle">TANK AREA PARAMETERS</div>
+          <div className="sci-panel-title">{title}</div>
+          <div className="sci-panel-subtitle">{subtitle}</div>
         </div>
       </section>
       <section className="sci-panel tank-panel-main">
