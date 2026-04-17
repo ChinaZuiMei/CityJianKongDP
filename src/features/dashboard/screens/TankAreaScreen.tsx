@@ -6,8 +6,8 @@ import { AlarmData, ScadaData } from '../model/types';
 import { Tank } from '../ui/SharedComponents';
 
 export const TankAreaScreen = ({ data, alarmData }: { data: ScadaData, alarmData: AlarmData }) => (
-  <div className="flex h-full w-full flex-col gap-2 px-4 py-3">
-    <div className="flex justify-center gap-10 items-end">
+  <div className="flex h-full w-full flex-col gap-3 overflow-hidden px-2 py-1 xl:px-3 xl:py-2">
+    <div className="grid min-h-0 grid-cols-4 gap-3">
       {[
         { id: 'hcl_tank1', label: '1# 盐酸罐', level: data.hcl_tank1_level, max: 3.6, variant: 'storage' as const },
         { id: 'hcl_tank2', label: '2# 盐酸罐', level: data.hcl_tank2_level, max: 3.6, variant: 'storage' as const },
@@ -15,28 +15,15 @@ export const TankAreaScreen = ({ data, alarmData }: { data: ScadaData, alarmData
         { id: 'h2so4_tank1', label: '1# 硫酸罐', level: data.h2so4_tank1_level, max: 6.2, variant: 'cone' as const }
       ].map(tank => {
         const alarmNames = getAlarmNames(tank.id, alarmData);
-        const outsideAlarms = alarmNames.slice(0, 1);
-        const insideAlarms = alarmNames.slice(1);
         return (
-          <div key={tank.id} className="relative flex flex-col items-center gap-2 min-w-[130px]">
-            {outsideAlarms.length > 0 && (
-              <div className="flex w-[140px] flex-col items-center justify-end gap-1 min-h-[56px]">
-                {outsideAlarms.map((name, idx) => (
-                  <div key={idx} className="w-full rounded border border-red-500 bg-transparent px-3 py-1 text-center text-sm font-bold text-red-100 animate-pulse">
-                    {name}
-                  </div>
-                ))}
-              </div>
-            )}
-            {insideAlarms.length > 0 && (
-              <div className="pointer-events-none absolute left-1/2 top-24 z-20 flex w-[150px] -translate-x-1/2 flex-col items-center gap-1">
-                {insideAlarms.map((name, idx) => (
-                  <div key={idx} className="w-full rounded border border-red-500 bg-transparent px-3 py-1 text-center text-sm font-bold text-red-100 animate-pulse">
-                    {name}
-                  </div>
-                ))}
-              </div>
-            )}
+          <div key={tank.id} className="flex min-h-0 flex-col items-center gap-1.5 overflow-hidden px-1 py-1">
+            <div className="flex min-h-[34px] w-full flex-col items-center justify-start gap-1">
+              {alarmNames.length > 0 ? alarmNames.map((name, idx) => (
+                <div key={idx} className="w-full truncate px-2 py-0.5 text-center text-[10px] font-bold text-red-100 animate-pulse xl:text-[11px]">
+                  {name}
+                </div>
+              )) : <div className="h-[26px]" />}
+            </div>
             <Tank 
               label={tank.label} 
               level={tank.level} 
@@ -48,7 +35,7 @@ export const TankAreaScreen = ({ data, alarmData }: { data: ScadaData, alarmData
         );
       })}
     </div>
-    <div className="flex justify-center gap-10 pt-1">
+    <div className="grid grid-cols-3 gap-3 pt-1">
       {[
         { id: 1, val: data.leak1, component: 'leak1' },
         { id: 2, val: data.leak2, component: 'leak2' },
@@ -57,22 +44,27 @@ export const TankAreaScreen = ({ data, alarmData }: { data: ScadaData, alarmData
         const isAlarm = hasAlarm(leak.component, alarmData);
         const alarmNames = getAlarmNames(leak.component, alarmData);
         return (
-          <div key={leak.id} className="flex flex-col items-center gap-2 group min-w-[190px]">
-            <div className={cn("flex items-center gap-2 text-base font-black uppercase tracking-wider", isAlarm ? "text-red-200 animate-pulse" : "text-slate-100")}>
-              <AlertTriangle size={20} className={cn(isAlarm ? "text-red-400 animate-pulse" : "text-sky-300")} /> 盐酸泄漏 {leak.id}
+          <div key={leak.id} className="group flex min-h-[92px] flex-col items-center justify-start gap-1.5 overflow-hidden px-2 py-2">
+            <div className={cn("flex items-center gap-1 text-xs font-black uppercase tracking-[0.1em] xl:text-sm", isAlarm ? "text-red-200 animate-pulse" : "text-slate-100")}>
+              <AlertTriangle size={14} className={cn(isAlarm ? "text-red-400 animate-pulse" : "text-sky-300")} /> 盐酸泄漏 {leak.id}
             </div>
-            <div className={cn("rounded-lg border bg-transparent px-6 py-2.5 font-mono text-xl font-black transition-all", isAlarm ? "border-red-500 text-red-100 shadow-[0_0_16px_rgba(239,68,68,0.25)] animate-pulse-border" : "border-sky-300/70 text-slate-100")}>
-              {leak.val.toFixed(3)} <span className="text-sm text-slate-300">ppm</span>
+            <div
+              className={cn(
+                "rounded-lg border px-3 py-1 font-mono text-base font-black transition-all xl:px-4 xl:text-lg",
+                isAlarm
+                  ? "border-red-400 bg-transparent text-red-100 drop-shadow-[0_0_10px_rgba(239,68,68,0.35)]"
+                  : "border-sky-300/70 bg-transparent data-glow"
+              )}
+            >
+              {leak.val.toFixed(3)} <span className="text-[10px] xl:text-xs text-slate-300">ppm</span>
             </div>
-            {alarmNames.length > 0 && (
-              <div className="flex flex-col items-center gap-1 min-h-[48px]">
-                {alarmNames.map((name, idx) => (
-                  <div key={idx} className="rounded border border-red-500 bg-transparent px-3 py-1 text-center text-sm font-bold text-red-100 animate-pulse">
-                    {name}
-                  </div>
-                ))}
-              </div>
-            )}
+            <div className="flex min-h-[32px] flex-col items-center gap-1">
+              {alarmNames.map((name, idx) => (
+                <div key={idx} className="truncate px-2 py-0.5 text-center text-[10px] font-bold text-red-100 animate-pulse xl:text-[11px]">
+                  {name}
+                </div>
+              ))}
+            </div>
           </div>
         );
       })}

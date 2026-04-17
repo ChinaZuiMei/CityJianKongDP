@@ -8,6 +8,7 @@ import {
   shouldEnableSidePanelPreview,
   useDashboardRuntime,
 } from './features/dashboard';
+import { TankDataPanel } from './features/dashboard/components/TankDataPanel';
 
 export default function App() {
   const enableSidePanelPreview = shouldEnableSidePanelPreview();
@@ -45,6 +46,9 @@ export default function App() {
           onClose={() => setIsAlarmPanelOpen(false)}
         />
       </AnimatePresence>
+      
+      {/* 左侧罐区数据面板 */}
+      <TankDataPanel data={scadaData} />
       
       <main className="relative flex-1 overflow-hidden bg-transparent">
         <ScrollDashboard data={scadaData} alarmData={alarmData} sidePanelPreviewEnabled={enableSidePanelPreview} />

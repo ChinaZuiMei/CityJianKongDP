@@ -9,18 +9,14 @@ export const MainScreen = ({ data, alarmData }: { data: ScadaData, alarmData: Al
   const acidFlowAlarms = getAlarmNames('acid_flow', alarmData);
 
   return (
-    <div className="relative w-full h-full p-5 flex flex-col overflow-hidden">
-      
-      {/* 主要内容区域 */}
-      <div className="flex-1 flex items-center justify-between gap-10">
-        {/* 左侧：反应槽区域 */}
-        <div className="flex items-center gap-8">
-          {/* 1# 反应槽 */}
-          <div className="flex items-center gap-3">
+    <div className="relative h-full w-full overflow-hidden px-3 py-2 xl:px-4 xl:py-3">
+      <div className="grid h-full min-h-0 grid-cols-[minmax(0,1.55fr)_minmax(220px,0.95fr)] items-center gap-4 xl:gap-5">
+        <div className="flex min-w-0 items-center justify-center gap-4 xl:gap-5">
+          <div className="flex min-w-0 items-center gap-2">
             {tank1Alarms.length > 0 && (
-              <div className="flex flex-col gap-1.5 w-max max-w-[180px]">
+              <div className="flex max-w-[85px] flex-col gap-1 xl:max-w-[95px]">
                 {tank1Alarms.map((name, idx) => (
-                  <div key={idx} className="rounded border border-red-500 bg-transparent px-3 py-1.5 text-sm font-bold text-red-100 whitespace-nowrap animate-pulse">
+                  <div key={idx} className="truncate rounded border border-red-500 bg-transparent px-1.5 py-0.5 text-[9px] font-bold text-red-100 animate-pulse xl:text-[10px]">
                     {name}
                   </div>
                 ))}
@@ -35,8 +31,7 @@ export const MainScreen = ({ data, alarmData }: { data: ScadaData, alarmData: Al
             />
           </div>
           
-          {/* 2# 反应槽 */}
-          <div className="flex items-center gap-3">
+          <div className="flex min-w-0 items-center gap-2">
             <Tank 
               label="2# 反应槽" 
               level={1.4} 
@@ -45,9 +40,9 @@ export const MainScreen = ({ data, alarmData }: { data: ScadaData, alarmData: Al
               hasAlarm={hasAlarm('tank2', alarmData)} 
             />
             {tank2Alarms.length > 0 && (
-              <div className="flex flex-col gap-1.5 w-max max-w-[180px]">
+              <div className="flex max-w-[85px] flex-col gap-1 xl:max-w-[95px]">
                 {tank2Alarms.map((name, idx) => (
-                  <div key={idx} className="rounded border border-red-500 bg-transparent px-3 py-1.5 text-sm font-bold text-red-100 whitespace-nowrap animate-pulse">
+                  <div key={idx} className="truncate rounded border border-red-500 bg-transparent px-1.5 py-0.5 text-[9px] font-bold text-red-100 animate-pulse xl:text-[10px]">
                     {name}
                   </div>
                 ))}
@@ -55,10 +50,9 @@ export const MainScreen = ({ data, alarmData }: { data: ScadaData, alarmData: Al
             )}
           </div>
         </div>
-        
-        {/* 右侧：流量显示区域 */}
-        <div className="flex flex-col gap-3">
-          <div className="flex items-center gap-3">
+
+        <div className="flex min-h-0 min-w-0 flex-col justify-center gap-2.5">
+          <div className="flex min-w-0 items-start gap-2">
             <FlowBox 
               title="盐酸硫酸流量" 
               instant={data.acid_flow_instant} 
@@ -66,9 +60,9 @@ export const MainScreen = ({ data, alarmData }: { data: ScadaData, alarmData: Al
               hasAlarm={hasAlarm('acid_flow', alarmData)} 
             />
             {acidFlowAlarms.length > 0 && (
-              <div className="flex flex-col gap-1.5 w-max max-w-[180px]">
+              <div className="flex max-w-[75px] flex-col gap-1 xl:max-w-[85px]">
                 {acidFlowAlarms.map((name, idx) => (
-                  <div key={idx} className="rounded border border-red-500 bg-transparent px-3 py-1.5 text-sm font-bold text-red-100 whitespace-nowrap animate-pulse">
+                  <div key={idx} className="truncate rounded border border-red-500 bg-transparent px-1.5 py-0.5 text-[9px] font-bold text-red-100 animate-pulse xl:text-[10px]">
                     {name}
                   </div>
                 ))}
@@ -78,11 +72,11 @@ export const MainScreen = ({ data, alarmData }: { data: ScadaData, alarmData: Al
           <FlowBox title="东氯废水流量" instant={data.waste_flow_instant} total={data.waste_flow_total} />
         </div>
       </div>
-      
-      <svg className="absolute inset-0 pointer-events-none -z-10 w-full h-full opacity-35">
-        <path d="M 170 365 L 980 365" stroke="#7dd3fc" strokeWidth="6" fill="none" strokeDasharray="10 5" />
-        <path d="M 355 365 L 355 300" stroke="#7dd3fc" strokeWidth="6" fill="none" />
-        <path d="M 725 365 L 725 300" stroke="#7dd3fc" strokeWidth="6" fill="none" />
+      <svg className="pointer-events-none absolute inset-0 -z-10 h-full w-full opacity-35" preserveAspectRatio="none">
+        {/* 虚线位置：向上微调，和下方模块对齐 */}
+        <line x1="18%" y1="72%" x2="88%" y2="72%" stroke="#7dd3fc" strokeWidth="5" strokeDasharray="10 5" />
+        <line x1="34%" y1="72%" x2="34%" y2="55%" stroke="#7dd3fc" strokeWidth="5" />
+        <line x1="57%" y1="72%" x2="57%" y2="55%" stroke="#7dd3fc" strokeWidth="5" />
       </svg>
     </div>
   );

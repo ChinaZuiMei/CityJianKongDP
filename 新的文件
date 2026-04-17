@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>暖通可视化系统</title>
+  <style>
+    :root {
+      --bg: #021033;
+      --bg2: #041a4d;
+      --panel: rgba(10, 28, 79, 0.78);
+      --panel-deep: rgba(6, 18, 58, 0.88);
+      --line: rgba(76, 145, 255, 0.6);
+      --glow: #48c8ff;
+      --glow2: #6ea9ff;
+      --text: #d8ecff;
+      --text-dim: #7ea9db;
+      --green: #22f0b5;
+      --orange: #ffb14d;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; font-family: "Microsoft YaHei", "PingFang SC", sans-serif; }
+    body {
+      color: var(--text);
+      background:
+        radial-gradient(circle at 50% 50%, rgba(48,116,255,0.18), transparent 35%),
+        linear-gradient(180deg, #041a56 0%, #020d2e 60%, #010922 100%);
+      overflow: hidden;
+    }
+
+    .dashboard {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      min-width: 1440px;
+      min-height: 810px;
+      background:
+        linear-gradient(rgba(53, 115, 255, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(53, 115, 255, 0.08) 1px, transparent 1px),
+        radial-gradient(circle at 50% 48%, rgba(43,123,255,0.16), transparent 40%),
+        linear-gradient(180deg, rgba(3,16,57,.98), rgba(3,10,34,1));
+      background-size: 42px 42px, 42px 42px, auto, auto;
+      background-position: center center;
+    }
+
+    .dashboard::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(120deg, transparent 0 18%, rgba(75,130,255,0.06) 18.2%, transparent 18.5%, transparent 37%, rgba(75,130,255,0.05) 37.2%, transparent 37.5%),
+        linear-gradient(45deg, rgba(47,103,255,0.04), transparent 30%, transparent 70%, rgba(47,103,255,0.04));
+      pointer-events: none;
+    }
+
+    .header {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 680px;
+      height: 96px;
+      clip-path: polygon(8% 0, 92% 0, 100% 25%, 94% 100%, 6% 100%, 0 25%);
+      background:
+        linear-gradient(180deg, rgba(112,169,255,.25), rgba(32,76,171,.22)),
+        rgba(11, 37, 105, 0.85);
+      border: 1px solid rgba(127, 187, 255, 0.55);
+      box-shadow: 0 0 30px rgba(72, 157, 255, 0.2), inset 0 0 35px rgba(52, 111, 255, 0.18);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      letter-spacing: 4px;
+      z-index: 20;
+    }
+
+    .header::before,
+    .header::after {
+      content: "";
+      position: absolute;
+      top: -14px;
+      width: 180px;
+      height: 44px;
+      background: linear-gradient(180deg, rgba(158, 198, 255, 0.18), rgba(33, 70, 162, 0.08));
+      border: 1px solid rgba(127, 187, 255, 0.45);
+    }
+
+    .header::before {
+      left: -128px;
+      transform: skewX(-34deg);
+      clip-path: polygon(20% 0, 100% 0, 82% 100%, 0 100%);
+    }
+
+    .header::after {
+      right: -128px;
+      transform: skewX(34deg);
+      clip-path: polygon(0 0, 80% 0, 100% 100%, 18% 100%);
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 34px;
+      line-height: 1;
+      text-shadow: 0 0 10px rgba(121, 191, 255, 0.7);
+    }
+
+    .header span {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #88b7ef;
+      letter-spacing: 1px;
+    }
+
+    .clock {
+      position: absolute;
+      right: 26px;
+      top: 18px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-weight: 700;
+      z-index: 20;
+    }
+
+    .clock .date { color: #dcecff; font-size: 18px; }
+    .clock .week { color: #99b9ed; font-size: 16px; }
+    .clock .time { font-size: 42px; color: #f5fbff; text-shadow: 0 0 14px rgba(120,180,255,.35); }
+
+    .side {
+      position: absolute;
+      top: 76px;
+      bottom: 18px;
+      width: 340px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      z-index: 10;
+    }
+
+    .left { left: 14px; }
+    .right { right: 14px; }
+
+    .panel {
+      position: relative;
+      background: linear-gradient(180deg, rgba(9,31,91,.68), rgba(7,18,58,.78));
+      border: 1px solid rgba(78, 142, 255, 0.4);
+      box-shadow: inset 0 0 25px rgba(88, 145, 255, 0.12), 0 0 20px rgba(17,61,159,0.15);
+      overflow: hidden;
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border: 1px solid rgba(104,174,255,0.12);
+      pointer-events: none;
+    }
+
+    .panel::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(107, 191, 255, 0.8), transparent);
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    .panel-header {
+      height: 42px;
+      display: flex;
+      align-items: center;
+      padding: 0 14px 0 68px;
+      position: relative;
+      background: linear-gradient(180deg, rgba(28,64,146,.15), rgba(6,19,66,.04));
+      border-bottom: 1px solid rgba(78, 142, 255, 0.2);
+    }
+
+    .panel-header::before {
+      content: "";
+      position: absolute;
+      left: 10px;
+      top: 7px;
+      width: 52px;
+      height: 24px;
+      background: linear-gradient(135deg, #b8d0e8 0%, #6b88a8 42%, #1a3f8d 42%, #0f255f 100%);
+      clip-path: polygon(0 0, 72% 0, 100% 100%, 0 100%);
+      box-shadow: 0 0 10px rgba(117, 183, 255, 0.2);
+    }
+
+    .panel-header::after {
+      content: "";
+      position: absolute;
+      left: 44px;
+      top: 21px;
+      width: 22px;
+      height: 6px;
+      border-radius: 8px;
+      background: linear-gradient(90deg, rgba(94, 154, 255, 0.3), rgba(109, 219, 255, 0.95));
+      box-shadow: 0 0 10px rgba(109,219,255,0.55);
+    }
+
+    .panel-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #ebf5ff;
+    }
+
+    .panel-subtitle {
+      margin-left: 8px;
+      font-size: 10px;
+      color: #6f92c7;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+    }
+
+    .panel-body { padding: 16px 16px 14px; }
+
+    .panel.tall { height: 246px; }
+    .panel.mid { height: 190px; }
+    .panel.short { height: 170px; }
+    .panel.table-panel { flex: 1; min-height: 240px; }
+
+    .pump-row {
+      display: grid;
+      grid-template-columns: 86px 1fr 86px;
+      align-items: center;
+      gap: 10px;
+      margin: 14px 0;
+    }
+
+    .pump-label {
+      font-size: 12px;
+      color: #e5f1ff;
+      white-space: nowrap;
+    }
+
+    .pump-value {
+      text-align: right;
+      font-family: "Segoe UI", sans-serif;
+      font-weight: 700;
+      color: #d7e9ff;
+      text-shadow: 0 0 8px rgba(115,173,255,0.22);
+    }
+
+    .pump-value em {
+      font-style: normal;
+      color: #92acd2;
+      font-size: 12px;
+      margin-left: 2px;
+    }
+
+    .track {
+      position: relative;
+      height: 4px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(174,196,255,0.18), rgba(109,144,220,0.35));
+    }
+
+    .track::before {
+      content: attr(data-min);
+      position: absolute;
+      left: -14px;
+      top: -7px;
+      font-size: 12px;
+      color: #8ba8cf;
+    }
+
+    .dot {
+      position: absolute;
+      top: 50%;
+      width: 14px;
+      height: 14px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      border: 2px solid #8fc0ff;
+      background: radial-gradient(circle at 35% 35%, #d7ebff, #4a84ff 65%, #183a84 100%);
+      box-shadow: 0 0 12px rgba(89, 166, 255, 0.7);
+    }
+
+    .bars {
+      height: 150px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-around;
+      padding: 0 8px;
+      gap: 16px;
+      margin-top: 4px;
+    }
+
+    .bar-item {
+      width: 54px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .bar-wrap {
+      position: relative;
+      width: 18px;
+      height: 126px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+      border: 1px solid rgba(144,190,255,0.06);
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      background: repeating-linear-gradient(
+        to top,
+        #84ecff 0 3px,
+        #1e78ff 3px 6px
+      );
+      box-shadow: 0 0 12px rgba(95, 214, 255, 0.4);
+    }
+
+    .bar-label {
+      font-size: 12px;
+      color: #dbebff;
+      white-space: nowrap;
+    }
+
+    .bar-temp {
+      font-size: 30px;
+      line-height: 1;
+      font-weight: 700;
+      color: #dff0ff;
+    }
+
+    .bar-temp span {
+      font-size: 12px;
+      color: #82a8d8;
+      margin-left: 2px;
+    }
+
+    .switch-list { display: flex; flex-direction: column; gap: 14px; }
+
+    .switch-row {
+      display: grid;
+      grid-template-columns: 28px 1fr 92px;
+      gap: 12px;
+      align-items: center;
+      padding: 8px 8px;
+      background: rgba(11, 24, 71, 0.38);
+      border: 1px solid rgba(77, 136, 245, 0.14);
+    }
+
+    .tower-icon {
+      width: 20px;
+      height: 28px;
+      margin-left: 2px;
+      background: linear-gradient(180deg, #d7ebff, #7da4dd 55%, #1f55ae);
+      clip-path: polygon(50% 0, 84% 14%, 84% 80%, 50% 100%, 16% 80%, 16% 14%);
+      opacity: 0.9;
+      box-shadow: 0 0 10px rgba(130, 190, 255, 0.32);
+    }
+
+    .switch-name { font-size: 13px; color: #dcecff; }
+
+    .toggle {
+      display: flex;
+      justify-content: end;
+      gap: 8px;
+    }
+
+    .toggle span {
+      min-width: 34px;
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(112, 161, 255, 0.28);
+      background: rgba(35, 57, 114, 0.7);
+      color: #6e88ad;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: lowercase;
+    }
+
+    .toggle .on.active,
+    .toggle .off.active {
+      color: #eff6ff;
+      background: linear-gradient(180deg, #4d82ff, #365ea8);
+      box-shadow: 0 0 10px rgba(88, 137, 255, 0.25);
+    }
+
+    .gauge-wrap {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      padding-top: 4px;
+    }
+
+    .gauge {
+      width: 148px;
+      text-align: center;
+    }
+
+    .gauge svg {
+      width: 148px;
+      height: 108px;
+      overflow: visible;
+    }
+
+    .gauge-title {
+      margin-top: -8px;
+      color: #dcecff;
+      font-size: 13px;
+    }
+
+    .gauge-value {
+      font-size: 34px;
+      line-height: 1;
+      font-weight: 700;
+      color: #dceeff;
+    }
+
+    .gauge-value span {
+      font-size: 13px;
+      color: #87a9d5;
+      margin-left: 2px;
+    }
+
+    .host-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      color: #dcecff;
+      margin-top: 2px;
+    }
+
+    .host-table th,
+    .host-table td {
+      border-bottom: 1px solid rgba(81, 136, 238, 0.14);
+      padding: 10px 6px;
+      text-align: center;
+    }
+
+    .host-table thead th {
+      color: #7fa6d6;
+      font-weight: 600;
+      background: rgba(30, 55, 113, 0.25);
+    }
+
+    .host-table tbody th {
+      color: #cfe4ff;
+      font-weight: 600;
+      white-space: nowrap;
+      text-align: left;
+      padding-left: 10px;
+    }
+
+    .center-stage {
+      position: absolute;
+      left: 354px;
+      right: 354px;
+      top: 102px;
+      bottom: 24px;
+      z-index: 2;
+    }
+
+    .plant {
+      position: absolute;
+      inset: 0;
+    }
+
+    .pipe {
+      position: absolute;
+      height: 10px;
+      border-radius: 10px;
+      background: linear-gradient(90deg, rgba(72,147,255,0.15), rgba(61,142,255,0.95), rgba(72,147,255,0.15));
+      box-shadow: 0 0 10px rgba(55, 145, 255, 0.5);
+    }
+
+    .pipe.green {
+      background: linear-gradient(90deg, rgba(44,252,188,0.12), rgba(31,232,193,0.95), rgba(44,252,188,0.12));
+      box-shadow: 0 0 10px rgba(37, 247, 189, 0.38);
+    }
+
+    .pipe.v {
+      width: 10px;
+      height: auto;
+      background: linear-gradient(180deg, rgba(72,147,255,0.15), rgba(61,142,255,0.95), rgba(72,147,255,0.15));
+    }
+
+    .pipe.v.green {
+      background: linear-gradient(180deg, rgba(44,252,188,0.12), rgba(31,232,193,0.95), rgba(44,252,188,0.12));
+    }
+
+    .equip {
+      position: absolute;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,.35));
+    }
+
+    .tower {
+      width: 52px;
+      height: 92px;
+      background: linear-gradient(180deg, #8896ac, #59667c 48%, #35465d 100%);
+      border: 1px solid rgba(177, 200, 230, 0.28);
+      transform: skewY(-20deg);
+    }
+
+    .tower::before {
+      content: "";
+      position: absolute;
+      inset: 10px 7px 12px;
+      background:
+        linear-gradient(90deg, transparent 0 2px, rgba(0,0,0,.18) 2px 3px, transparent 3px 8px),
+        linear-gradient(180deg, transparent 0 2px, rgba(0,0,0,.12) 2px 3px, transparent 3px 8px),
+        linear-gradient(180deg, #8bf3ff, #56b8ff 60%, #1c66d0);
+      opacity: 0.9;
+    }
+
+    .tower::after {
+      content: "";
+      position: absolute;
+      top: -13px;
+      left: 9px;
+      width: 34px;
+      height: 18px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 40%, #9fd7ff, #5a80b9 70%, #384f77 100%);
+      box-shadow: inset 0 0 0 4px rgba(15,25,53,.4);
+    }
+
+    .pump {
+      width: 74px;
+      height: 30px;
+      border-radius: 18px 8px 8px 18px;
+      background: linear-gradient(180deg, #6f7f97, #2b3850);
+      border: 1px solid rgba(156, 194, 240, 0.2);
+    }
+
+    .pump::before {
+      content: "";
+      position: absolute;
+      right: -14px;
+      top: 4px;
+      width: 24px;
+      height: 22px;
+      border-radius: 4px 12px 12px 4px;
+      background: linear-gradient(180deg, #7483a0, #2d3f60);
+    }
+
+    .pump::after {
+      content: "";
+      position: absolute;
+      left: 24px;
+      top: -9px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #90d5ff, #4f86d8 60%, #35518c);
+      box-shadow: 0 0 10px rgba(105, 195, 255, 0.4);
+    }
+
+    .machine {
+      width: 120px;
+      height: 34px;
+      border-radius: 6px;
+      background: linear-gradient(180deg, #d6dee6, #98a7b8 48%, #6f7e90);
+      border: 1px solid rgba(194, 211, 235, 0.24);
+    }
+
+    .machine::before,
+    .machine::after {
+      content: "";
+      position: absolute;
+      top: 8px;
+      width: 16px;
+      height: 18px;
+      background: linear-gradient(180deg, #5ba1ff, #3768bc);
+      border-radius: 3px;
+    }
+
+    .machine::before { left: -4px; }
+    .machine::after { right: -4px; }
+
+    .hex-label {
+      position: absolute;
+      min-width: 38px;
+      height: 22px;
+      padding: 0 10px;
+      line-height: 22px;
+      text-align: center;
+      font-size: 12px;
+      color: #03273d;
+      background: #22e9bf;
+      box-shadow: 0 0 12px rgba(34, 233, 191, 0.26);
+    }
+
+    .hex-label::before,
+    .hex-label::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      width: 0;
+      height: 0;
+      border-top: 11px solid transparent;
+      border-bottom: 11px solid transparent;
+    }
+
+    .hex-label::before { left: -8px; border-right: 8px solid #22e9bf; }
+    .hex-label::after { right: -8px; border-left: 8px solid #22e9bf; }
+
+    .metric {
+      position: absolute;
+      padding: 3px 8px;
+      border: 1px solid rgba(103,167,255,0.4);
+      background: rgba(4, 21, 66, 0.84);
+      font-size: 11px;
+      color: #eaf5ff;
+      white-space: nowrap;
+    }
+
+    .metric b { color: #7cf0ff; }
+    .metric.orange b { color: var(--orange); }
+
+    .node {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #dff2ff, #6eb2ff 60%, #315eb2);
+      box-shadow: 0 0 10px rgba(89, 178, 255, .5);
+    }
+
+    .line-caption {
+      position: absolute;
+      font-size: 13px;
+      color: #dcecff;
+      text-shadow: 0 0 8px rgba(97,165,255,.25);
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <div class="header">
+      <h1>暖通可视化系统</h1>
+      <span>HVAC VISUALIZATION SYSTEM</span>
+    </div>
+
+    <div class="clock">
+      <div class="date">2026-04-16</div>
+      <div class="week">星期四</div>
+      <div class="time" id="clock">15:50:51</div>
+    </div>
+
+    <aside class="side left">
+      <section class="panel tall">
+        <div class="panel-header">
+          <div class="panel-title">冷却泵参数</div>
+          <div class="panel-subtitle">COOLING PUMP PARAMETERS</div>
+        </div>
+        <div class="panel-body">
+          <div class="pump-row"><div class="pump-label">#1冷却泵</div><div class="track" data-min="5"><span class="dot" style="left:78%"></span></div><div class="pump-value">17.71<em>r/min</em></div></div>
+          <div class="pump-row"><div class="pump-label">#2冷却泵</div><div class="track" data-min="4"><span class="dot" style="left:6%"></span></div><div class="pump-value">5.84<em>r/min</em></div></div>
+          <div class="pump-row"><div class="pump-label">#3冷却泵</div><div class="track" data-min="3"><span class="dot" style="left:70%"></span></div><div class="pump-value">14.23<em>r/min</em></div></div>
+          <div class="pump-row"><div class="pump-label">#4冷却泵</div><div class="track" data-min="2"><span class="dot" style="left:28%"></span></div><div class="pump-value">10.02<em>r/min</em></div></div>
+          <div class="pump-row"><div class="pump-label">#5冷却泵</div><div class="track" data-min="1"><span class="dot" style="left:78%"></span></div><div class="pump-value">16.12<em>r/min</em></div></div>
+        </div>
+      </section>
+
+      <section class="panel mid">
+        <div class="panel-header">
+          <div class="panel-title">冷水机组信息</div>
+          <div class="panel-subtitle">ENVIRONMENTAL MONITORING</div>
+        </div>
+        <div class="panel-body">
+          <div class="bars">
+            <div class="bar-item">
+              <div class="bar-wrap"><div class="bar-fill" style="height:72%"></div></div>
+              <div class="bar-label">#1离心机</div>
+              <div class="bar-temp">71<span>°C</span></div>
+            </div>
+            <div class="bar-item">
+              <div class="bar-wrap"><div class="bar-fill" style="height:42%"></div></div>
+              <div class="bar-label">#2离心机</div>
+              <div class="bar-temp">42<span>°C</span></div>
+            </div>
+            <div class="bar-item">
+              <div class="bar-wrap"><div class="bar-fill" style="height:60%"></div></div>
+              <div class="bar-label">#3离心机</div>
+              <div class="bar-temp">60<span>°C</span></div>
+            </div>
+            <div class="bar-item">
+              <div class="bar-wrap"><div class="bar-fill" style="height:26%"></div></div>
+              <div class="bar-label">#1螺杆机</div>
+              <div class="bar-temp">26<span>°C</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel tall">
+        <div class="panel-header">
+          <div class="panel-title">冷却泵参数</div>
+          <div class="panel-subtitle">COOLING PUMP PARAMETERS</div>
+        </div>
+        <div class="panel-body">
+          <div class="pump-row"><div class="pump-label">#6冷却泵</div><div class="track" data-min="11"><span class="dot" style="left:74%"></span></div><div class="pump-value">17.62<em>r/min</em></div></div>
+          <div class="pump-row"><div class="pump-label">#7冷却泵</div><div class="track" data-min="10"><span class="dot" style="left:18%"></span></div><div class="pump-value">3.03<em>r/min</em></div></div>
+          <div class="pump-row"><div class="pump-label">#8冷却泵</div><div class="track" data-min="9"><span class="dot" style="left:66%"></span></div><div class="pump-value">12.95<em>r/min</em></div></div>
+          <div class="pump-row"><div class="pump-label">#9冷却泵</div><div class="track" data-min="8"><span class="dot" style="left:56%"></span></div><div class="pump-value">11.28<em>r/min</em></div></div>
+          <div class="pump-row"><div class="pump-label">#10冷却泵</div><div class="track" data-min="7"><span class="dot" style="left:12%"></span></div><div class="pump-value">18.44<em>r/min</em></div></div>
+          <div class="pump-row"><div class="pump-label">#11冷却泵</div><div class="track" data-min="6"><span class="dot" style="left:88%"></span></div><div class="pump-value">12.20<em>r/min</em></div></div>
+        </div>
+      </section>
+    </aside>
+
+    <aside class="side right">
+      <section class="panel short">
+        <div class="panel-header">
+          <div class="panel-title">冷却塔设备状态</div>
+          <div class="panel-subtitle">DEVICE STATUS</div>
+        </div>
+        <div class="panel-body">
+          <div class="switch-list">
+            <div class="switch-row"><div class="tower-icon"></div><div class="switch-name">#1冷却塔</div><div class="toggle"><span class="on active">on</span><span class="off">off</span></div></div>
+            <div class="switch-row"><div class="tower-icon"></div><div class="switch-name">#2冷却塔</div><div class="toggle"><span class="on active">on</span><span class="off">off</span></div></div>
+            <div class="switch-row"><div class="tower-icon"></div><div class="switch-name">#3冷却塔</div><div class="toggle"><span class="on">on</span><span class="off active">off</span></div></div>
+            <div class="switch-row"><div class="tower-icon"></div><div class="switch-name">#4冷却塔</div><div class="toggle"><span class="on active">on</span><span class="off">off</span></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel mid">
+        <div class="panel-header">
+          <div class="panel-title">环境监控</div>
+          <div class="panel-subtitle">ENVIRONMENTAL MONITORING</div>
+        </div>
+        <div class="panel-body">
+          <div class="gauge-wrap">
+            <div class="gauge">
+              <svg viewBox="0 0 160 120">
+                <path d="M25 90 A55 55 0 0 1 135 90" fill="none" stroke="rgba(105,148,230,0.35)" stroke-width="10" />
+                <path d="M25 90 A55 55 0 0 1 90 38" fill="none" stroke="url(#g1)" stroke-width="10" />
+                <line x1="80" y1="90" x2="66" y2="45" stroke="#55d4ff" stroke-width="3" />
+                <circle cx="80" cy="90" r="5" fill="#dff4ff" />
+                <text x="16" y="88" fill="#cfe3ff" font-size="10">0</text>
+                <text x="23" y="52" fill="#cfe3ff" font-size="10">10</text>
+                <text x="48" y="27" fill="#cfe3ff" font-size="10">20</text>
+                <text x="80" y="18" fill="#cfe3ff" font-size="10">30</text>
+                <text x="112" y="27" fill="#cfe3ff" font-size="10">40</text>
+                <text x="136" y="52" fill="#cfe3ff" font-size="10">50</text>
+                <defs>
+                  <linearGradient id="g1" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#1a69ff" />
+                    <stop offset="100%" stop-color="#7cefff" />
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div class="gauge-title">室内温度</div>
+              <div class="gauge-value">40<span>°C</span></div>
+            </div>
+            <div class="gauge">
+              <svg viewBox="0 0 160 120">
+                <path d="M25 90 A55 55 0 0 1 135 90" fill="none" stroke="rgba(105,148,230,0.35)" stroke-width="10" />
+                <path d="M25 90 A55 55 0 0 1 102 40" fill="none" stroke="url(#g2)" stroke-width="10" />
+                <line x1="80" y1="90" x2="72" y2="50" stroke="#55d4ff" stroke-width="3" />
+                <circle cx="80" cy="90" r="5" fill="#dff4ff" />
+                <text x="16" y="88" fill="#cfe3ff" font-size="10">0</text>
+                <text x="23" y="52" fill="#cfe3ff" font-size="10">10</text>
+                <text x="48" y="27" fill="#cfe3ff" font-size="10">20</text>
+                <text x="80" y="18" fill="#cfe3ff" font-size="10">30</text>
+                <text x="112" y="27" fill="#cfe3ff" font-size="10">40</text>
+                <text x="136" y="52" fill="#cfe3ff" font-size="10">50</text>
+                <defs>
+                  <linearGradient id="g2" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#1a69ff" />
+                    <stop offset="100%" stop-color="#7cefff" />
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div class="gauge-title">室外温度</div>
+              <div class="gauge-value">37<span>°C</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel table-panel">
+        <div class="panel-header">
+          <div class="panel-title">主机群监控</div>
+          <div class="panel-subtitle">HOST GROUP MONITORING</div>
+        </div>
+        <div class="panel-body">
+          <table class="host-table">
+            <thead>
+              <tr>
+                <th>机组</th>
+                <th>#1机组</th>
+                <th>#2机组</th>
+                <th>#3机组</th>
+                <th>#4机组</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th>单元进水温度</th><td>47°</td><td>39°</td><td>40°</td><td>48°</td></tr>
+              <tr><th>单元出水温度</th><td>47°</td><td>42°</td><td>46°</td><td>48°</td></tr>
+              <tr><th>室外环境温度</th><td>24°</td><td>21°</td><td>42°</td><td>34°</td></tr>
+              <tr><th>室内环境温度</th><td>11°</td><td>13°</td><td>15°</td><td>10°</td></tr>
+              <tr><th>冷凝器温度</th><td>6°</td><td>8°</td><td>8°</td><td>9°</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </aside>
+
+    <main class="center-stage">
+      <div class="plant">
+        <div class="line-caption" style="left:240px;top:-6px;">1#冷却塔</div>
+        <div class="line-caption" style="left:150px;top:36px;color:#7ea1d5;">2#冷却塔</div>
+
+        <div class="equip tower" style="left:248px;top:10px"></div>
+        <div class="equip tower" style="left:302px;top:10px"></div>
+        <div class="equip tower" style="left:356px;top:10px"></div>
+        <div class="equip tower" style="left:410px;top:10px"></div>
+
+        <div class="equip tower" style="left:160px;top:66px"></div>
+        <div class="equip tower" style="left:214px;top:66px"></div>
+        <div class="equip tower" style="left:268px;top:66px"></div>
+        <div class="equip tower" style="left:322px;top:66px"></div>
+
+        <div class="equip tower" style="left:72px;top:122px"></div>
+        <div class="equip tower" style="left:126px;top:122px"></div>
+        <div class="equip tower" style="left:180px;top:122px"></div>
+
+        <div class="pipe" style="left:240px;top:132px;width:280px"></div>
+        <div class="pipe" style="left:152px;top:188px;width:476px"></div>
+        <div class="pipe v" style="left:326px;top:100px;height:150px"></div>
+        <div class="pipe v" style="left:220px;top:156px;height:176px"></div>
+        <div class="pipe" style="left:86px;top:300px;width:420px;transform:rotate(-28deg);transform-origin:left center"></div>
+        <div class="pipe" style="left:84px;top:404px;width:504px;transform:rotate(-29deg);transform-origin:left center"></div>
+        <div class="pipe" style="left:348px;top:264px;width:344px"></div>
+        <div class="pipe" style="left:470px;top:352px;width:300px"></div>
+        <div class="pipe green" style="left:508px;top:322px;width:270px"></div>
+        <div class="pipe green" style="left:556px;top:398px;width:234px"></div>
+        <div class="pipe green v" style="left:594px;top:300px;height:136px"></div>
+        <div class="pipe green v" style="left:694px;top:312px;height:154px"></div>
+        <div class="pipe green" style="left:420px;top:480px;width:340px"></div>
+        <div class="pipe green" style="left:344px;top:566px;width:430px"></div>
+        <div class="pipe v" style="left:760px;top:332px;height:278px"></div>
+        <div class="pipe v green" style="left:440px;top:402px;height:178px"></div>
+
+        <div class="node" style="left:510px;top:118px"></div>
+        <div class="node" style="left:542px;top:300px"></div>
+        <div class="node" style="left:642px;top:318px"></div>
+        <div class="node" style="left:736px;top:344px"></div>
+        <div class="node" style="left:706px;top:468px"></div>
+        <div class="node" style="left:388px;top:568px"></div>
+        <div class="node" style="left:526px;top:568px"></div>
+
+        <div class="equip pump" style="left:442px;top:184px"></div>
+        <div class="equip pump" style="left:350px;top:246px"></div>
+        <div class="equip pump" style="left:258px;top:306px"></div>
+        <div class="equip pump" style="left:166px;top:368px"></div>
+        <div class="equip pump" style="left:74px;top:430px"></div>
+
+        <div class="equip machine" style="left:604px;top:292px"></div>
+        <div class="equip machine" style="left:562px;top:390px"></div>
+        <div class="equip machine" style="left:516px;top:470px;transform:scale(1.08)"></div>
+
+        <div class="equip pump" style="left:810px;top:354px"></div>
+        <div class="equip pump" style="left:740px;top:420px"></div>
+        <div class="equip pump" style="left:670px;top:474px"></div>
+        <div class="equip pump" style="left:600px;top:540px"></div>
+        <div class="equip pump" style="left:476px;top:604px"></div>
+
+        <div class="equip machine" style="left:232px;top:590px;width:90px"></div>
+
+        <div class="line-caption" style="left:462px;top:214px">1#冷却泵</div>
+        <div class="line-caption" style="left:370px;top:278px">2#冷却泵</div>
+        <div class="line-caption" style="left:278px;top:338px">3#冷却泵</div>
+        <div class="line-caption" style="left:186px;top:400px">4#冷却泵</div>
+        <div class="line-caption" style="left:94px;top:462px">5#冷却泵</div>
+        <div class="line-caption" style="left:626px;top:326px">1#离心机</div>
+        <div class="line-caption" style="left:584px;top:424px">2#离心机</div>
+        <div class="line-caption" style="left:536px;top:504px">3#离心机</div>
+        <div class="line-caption" style="left:830px;top:384px">6#冷冻泵</div>
+        <div class="line-caption" style="left:758px;top:448px">7#冷冻泵</div>
+        <div class="line-caption" style="left:688px;top:504px">8#冷冻泵</div>
+        <div class="line-caption" style="left:618px;top:570px">9#冷冻泵</div>
+        <div class="line-caption" style="left:492px;top:636px">11#冷冻泵</div>
+        <div class="line-caption" style="left:204px;top:660px">板式换热器</div>
+
+        <div class="hex-label" style="left:522px;top:254px">开</div>
+        <div class="hex-label" style="left:454px;top:318px">正常</div>
+        <div class="hex-label" style="left:374px;top:388px">正常</div>
+        <div class="hex-label" style="left:610px;top:360px">开</div>
+        <div class="hex-label" style="left:594px;top:458px">开</div>
+        <div class="hex-label" style="left:558px;top:538px">开</div>
+        <div class="hex-label" style="left:302px;top:708px">开</div>
+
+        <div class="metric orange" style="left:486px;top:22px"><b>4.9066405</b> ℃</div>
+        <div class="metric" style="left:430px;top:22px"><b>-7</b></div>
+        <div class="metric" style="left:774px;top:236px"><b>5270</b> r/min</div>
+        <div class="metric" style="left:728px;top:350px"><b>12</b> bar</div>
+        <div class="metric" style="left:706px;top:438px"><b>12</b> bar</div>
+        <div class="metric" style="left:676px;top:516px"><b>12</b> bar</div>
+        <div class="metric" style="left:316px;top:598px"><b>124</b> bar</div>
+        <div class="metric" style="left:344px;top:650px"><b>57</b> bar</div>
+        <div class="metric" style="left:430px;top:690px"><b>11</b> bar</div>
+        <div class="metric" style="left:836px;top:646px"><b>-7</b> m³/h</div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    function updateClock() {
+      const el = document.getElementById('clock');
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+      el.textContent = `${h}:${m}:${s}`;
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+  </script>
+</body>
+</html>
