@@ -6,6 +6,9 @@
   width: 380px;
   z-index: 30;
   pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
 /* 科技面板基础样式 */
@@ -66,109 +69,74 @@
 }
 
 .sci-panel-body {
-  padding: 24px 20px 20px;
+  padding: 6px 6px 6px;
 }
 
-/* 储罐行样式 */
-.tank-row {
-  display: grid;
-  grid-template-columns: 100px 50px 1fr 110px;
-  align-items: center;
-  gap: 12px;
-  margin: 20px 0;
+.tank-panel-top {
+  flex: 0 0 auto;
+}
+
+.tank-panel-main {
+  flex: 0 0 auto;
+}
+
+.tank-panel-chart-wrap {
   position: relative;
+  border-radius: 10px;
+  padding: 16px 14px 10px;
+  background:
+    linear-gradient(180deg, rgba(7, 20, 47, 0.64), rgba(4, 13, 33, 0.9)),
+    radial-gradient(circle at top left, rgba(60, 157, 255, 0.15), transparent 38%);
+  border: 1px solid rgba(86, 152, 220, 0.2);
+  box-shadow:
+    inset 0 0 24px rgba(40, 110, 210, 0.08),
+    0 8px 20px rgba(0, 0, 0, 0.24);
 }
 
-.tank-label {
-  font-size: 16px;
-  color: rgba(200, 220, 245, 0.9);
-  white-space: nowrap;
-  font-weight: 500;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-}
-
-/* 最小值标签 */
-.tank-track::before {
-  content: attr(data-min);
-  font-size: 14px;
-  color: rgba(140, 170, 210, 0.7);
-  font-weight: 600;
-}
-
-/* 进度条轨道 */
-.tank-track {
-  position: relative;
-  height: 6px;
-  border-radius: 3px;
-  background: linear-gradient(90deg, 
-    rgba(40, 70, 120, 0.6) 0%, 
-    rgba(30, 55, 95, 0.8) 100%
-  );
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-}
-
-/* 进度条填充 */
-.tank-track::after {
+.tank-panel-chart-wrap::before,
+.tank-panel-chart-wrap::after {
   content: "";
   position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: var(--progress, 0%);
-  background: linear-gradient(90deg, 
-    rgba(60, 140, 255, 0.9) 0%, 
-    rgba(80, 180, 255, 0.95) 50%,
-    rgba(100, 200, 255, 1) 100%
-  );
-  border-radius: 3px;
-  box-shadow: 
-    0 0 10px rgba(80, 160, 255, 0.6),
-    inset 0 1px 2px rgba(255, 255, 255, 0.3);
-  transition: width 0.3s ease;
+  width: 22px;
+  height: 22px;
+  border-color: rgba(85, 196, 255, 0.42);
+  pointer-events: none;
 }
 
-/* 进度点 - 发光效果 */
-.tank-dot {
-  position: absolute;
-  top: 50%;
-  width: 18px;
-  height: 18px;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  border: 3px solid rgba(120, 200, 255, 0.9);
-  background: radial-gradient(circle at 35% 35%, 
-    rgba(240, 250, 255, 1) 0%, 
-    rgba(150, 210, 255, 1) 40%,
-    rgba(80, 160, 255, 1) 70%,
-    rgba(40, 100, 180, 1) 100%
-  );
-  box-shadow: 
-    0 0 15px rgba(100, 180, 255, 0.9),
-    0 0 25px rgba(80, 160, 255, 0.6),
-    inset 0 1px 3px rgba(255, 255, 255, 0.5);
-  transition: left 0.3s ease;
-  z-index: 2;
+.tank-panel-chart-wrap::before {
+  left: 8px;
+  top: 8px;
+  border-left: 1px solid rgba(85, 196, 255, 0.42);
+  border-top: 1px solid rgba(85, 196, 255, 0.42);
 }
 
-/* 数值显示 - 大号字体 */
-.tank-value {
-  text-align: right;
+.tank-panel-chart-wrap::after {
+  right: 8px;
+  bottom: 8px;
+  border-right: 1px solid rgba(85, 196, 255, 0.42);
+  border-bottom: 1px solid rgba(85, 196, 255, 0.42);
+}
+
+.tank-panel-chart-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  padding: 0 4px;
   font-family: "Segoe UI", "Arial", sans-serif;
+  font-size: 12px;
   font-weight: 700;
-  font-size: 28px;
-  color: rgba(230, 245, 255, 0.95);
-  text-shadow: 
-    0 0 10px rgba(100, 180, 255, 0.4),
-    0 2px 4px rgba(0, 0, 0, 0.5);
   letter-spacing: 1px;
+  color: rgba(168, 207, 236, 0.88);
+  text-transform: uppercase;
 }
 
-.tank-value em {
-  font-style: normal;
-  color: rgba(160, 190, 220, 0.8);
-  font-size: 14px;
-  margin-left: 4px;
-  font-weight: 500;
+.tank-panel-chart {
+  width: 100%;
+  height: auto;
+}
+
+.tank-chart-fallback {
+  width: 100%;
+  height: 100%;
 }

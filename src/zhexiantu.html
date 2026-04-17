@@ -20,7 +20,7 @@
                                 <div id="chart-panel" style="height: 100vh;width: 100vw;overflow: hidden;"></div>
                                 <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
                                 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
-                                
+
                                 <script type="text/javascript">
                                     var dom = document.getElementById("chart-panel");
                                     var myChart = echarts.init(dom);
@@ -29,43 +29,19 @@
                                     let echartData = [
       {
          value: 44,
-         name: '市本级',
+         name: '盐酸罐',
       },
       {
          value: 43,
-         name: '广陵区',
+         name: '盐酸罐',
       },
       {
          value: 41,
-         name: '邗江区',
+         name: '盐酸罐',
       },
       {
          value: 40,
-         name: '开发区',
-      },
-      {
-         value: 38,
-         name: '江都区',
-      },
-      {
-         value: 33,
-         name: '瘦西湖景区',
-      },
-      {
-         value: 32,
-         name: '生态科技新城',
-      },
-      {
-         value: 31,
-         name: '宝应县',
-      },
-      {
-         value: 22,
-         name: '高邮市',
-      },
-      {
-         value: 10,
-         name: '仪征市',
+         name: '硫酸罐',
       },
 ];
 let attackSourcesColor = [
@@ -194,7 +170,7 @@ option = {
             padding: [-3, 0, 0, 0],
             margin: 10, //刻度标签与轴线之间的距离
             formatter: function (value, index) {
-               return `{a|${echartData[index].value}}{b|宗}`;
+               return `{a|${echartData[index].value}}`;
             },
             rich: {
                a: {
@@ -312,5 +288,4 @@ option = {
                                     }
                                 </script>
                      </body>
-                </html> 
-    
+                </html>
