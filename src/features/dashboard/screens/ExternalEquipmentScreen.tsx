@@ -1,10 +1,11 @@
 import React from 'react';
-import { Factory, Activity, Settings, LayoutDashboard } from 'lucide-react';
+import { Factory, Activity, Settings } from 'lucide-react';
 import { cn } from '../../../utils/cn';
 import { getAlarmNames, hasAlarm } from '../lib/alarmUtils';
 import { AlarmData, ScadaData } from '../model/types';
 import fanDrumImage from '../../../images/风机_滚筒.png';
 import scrubberTowerImage from '../../../images/洗涤塔.png';
+import centrifugeImage from '../../../images/离心机.png';
 
 const equipmentValueClass = "rounded-md px-3 py-1 text-sm font-black bg-transparent";
 const alarmBadgeInlineClass =
@@ -18,6 +19,7 @@ const externalEquipmentAreaStyles = {
   drumGrid: "relative z-10 grid h-full grid-cols-[0.95fr_1fr_1fr_0.92fr] items-center gap-2 px-3",
   fanIcon: "h-12 w-12 object-contain",
   towerIcon: "h-20 w-12 object-contain",
+  centrifugeIcon: "h-14 w-20 object-contain",
 };
 
 export const ExternalEquipmentScreen = ({ data, alarmData }: { data: ScadaData, alarmData: AlarmData }) => (
@@ -319,7 +321,14 @@ export const ExternalEquipmentScreen = ({ data, alarmData }: { data: ScadaData, 
                   hasAlarm('old_centrifuge', alarmData) && "bg-red-500/5 shadow-[0_0_16px_rgba(239,68,68,0.35)] animate-pulse"
                 )}
               >
-                <LayoutDashboard className={cn(hasAlarm('old_centrifuge', alarmData) ? "text-red-600 animate-bounce" : "text-sky-600", data.drum_centrifuge_v > 0 && !hasAlarm('old_centrifuge', alarmData) && "animate-bounce")} size={32} />
+                <img
+                  src={centrifugeImage}
+                  alt="离心机"
+                  className={cn(
+                    externalEquipmentAreaStyles.centrifugeIcon,
+                    data.drum_centrifuge_v > 0 && !hasAlarm('old_centrifuge', alarmData) && "animate-bounce"
+                  )}
+                />
                 <div className={cn("text-xs font-bold", hasAlarm('old_centrifuge', alarmData) ? "text-red-200 animate-pulse" : "panel-title-glow")}>离心机</div>
                 <div
                   className={cn(
