@@ -32,7 +32,7 @@ export const ScrollDashboard = ({
   alarmData: AlarmData;
   sidePanelPreviewEnabled?: boolean;
 }) => {
-  const outerClassName = sidePanelPreviewEnabled ? 'pl-[420px] pr-[420px] py-[15px]' : 'px-4 py-[15px]';
+  const outerClassName = sidePanelPreviewEnabled ? 'pl-[420px] pr-[420px]' : '';
   const [scale, setScale] = useState(0.92);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
@@ -71,7 +71,7 @@ export const ScrollDashboard = ({
   };
 
   return (
-    <div className={`dashboard-scroll-shell h-full overflow-y-auto overflow-x-hidden ${outerClassName}`}>
+    <div className={`dashboard-scroll-shell flex h-full items-center justify-center overflow-y-auto overflow-x-hidden ${outerClassName}`}>
       <div
         className={`dashboard-workspace relative mx-auto flex h-[calc(100vh-118px)] max-w-[1800px] items-center justify-center overflow-visible rounded-[32px] ${dragging ? 'cursor-grabbing' : 'cursor-grab'}`}
         onWheel={handleWheel}
