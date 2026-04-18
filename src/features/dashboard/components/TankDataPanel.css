@@ -1,8 +1,13 @@
 /* 罐区数据面板样式 */
+:root {
+  --side-panel-width: 368px;
+  --side-panel-scale: 0.97;
+}
+
 .tank-data-panel {
   position: fixed;
   top: 50px;
-  width: 380px;
+  width: var(--side-panel-width);
   z-index: 30;
   pointer-events: auto;
   display: flex;
@@ -24,27 +29,30 @@
   right: auto;
   left: auto;
   bottom: auto;
-  width: 100%;
+  width: calc(100% / var(--side-panel-scale));
+  transform: scale(var(--side-panel-scale));
+  transform-origin: top center;
 }
 
 .tank-data-column {
   position: fixed;
   top: 50px;
   bottom: 18px;
-  width: 380px;
+  width: var(--side-panel-width);
   z-index: 30;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 10px;
   pointer-events: auto;
+  overflow: hidden;
 }
 
 .tank-data-column--left {
-  left: 60px;
+  left: 45px;
 }
 
 .tank-data-column--right {
-  right: 60px;
+  right: 45px;
 }
 
 /* 科技面板基础样式 */

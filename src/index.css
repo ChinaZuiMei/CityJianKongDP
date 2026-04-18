@@ -6,7 +6,8 @@
 }
 
 :root {
-  --app-scale: 0.9;
+  --dashboard-module-scale: 0.9;
+  /*--app-scale: 0.9;*/
 }
 
 html,
@@ -427,6 +428,21 @@ body {
 
 .dashboard-module-frame--compact {
   padding: 0.25rem;
+}
+
+.dashboard-module-scale {
+  width: calc(100% / var(--dashboard-module-scale));
+  height: calc(100% / var(--dashboard-module-scale));
+  transform: scale(var(--dashboard-module-scale));
+  transform-origin: center center;
+}
+
+.dashboard-module-scale--main,
+.dashboard-module-scale--tank,
+.dashboard-module-scale--external {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @media (min-width: 1536px) {
