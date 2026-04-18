@@ -13,7 +13,7 @@
   pointer-events: auto;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 0;
 }
 
 .tank-data-panel--left {
@@ -43,13 +43,12 @@
   z-index: 30;
   display: flex;
   flex-direction: column;
-  gap: 10px;
   pointer-events: auto;
   overflow: hidden;
 }
 
 .tank-data-column--left {
-  left: 45px;
+  left: 27px;
 }
 
 .tank-data-column--right {
