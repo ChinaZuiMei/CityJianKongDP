@@ -33,7 +33,8 @@ export const ScrollDashboard = ({
   sidePanelPreviewEnabled?: boolean;
 }) => {
   const outerClassName = sidePanelPreviewEnabled ? 'pl-[420px] pr-[420px]' : '';
-  const columnRows = 'minmax(335px, 41vh) minmax(300px, 37vh)';
+  const leftColumnRows = 'minmax(335px, 41vh) minmax(300px, 37vh)';
+  const rightColumnRows = 'minmax(380px, 46vh) minmax(255px, 32vh)';
   const [scale, setScale] = useState(0.92);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
@@ -91,7 +92,7 @@ export const ScrollDashboard = ({
           }}
         >
           <div className="grid grid-cols-1 gap-[15px] 2xl:grid-cols-2">
-            <div className="grid gap-[15px]" style={{ gridTemplateRows: columnRows }}>
+            <div className="grid gap-[15px]" style={{ gridTemplateRows: leftColumnRows }}>
               <Section title="主画面" minHeight="h-full">
                 <div className="flex h-full items-center justify-center overflow-hidden pt-8">
                   <div className="dashboard-module-scale dashboard-module-scale--main">
@@ -109,9 +110,9 @@ export const ScrollDashboard = ({
               </Section>
             </div>
 
-            <div className="grid gap-[15px]" style={{ gridTemplateRows: columnRows }}>
+            <div className="grid gap-[15px]" style={{ gridTemplateRows: rightColumnRows }}>
               <Section title="罐区" minHeight="h-full">
-                <div className="flex h-full items-center justify-center overflow-hidden pt-8">
+                <div className="flex h-full items-center justify-center overflow-visible pt-8">
                   <div className="dashboard-module-scale dashboard-module-scale--tank">
                     <TankAreaScreen data={data} alarmData={alarmData} />
                   </div>

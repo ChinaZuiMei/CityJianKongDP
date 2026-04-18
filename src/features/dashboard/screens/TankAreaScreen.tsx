@@ -6,8 +6,8 @@ import { AlarmData, ScadaData } from '../model/types';
 import { Tank } from '../ui/SharedComponents';
 
 export const TankAreaScreen = ({ data, alarmData }: { data: ScadaData, alarmData: AlarmData }) => (
-  <div className="flex h-full w-full flex-col gap-3 overflow-hidden px-2 py-1 xl:px-3 xl:py-2">
-    <div className="grid min-h-0 grid-cols-4 gap-3">
+  <div className="flex h-full w-full flex-col gap-3 overflow-visible px-2 py-1 xl:px-3 xl:py-2">
+    <div className="grid min-h-0 grid-cols-4 gap-3 pb-3 overflow-visible">
       {[
         { id: 'hcl_tank1', label: '1# 盐酸罐', level: data.hcl_tank1_level, max: 3.6, variant: 'storage' as const },
         { id: 'hcl_tank2', label: '2# 盐酸罐', level: data.hcl_tank2_level, max: 3.6, variant: 'storage' as const },
@@ -16,7 +16,7 @@ export const TankAreaScreen = ({ data, alarmData }: { data: ScadaData, alarmData
       ].map(tank => {
         const alarmNames = getAlarmNames(tank.id, alarmData);
         return (
-          <div key={tank.id} className="flex min-h-0 flex-col items-center gap-1.5 overflow-hidden px-1 py-1">
+          <div key={tank.id} className="flex min-h-0 flex-col items-center gap-1.5 overflow-visible px-1 py-1">
             <div className="flex min-h-[34px] w-full flex-col items-center justify-start gap-1">
               {alarmNames.length > 0 ? alarmNames.map((name, idx) => (
                 <div key={idx} className="w-full truncate px-2 py-0.5 text-center text-[10px] font-bold text-red-100 animate-pulse xl:text-[11px]">

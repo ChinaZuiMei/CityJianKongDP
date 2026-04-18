@@ -1,7 +1,8 @@
 /* 罐区数据面板样式 */
 :root {
   --side-panel-width: 360px;
-  --side-panel-scale: 0.95;
+  --side-panel-scale: 0.9;
+  --side-panel-bleed: 18px;
 }
 
 .tank-data-panel {
@@ -29,7 +30,7 @@
   right: auto;
   left: auto;
   bottom: auto;
-  width: calc(100% / var(--side-panel-scale));
+  width: calc((100% - var(--side-panel-bleed)) / var(--side-panel-scale));
   transform: scale(var(--side-panel-scale));
   transform-origin: top center;
 }

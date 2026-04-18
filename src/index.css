@@ -8,6 +8,7 @@
 :root {
   --dashboard-module-scale: 0.9;
   --dashboard-module-scale-external: 0.94;
+  --dashboard-module-bleed: 24px;
   /*--app-scale: 0.9;*/
 }
 
@@ -432,8 +433,8 @@ body {
 }
 
 .dashboard-module-scale {
-  width: calc(100% / var(--dashboard-module-scale));
-  height: calc(100% / var(--dashboard-module-scale));
+  width: calc((100% - var(--dashboard-module-bleed)) / var(--dashboard-module-scale));
+  height: calc((100% - var(--dashboard-module-bleed)) / var(--dashboard-module-scale));
   transform: scale(var(--dashboard-module-scale));
   transform-origin: center center;
 }
@@ -447,8 +448,8 @@ body {
 }
 
 .dashboard-module-scale--external {
-  width: calc(100% / var(--dashboard-module-scale-external));
-  height: calc(100% / var(--dashboard-module-scale-external));
+  width: calc((100% - var(--dashboard-module-bleed)) / var(--dashboard-module-scale-external));
+  height: calc((100% - var(--dashboard-module-bleed)) / var(--dashboard-module-scale-external));
   transform: scale(var(--dashboard-module-scale-external));
 }
 
