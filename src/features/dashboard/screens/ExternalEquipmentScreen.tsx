@@ -1,37 +1,23 @@
 import React from 'react';
-import { Factory, Activity, Settings } from 'lucide-react';
+import { Settings } from 'lucide-react';
 import { cn } from '../../../utils/cn';
 import { getAlarmNames, hasAlarm } from '../lib/alarmUtils';
 import { AlarmData, ScadaData } from '../model/types';
 import fanDrumImage from '../../../images/风机_滚筒.png';
 import scrubberTowerImage from '../../../images/洗涤塔.png';
-import centrifugeImage from '../../../images/离心机.png';
+import centrifugeImage from '../../../images/img_5.png';
 
 const equipmentValueClass = "rounded-md px-3 py-1 text-sm font-black bg-transparent";
 const alarmBadgeInlineClass =
   "mt-1 w-max max-w-[170px] rounded bg-red-500/5 px-2.5 py-1 text-center text-xs font-bold text-red-100 shadow-[0_0_14px_rgba(239,68,68,0.25)]";
+const panelClass = "relative h-full min-h-0 overflow-visible rounded-xl bg-transparent pb-2";
+const fanIconClass = "h-18 w-18 object-contain";
+const towerIconClass = "h-28 w-16 object-contain";
+const centrifugeIconClass = "h-14 w-20 object-contain";
 
-const externalEquipmentAreaStyles = {
-  container: "grid h-full grid-rows-2 gap-2.5 px-4 py-3 overflow-visible",
-  oldPlantPanel: "relative h-full min-h-[178px] overflow-visible rounded-xl bg-transparent pb-2",
-  oldPlantGrid: "relative z-10 grid h-full grid-cols-[0.95fr_1fr_1fr_1fr] items-center gap-2 px-3",
-  drumPanel: "relative h-full min-h-[178px] overflow-visible rounded-xl bg-transparent pb-2",
-  drumGrid: "relative z-10 grid h-full grid-cols-[0.95fr_1fr_1fr_0.92fr] items-center gap-2 px-3",
-  fanIcon: "h-12 w-12 object-contain",
-  towerIcon: "h-20 w-12 object-contain",
-  centrifugeIcon: "h-14 w-20 object-contain",
-};
-
-export const ExternalEquipmentScreen = ({ data, alarmData }: { data: ScadaData, alarmData: AlarmData }) => (
-    <div className="external-screen w-full h-full bg-transparent">
-      <div className={externalEquipmentAreaStyles.container}>
-        {/* 聚铝老厂 */}
-        <div className="relative min-h-0">
-          <div className="panel-title-glow mb-2 flex items-center justify-end gap-2 text-right text-sm font-black uppercase tracking-[0.16em]">
-            <Factory size={18} /> 聚铝老厂
-          </div>
-
-          <div className={externalEquipmentAreaStyles.oldPlantPanel}>
+const OldPlantBlock = ({ data, alarmData }: { data: ScadaData; alarmData: AlarmData }) => (
+  <div className="relative min-h-0">
+    <div className={panelClass}>
             <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 1 }}>
               {/* 技改风格：粉色背景装饰线 - 匹配图片中的连续折线 */}
               <polyline
@@ -91,7 +77,7 @@ export const ExternalEquipmentScreen = ({ data, alarmData }: { data: ScadaData, 
               <line x1="87.5%" y1="75%" x2="87.5%" y2="65%" stroke="#38bdf8" strokeWidth="2" opacity="0.75" />
             </svg>
 
-            <div className={externalEquipmentAreaStyles.oldPlantGrid}>
+            <div className="relative z-10 grid h-full grid-cols-[0.95fr_1fr_1fr_1fr] items-center gap-2 px-3">
               {/* 风机 */}
               <div
                 className={cn(
@@ -99,7 +85,7 @@ export const ExternalEquipmentScreen = ({ data, alarmData }: { data: ScadaData, 
                   hasAlarm('old_fan', alarmData) && "bg-red-500/5 shadow-[0_0_16px_rgba(239,68,68,0.35)] animate-pulse"
                 )}
               >
-                <img src={fanDrumImage} alt="风机" className={externalEquipmentAreaStyles.fanIcon} />
+                <img src={fanDrumImage} alt="风机" className={fanIconClass} />
                 <div className={cn("text-xs font-bold", hasAlarm('old_fan', alarmData) ? "text-red-200 animate-pulse" : "panel-title-glow")}>风机</div>
                 <div
                   className={cn(
@@ -118,7 +104,7 @@ export const ExternalEquipmentScreen = ({ data, alarmData }: { data: ScadaData, 
 
               {/* 洗涤塔1 + 循环泵1 */}
               <div className="relative flex flex-col items-center gap-1">
-                <img src={scrubberTowerImage} alt="洗涤塔" className={externalEquipmentAreaStyles.towerIcon} />
+                <img src={scrubberTowerImage} alt="洗涤塔" className={towerIconClass} />
                 <div className="panel-title-glow text-xs font-bold">洗涤塔1</div>
                 <div className="flex flex-col items-center gap-1 mt-1">
                   <Settings className={cn(hasAlarm('old_pump1', alarmData) ? "text-red-600 animate-spin-slow" : "text-sky-600", data.old_pump1_v > 0 && !hasAlarm('old_pump1', alarmData) && "animate-spin-slow")} size={20} />
@@ -141,7 +127,7 @@ export const ExternalEquipmentScreen = ({ data, alarmData }: { data: ScadaData, 
 
               {/* 洗涤塔2 + 循环泵2 */}
               <div className="relative flex flex-col items-center gap-1">
-                <img src={scrubberTowerImage} alt="洗涤塔" className={externalEquipmentAreaStyles.towerIcon} />
+                <img src={scrubberTowerImage} alt="洗涤塔" className={towerIconClass} />
                 <div className="panel-title-glow text-xs font-bold">洗涤塔2</div>
                 <div className="flex flex-col items-center gap-1 mt-1">
                   <Settings className={cn(hasAlarm('old_pump2', alarmData) ? "text-red-600 animate-spin-slow" : "text-sky-600", data.old_pump2_v > 0 && !hasAlarm('old_pump2', alarmData) && "animate-spin-slow")} size={20} />
@@ -164,7 +150,7 @@ export const ExternalEquipmentScreen = ({ data, alarmData }: { data: ScadaData, 
 
               {/* 洗涤塔3 + 循环泵3 */}
               <div className="relative flex flex-col items-center gap-1">
-                <img src={scrubberTowerImage} alt="洗涤塔" className={externalEquipmentAreaStyles.towerIcon} />
+                <img src={scrubberTowerImage} alt="洗涤塔" className={towerIconClass} />
                 <div className="panel-title-glow text-xs font-bold">洗涤塔3</div>
                 <div className="flex flex-col items-center gap-1 mt-1">
                   <Settings className={cn(hasAlarm('old_pump3', alarmData) ? "text-red-600 animate-spin-slow" : "text-sky-600", data.old_pump3_v > 0 && !hasAlarm('old_pump3', alarmData) && "animate-spin-slow")} size={20} />
@@ -185,16 +171,13 @@ export const ExternalEquipmentScreen = ({ data, alarmData }: { data: ScadaData, 
                 ))}
               </div>
             </div>
-          </div>
-        </div>
+    </div>
+  </div>
+);
 
-        {/* 滚筒干燥 */}
-        <div className="relative min-h-0">
-          <div className="panel-title-glow-cyan mb-2 flex items-center justify-end gap-2 text-right text-sm font-black uppercase tracking-[0.16em]">
-            <Activity size={18} /> 滚筒干燥
-          </div>
-
-          <div className={externalEquipmentAreaStyles.drumPanel}>
+const DrumBlock = ({ data, alarmData }: { data: ScadaData; alarmData: AlarmData }) => (
+  <div className="relative min-h-0">
+    <div className={panelClass}>
             <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 1 }}>
               {/* 粉色背景装饰线 */}
               <polyline
@@ -228,7 +211,7 @@ export const ExternalEquipmentScreen = ({ data, alarmData }: { data: ScadaData, 
               />
               {/* 3. 洗涤塔2 -> 离心机 */}
               <polyline
-                  points="67%,55% 75%,55% 75%,55% 85%,55%"
+                  points="67%,64% 75%,64% 75%,74% 85%,74%"
                   fill="none"
                   stroke="#22d3ee"
                   strokeWidth="2.5"
@@ -238,12 +221,12 @@ export const ExternalEquipmentScreen = ({ data, alarmData }: { data: ScadaData, 
               />
 
               {/* 底部循环回流线 */}
-              <line x1="37.5%" y1="75%" x2="62.5%" y2="75%" stroke="#22d3ee" strokeWidth="2" opacity="0.75" />
-              <line x1="37.5%" y1="75%" x2="37.5%" y2="65%" stroke="#22d3ee" strokeWidth="2" opacity="0.75" />
-              <line x1="62.5%" y1="75%" x2="62.5%" y2="65%" stroke="#22d3ee" strokeWidth="2" opacity="0.75" />
+              <line x1="37.5%" y1="85%" x2="62.5%" y2="85%" stroke="#22d3ee" strokeWidth="2" opacity="0.75" />
+              <line x1="37.5%" y1="85%" x2="37.5%" y2="74%" stroke="#22d3ee" strokeWidth="2" opacity="0.75" />
+              <line x1="62.5%" y1="85%" x2="62.5%" y2="74%" stroke="#22d3ee" strokeWidth="2" opacity="0.75" />
             </svg>
 
-            <div className={externalEquipmentAreaStyles.drumGrid}>
+            <div className="relative z-10 grid h-full grid-cols-[0.95fr_1fr_1fr_0.92fr] items-center gap-2 px-3">
               {/* 风机 */}
               <div
                 className={cn(
@@ -251,7 +234,7 @@ export const ExternalEquipmentScreen = ({ data, alarmData }: { data: ScadaData, 
                   hasAlarm('drum_fan', alarmData) && "bg-red-500/5 shadow-[0_0_16px_rgba(239,68,68,0.35)] animate-pulse"
                 )}
               >
-                <img src={fanDrumImage} alt="风机" className={externalEquipmentAreaStyles.fanIcon} />
+                <img src={fanDrumImage} alt="风机" className={fanIconClass} />
                 <div className={cn("text-xs font-bold", hasAlarm('drum_fan', alarmData) ? "text-red-200 animate-pulse" : "panel-title-glow-cyan")}>风机</div>
                 <div
                   className={cn(
@@ -270,7 +253,7 @@ export const ExternalEquipmentScreen = ({ data, alarmData }: { data: ScadaData, 
 
               {/* 洗涤塔1 + 循环泵1 */}
               <div className="relative flex flex-col items-center gap-1">
-                <img src={scrubberTowerImage} alt="洗涤塔" className={externalEquipmentAreaStyles.towerIcon} />
+                <img src={scrubberTowerImage} alt="洗涤塔" className={towerIconClass} />
                 <div className="panel-title-glow-cyan text-xs font-bold">洗涤塔1</div>
                 <div className="flex flex-col items-center gap-1 mt-1">
                   <Settings className={cn(hasAlarm('drum_pump1', alarmData) ? "text-red-600 animate-spin-slow" : "text-cyan-600", data.drum_pump1_v > 0 && !hasAlarm('drum_pump1', alarmData) && "animate-spin-slow")} size={20} />
@@ -293,7 +276,7 @@ export const ExternalEquipmentScreen = ({ data, alarmData }: { data: ScadaData, 
 
               {/* 洗涤塔2 + 循环泵2 */}
               <div className="relative flex flex-col items-center gap-1">
-                <img src={scrubberTowerImage} alt="洗涤塔" className={externalEquipmentAreaStyles.towerIcon} />
+                <img src={scrubberTowerImage} alt="洗涤塔" className={towerIconClass} />
                 <div className="panel-title-glow-cyan text-xs font-bold">洗涤塔2</div>
                 <div className="flex flex-col items-center gap-1 mt-1">
                   <Settings className={cn(hasAlarm('drum_pump2', alarmData) ? "text-red-600 animate-spin-slow" : "text-cyan-600", data.drum_pump2_v > 0 && !hasAlarm('drum_pump2', alarmData) && "animate-spin-slow")} size={20} />
@@ -325,7 +308,7 @@ export const ExternalEquipmentScreen = ({ data, alarmData }: { data: ScadaData, 
                   src={centrifugeImage}
                   alt="离心机"
                   className={cn(
-                    externalEquipmentAreaStyles.centrifugeIcon,
+                    centrifugeIconClass,
                     data.drum_centrifuge_v > 0 && !hasAlarm('old_centrifuge', alarmData) && "animate-bounce"
                   )}
                 />
@@ -345,8 +328,38 @@ export const ExternalEquipmentScreen = ({ data, alarmData }: { data: ScadaData, 
                 ))}
               </div>
             </div>
-          </div>
+    </div>
+  </div>
+);
+
+export const ExternalEquipmentScreen = ({
+  data,
+  alarmData,
+  layout = 'stacked',
+  section = 'both',
+}: {
+  data: ScadaData;
+  alarmData: AlarmData;
+  layout?: 'stacked' | 'sideBySide';
+  section?: 'both' | 'oldPlant' | 'drum';
+}) => (
+    <div className="external-screen w-full h-full bg-transparent">
+      {section === 'oldPlant' ? (
+        <div className="h-full px-4 py-3 overflow-visible">
+          <OldPlantBlock data={data} alarmData={alarmData} />
         </div>
-      </div>
+      ) : section === 'drum' ? (
+        <div className="h-full px-4 py-3 overflow-visible">
+          <DrumBlock data={data} alarmData={alarmData} />
+        </div>
+      ) : (
+        <div className={layout === 'sideBySide'
+          ? "grid h-full grid-cols-2 gap-4 px-4 py-3 overflow-visible"
+          : "grid h-full grid-rows-2 gap-2.5 px-4 py-3 overflow-visible"}
+        >
+          <OldPlantBlock data={data} alarmData={alarmData} />
+          <DrumBlock data={data} alarmData={alarmData} />
+        </div>
+      )}
     </div>
 );
