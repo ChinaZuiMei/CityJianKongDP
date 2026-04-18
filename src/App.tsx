@@ -38,7 +38,11 @@ export default function App() {
         <img src={sideDecorImage} alt="" className="site-decor site-decor--left" draggable="false" />
         <img src={sideDecorImage} alt="" className="site-decor site-decor--right" draggable="false" />
       </div>
-      <div className="site-title">建衡实业IOT看板</div>
+      <div className="site-title-box">
+        <div className="site-title">建衡实业IOT面板</div>
+        <div className="site-title-divider" aria-hidden />
+        <div className="site-title-subtitle">JIANHENG INDUSTRIAL IOT CONTROL PANEL</div>
+      </div>
       <Header
         currentTime={currentTime}
         connected={mqttConnected}
