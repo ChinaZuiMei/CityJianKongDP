@@ -73,10 +73,10 @@ export const MainScreen = ({ data, alarmData }: { data: ScadaData, alarmData: Al
         </div>
       </div>
       <svg className="pointer-events-none absolute inset-0 -z-10 h-full w-full opacity-35" preserveAspectRatio="none">
-        {/* 虚线位置：向上微调，和下方模块对齐 */}
-        <line x1="18%" y1="72%" x2="88%" y2="72%" stroke="#7dd3fc" strokeWidth="5" strokeDasharray="10 5" />
-        <line x1="34%" y1="72%" x2="34%" y2="55%" stroke="#7dd3fc" strokeWidth="5" />
-        <line x1="57%" y1="72%" x2="57%" y2="55%" stroke="#7dd3fc" strokeWidth="5" />
+        {/* 虚线贴近反应槽图片正下方，保持两侧反应槽垂直对齐 */}
+        <line x1="16%" y1="75%" x2="54%" y2="75%" stroke="#7dd3fc" strokeWidth="5" strokeDasharray="10 5" />
+        <line x1="24%" y1="75%" x2="24%" y2="55%" stroke="#7dd3fc" strokeWidth="5" />
+        <line x1="47%" y1="75%" x2="47%" y2="55%" stroke="#7dd3fc" strokeWidth="5" />
       </svg>
     </div>
   );
