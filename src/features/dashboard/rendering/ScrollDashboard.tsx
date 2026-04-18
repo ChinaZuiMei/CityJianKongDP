@@ -71,9 +71,9 @@ export const ScrollDashboard = ({
   };
 
   return (
-    <div className={`dashboard-scroll-shell flex h-full items-center justify-center overflow-y-auto overflow-x-hidden ${outerClassName}`}>
+    <div className={`dashboard-scroll-shell flex h-full w-full min-h-0 min-w-0 items-center justify-center overflow-y-auto overflow-x-hidden ${outerClassName}`}>
       <div
-        className={`dashboard-workspace relative mx-auto flex h-[calc(100vh-118px)] max-w-[1800px] items-center justify-center overflow-visible rounded-[32px] ${dragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+        className={`dashboard-workspace relative mx-auto flex h-full w-full items-center justify-center overflow-visible rounded-[32px] ${dragging ? 'cursor-grabbing' : 'cursor-grab'}`}
         onWheel={handleWheel}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
