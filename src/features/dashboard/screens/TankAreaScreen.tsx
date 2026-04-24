@@ -14,28 +14,20 @@ export const TankAreaScreen = ({ data, alarmData }: { data: ScadaData, alarmData
         { id: 'hcl_tank3', label: '3# 盐酸罐', level: data.hcl_tank3_level, max: 3.6, variant: 'storage' as const },
         { id: 'h2so4_tank1', label: '1# 硫酸罐', level: data.h2so4_tank1_level, max: 6.2, variant: 'cone' as const }
       ].map(tank => {
-        const alarmNames = getAlarmNames(tank.id, alarmData);
         return (
           <div key={tank.id} className="flex min-h-0 flex-col items-center gap-1.5 overflow-visible px-1 py-1">
-            <div className="flex min-h-[34px] w-full flex-col items-center justify-start gap-1">
-              {alarmNames.length > 0 ? alarmNames.map((name, idx) => (
-                <div key={idx} className="w-full truncate px-2 py-0.5 text-center text-[10px] font-bold text-red-100 animate-pulse xl:text-[11px]">
-                  {name}
-                </div>
-              )) : <div className="h-[26px]" />}
-            </div>
             <Tank 
               label={tank.label} 
               level={tank.level} 
               max={tank.max} 
               variant={tank.variant}
-              hasAlarm={hasAlarm(tank.id, alarmData)} 
+              labelOffsetClassName={tank.variant === 'storage' ? 'mt-10' : undefined}
             />
           </div>
         );
       })}
     </div>
-    <div className="grid grid-cols-3 gap-3 pt-1">
+    <div className="-translate-y-4 grid grid-cols-3 gap-3 pt-1">
       {[
         { id: 1, val: data.leak1, component: 'leak1' },
         { id: 2, val: data.leak2, component: 'leak2' },

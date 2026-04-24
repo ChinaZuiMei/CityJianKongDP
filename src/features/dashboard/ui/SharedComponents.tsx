@@ -2,9 +2,9 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { Activity } from 'lucide-react';
 import { cn } from '../../../utils/cn';
-import coneTankImage from '../../../images/硫酸罐.png';
+import coneTankImage from '../../../images/硫酸02.png';
 import reactorTankImage from '../../../images/反应槽.png';
-import storageTankImage from '../../../images/盐酸罐.png';
+import storageTankImage from '../../../images/盐酸罐02.png';
 
 /** 罐内液体：天青色 */
 const liquidClass = 'bg-cyan-300';
@@ -18,6 +18,7 @@ export const Tank = ({
   max = 2.5,
   hasAlarm = false,
   variant = 'default',
+  labelOffsetClassName,
 }: {
   label: string,
   level: number,
@@ -27,35 +28,52 @@ export const Tank = ({
   max?: number,
   hasAlarm?: boolean,
   variant?: 'default' | 'storage' | 'cone' | 'reactor',
+  labelOffsetClassName?: string,
 }) => {
   const fillPercent = Math.min((level / max) * 100, 100);
   const isImageTank = variant === 'storage' || variant === 'cone' || variant === 'reactor';
   const tankImage =
     variant === 'cone' ? coneTankImage : variant === 'reactor' ? reactorTankImage : storageTankImage;
-  const imageTankSizeClass =
-    variant === 'reactor' ? 'h-[11.75rem] w-[9.75rem]' : variant === 'cone' ? 'h-[11.25rem] w-[7.25rem]' : 'h-[11.75rem] w-[7.4rem]';
+  const imageTankSizeClass = 'h-[11.75rem]';
+  const imageBaselineAdjustClass =
+    variant === 'reactor'
+      ? '-translate-y-[58px]'
+      : variant === 'cone'
+        ? '-translate-y-[5px]'
+        : '-translate-y-[1px]';
 
   return (
     <div className="flex flex-col items-center gap-2">
       {isImageTank ? (
-        <div className={cn("relative transition-all", imageTankSizeClass)}>
+        <div className={cn("relative flex items-center justify-center transition-all", imageTankSizeClass)}>
           {hasAlarm ? <div className="absolute inset-0 z-10 rounded-[28px] bg-red-500/8 blur-xl animate-pulse pointer-events-none" /> : null}
           <img
             src={tankImage}
             alt={label}
             className={cn(
-              "h-full w-full object-contain transition-all duration-300",
+              "h-full w-auto object-contain transition-all duration-300",
+              imageBaselineAdjustClass,
               hasAlarm &&
                 "drop-shadow-[0_0_20px_rgba(239,68,68,0.75)] saturate-[1.15] brightness-[0.92] sepia-[0.35] hue-rotate-[-18deg]",
             )}
             draggable="false"
           />
           {hasAlarm ? <div className="absolute inset-0 z-10 bg-red-500/10 mix-blend-screen pointer-events-none animate-pulse" /> : null}
-          <div className={cn("absolute inset-x-0 z-20 flex justify-center", variant === 'reactor' ? 'bottom-[1.8rem]' : 'bottom-[3rem]')}>
-            <div className={cn("rounded border px-2 py-0.5 text-xs font-bold shadow-[0_0_12px_rgba(15,23,42,0.35)]", hasAlarm ? "border-red-400 bg-slate-950/50 text-red-100" : "panel-frame bg-slate-950/40 data-glow")}>
-              {level.toFixed(2)} {unit}
+          {variant === 'reactor' && (
+            <div className="absolute inset-x-0 bottom-[1.8rem] z-20 flex justify-center">
+              <div className={cn("rounded border px-2 py-0.5 text-xs font-bold shadow-[0_0_12px_rgba(15,23,42,0.35)]", hasAlarm ? "border-red-400 bg-slate-950/50 text-red-100" : "panel-frame bg-slate-950/40 data-glow")}>
+                {level.toFixed(2)} {unit}
+              </div>
             </div>
-          </div>
+          )}
+          {variant !== 'reactor' && (
+            // 液位数据会再往下，落在图片和名称之间更靠下的位置，因此需要将bottom-3改为-bottom-6
+            <div className="absolute inset-x-0 -bottom-8 z-20 flex justify-center">
+              <div className={cn("rounded border px-2 py-0.5 text-xs font-bold shadow-[0_0_12px_rgba(15,23,42,0.35)]", hasAlarm ? "border-red-400 bg-slate-950/50 text-red-100" : "panel-frame bg-slate-950/40 data-glow")}>
+                {level.toFixed(2)} {unit}
+              </div>
+            </div>
+          )}
         </div>
       ) : (
         <div className={cn("relative flex h-40 w-24 flex-col-reverse overflow-hidden rounded-t-xl border-2 bg-transparent transition-all", hasAlarm ? "border-red-500 animate-pulse-border" : "panel-frame")}>
@@ -73,9 +91,18 @@ export const Tank = ({
           </div>
         </div>
       )}
-      <div className="text-center">
-        <div className={cn("text-sm font-bold tracking-wide", hasAlarm ? "font-extrabold text-red-200" : "panel-title-glow")}>{label}</div>
-        {temp !== undefined && (
+      <div className={cn("mt-1 flex h-[3.15rem] flex-col items-center text-center", variant === 'reactor' && "-translate-y-6", labelOffsetClassName)}>
+        <div className="flex items-center justify-center gap-2">
+          <div className={cn("flex h-5 items-center text-sm font-bold tracking-wide", hasAlarm ? "font-extrabold text-red-200" : "panel-title-glow")}>
+            {label}
+          </div>
+          {temp !== undefined && variant === 'reactor' && (
+            <div className={cn("rounded-md border bg-transparent px-2 py-0.5 text-[11px] font-black leading-none", hasAlarm ? "border-red-400 text-red-100" : "panel-frame data-glow")}>
+              {temp.toFixed(1)} °C
+            </div>
+          )}
+        </div>
+        {temp !== undefined && variant !== 'reactor' && (
           <div className={cn("mt-1.5 rounded-md border bg-transparent px-2.5 py-1 text-xs font-black", hasAlarm ? "border-red-400 text-red-100" : "panel-frame data-glow")}>
             {temp.toFixed(1)} °C
           </div>
