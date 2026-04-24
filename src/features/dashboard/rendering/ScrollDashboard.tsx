@@ -33,8 +33,7 @@ export const ScrollDashboard = ({
   sidePanelPreviewEnabled?: boolean;
 }) => {
   const outerClassName = sidePanelPreviewEnabled ? 'pl-[420px] pr-[420px]' : '';
-  const leftColumnRows = 'minmax(335px, 41vh) minmax(300px, 37vh)';
-  const rightColumnRows = 'minmax(380px, 46vh) minmax(255px, 32vh)';
+  const dashboardRows = 'minmax(340px, 43vh) minmax(280px, 34vh)';
   const [scale, setScale] = useState(0.92);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
@@ -91,8 +90,11 @@ export const ScrollDashboard = ({
             transform: `translate(calc(-50% + ${offset.x}px), calc(-50% + ${offset.y}px)) scale(${scale})`,
           }}
         >
-          <div className="grid grid-cols-1 gap-[15px] 2xl:grid-cols-2">
-            <div className="grid gap-[15px]" style={{ gridTemplateRows: leftColumnRows }}>
+          <div
+            className="grid gap-y-[59px] [&_.text-\\[10px\\]]:text-xs [&_.text-xs]:text-sm [&_.text-sm]:text-base"
+            style={{ gridTemplateRows: dashboardRows }}
+          >
+            <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-[15px]">
               <Section title="主画面" minHeight="h-full">
                 <div className="flex h-full items-center justify-center overflow-hidden pt-8">
                   <div className="dashboard-module-scale dashboard-module-scale--main">
@@ -101,20 +103,20 @@ export const ScrollDashboard = ({
                 </div>
               </Section>
 
-              <Section title="外部设备-聚铝老厂" minHeight="h-full">
-                <div className="h-full overflow-visible px-2 pt-8 pb-2">
-                  <div className="dashboard-module-scale dashboard-module-scale--external">
-                    <ExternalEquipmentScreen data={data} alarmData={alarmData} section="oldPlant" />
+              <Section title="罐区" minHeight="h-full">
+                <div className="flex h-full items-center justify-center overflow-visible pt-8">
+                  <div className="dashboard-module-scale dashboard-module-scale--tank">
+                    <TankAreaScreen data={data} alarmData={alarmData} />
                   </div>
                 </div>
               </Section>
             </div>
 
-            <div className="grid gap-[15px]" style={{ gridTemplateRows: rightColumnRows }}>
-              <Section title="罐区" minHeight="h-full">
-                <div className="flex h-full items-center justify-center overflow-visible pt-8">
-                  <div className="dashboard-module-scale dashboard-module-scale--tank">
-                    <TankAreaScreen data={data} alarmData={alarmData} />
+            <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-[15px]">
+              <Section title="外部设备-聚铝老厂" minHeight="h-full">
+                <div className="h-full overflow-visible px-2 pt-8 pb-2">
+                  <div className="dashboard-module-scale dashboard-module-scale--external">
+                    <ExternalEquipmentScreen data={data} alarmData={alarmData} section="oldPlant" />
                   </div>
                 </div>
               </Section>

@@ -9,9 +9,9 @@ import centrifugeImage from '../../../images/img_5.png';
 
 const equipmentValueClass = "rounded-md px-3 py-1 text-sm font-black bg-transparent";
 const panelClass = "relative h-full min-h-0 overflow-visible rounded-xl bg-transparent pb-2";
-const fanIconClass = "h-18 w-18 object-contain";
-const towerIconClass = "h-28 w-16 object-contain";
-const centrifugeIconClass = "h-14 w-20 object-contain";
+const fanIconClass = "h-24 w-24 object-contain";
+const towerIconClass = "h-32 w-18 object-contain";
+const centrifugeIconClass = "h-20 w-28 object-contain";
 
 const OldPlantBlock = ({ data, alarmData }: { data: ScadaData; alarmData: AlarmData }) => (
   <div className="relative min-h-0">
@@ -97,10 +97,10 @@ const OldPlantBlock = ({ data, alarmData }: { data: ScadaData; alarmData: AlarmD
                 <img src={scrubberTowerImage} alt="洗涤塔" className={towerIconClass} />
                 <div className="panel-title-glow text-xs font-bold">洗涤塔1</div>
                 <div className="flex flex-col items-center gap-1 mt-1">
-                  <Settings className={cn(hasAlarm('old_pump1', alarmData) ? "text-red-600 animate-spin-slow" : "text-sky-600", data.old_pump1_v > 0 && !hasAlarm('old_pump1', alarmData) && "animate-spin-slow")} size={20} />
+                  <Settings className={cn(hasAlarm('old_pump1', alarmData) ? "text-red-600 animate-spin-slow" : "text-sky-600", data.old_pump1_v > 0 && !hasAlarm('old_pump1', alarmData) && "animate-spin-slow")} size={22} />
                   <div className="panel-title-glow text-xs font-bold">循环泵1</div>
                   <div
-                    className="rounded bg-transparent px-2 py-0.5 font-mono text-xs data-glow"
+                    className="rounded bg-transparent px-2 py-0.5 font-mono text-xs font-black data-glow"
                   >
                     {data.old_pump1_v.toFixed(1)} A
                   </div>
@@ -112,10 +112,10 @@ const OldPlantBlock = ({ data, alarmData }: { data: ScadaData; alarmData: AlarmD
                 <img src={scrubberTowerImage} alt="洗涤塔" className={towerIconClass} />
                 <div className="panel-title-glow text-xs font-bold">洗涤塔2</div>
                 <div className="flex flex-col items-center gap-1 mt-1">
-                  <Settings className={cn(hasAlarm('old_pump2', alarmData) ? "text-red-600 animate-spin-slow" : "text-sky-600", data.old_pump2_v > 0 && !hasAlarm('old_pump2', alarmData) && "animate-spin-slow")} size={20} />
+                  <Settings className={cn(hasAlarm('old_pump2', alarmData) ? "text-red-600 animate-spin-slow" : "text-sky-600", data.old_pump2_v > 0 && !hasAlarm('old_pump2', alarmData) && "animate-spin-slow")} size={22} />
                   <div className="panel-title-glow text-xs font-bold">循环泵2</div>
                   <div
-                    className="rounded bg-transparent px-2 py-0.5 font-mono text-xs data-glow"
+                    className="rounded bg-transparent px-2 py-0.5 font-mono text-xs font-black data-glow"
                   >
                     {data.old_pump2_v.toFixed(1)} A
                   </div>
@@ -127,10 +127,10 @@ const OldPlantBlock = ({ data, alarmData }: { data: ScadaData; alarmData: AlarmD
                 <img src={scrubberTowerImage} alt="洗涤塔" className={towerIconClass} />
                 <div className="panel-title-glow text-xs font-bold">洗涤塔3</div>
                 <div className="flex flex-col items-center gap-1 mt-1">
-                  <Settings className={cn(hasAlarm('old_pump3', alarmData) ? "text-red-600 animate-spin-slow" : "text-sky-600", data.old_pump3_v > 0 && !hasAlarm('old_pump3', alarmData) && "animate-spin-slow")} size={20} />
+                  <Settings className={cn(hasAlarm('old_pump3', alarmData) ? "text-red-600 animate-spin-slow" : "text-sky-600", data.old_pump3_v > 0 && !hasAlarm('old_pump3', alarmData) && "animate-spin-slow")} size={22} />
                   <div className="panel-title-glow text-xs font-bold">循环泵3</div>
                   <div
-                    className="rounded bg-transparent px-2 py-0.5 font-mono text-xs data-glow"
+                    className="rounded bg-transparent px-2 py-0.5 font-mono text-xs font-black data-glow"
                   >
                     {data.old_pump3_v.toFixed(1)} A
                   </div>
@@ -214,10 +214,10 @@ const DrumBlock = ({ data, alarmData }: { data: ScadaData; alarmData: AlarmData 
                 <img src={scrubberTowerImage} alt="洗涤塔" className={towerIconClass} />
                 <div className="panel-title-glow-cyan text-xs font-bold">洗涤塔1</div>
                 <div className="flex flex-col items-center gap-1 mt-1">
-                  <Settings className={cn(hasAlarm('drum_pump1', alarmData) ? "text-red-600 animate-spin-slow" : "text-cyan-600", data.drum_pump1_v > 0 && !hasAlarm('drum_pump1', alarmData) && "animate-spin-slow")} size={20} />
+                  <Settings className={cn(hasAlarm('drum_pump1', alarmData) ? "text-red-600 animate-spin-slow" : "text-cyan-600", data.drum_pump1_v > 0 && !hasAlarm('drum_pump1', alarmData) && "animate-spin-slow")} size={22} />
                   <div className="panel-title-glow-cyan text-xs font-bold">循环泵1</div>
                   <div
-                    className="rounded bg-transparent px-2 py-0.5 font-mono text-xs data-glow-cyan"
+                    className="rounded bg-transparent px-2 py-0.5 font-mono text-xs font-black data-glow-cyan"
                   >
                     {data.drum_pump1_v.toFixed(1)} A
                   </div>
@@ -229,10 +229,10 @@ const DrumBlock = ({ data, alarmData }: { data: ScadaData; alarmData: AlarmData 
                 <img src={scrubberTowerImage} alt="洗涤塔" className={towerIconClass} />
                 <div className="panel-title-glow-cyan text-xs font-bold">洗涤塔2</div>
                 <div className="flex flex-col items-center gap-1 mt-1">
-                  <Settings className={cn(hasAlarm('drum_pump2', alarmData) ? "text-red-600 animate-spin-slow" : "text-cyan-600", data.drum_pump2_v > 0 && !hasAlarm('drum_pump2', alarmData) && "animate-spin-slow")} size={20} />
+                  <Settings className={cn(hasAlarm('drum_pump2', alarmData) ? "text-red-600 animate-spin-slow" : "text-cyan-600", data.drum_pump2_v > 0 && !hasAlarm('drum_pump2', alarmData) && "animate-spin-slow")} size={22} />
                   <div className="panel-title-glow-cyan text-xs font-bold">循环泵2</div>
                   <div
-                    className="rounded bg-transparent px-2 py-0.5 font-mono text-xs data-glow-cyan"
+                    className="rounded bg-transparent px-2 py-0.5 font-mono text-xs font-black data-glow-cyan"
                   >
                     {data.drum_pump2_v.toFixed(1)} A
                   </div>

@@ -5,7 +5,7 @@ import { FlowBox, Tank } from '../ui/SharedComponents';
 
 export const MainScreen = ({ data, alarmData }: { data: ScadaData, alarmData: AlarmData }) => {
   return (
-    <div className="relative h-full w-full overflow-hidden px-3 py-2 xl:px-4 xl:py-3">
+    <div className="-translate-y-11 relative h-full w-full overflow-hidden px-3 py-2 xl:px-4 xl:py-3">
       <div className="grid h-full min-h-0 grid-cols-[minmax(0,1.55fr)_minmax(220px,0.95fr)] items-center gap-4 xl:gap-5">
         <div className="flex min-w-0 items-center justify-center gap-4 xl:gap-5">
           <div className="flex min-w-0 items-center gap-2">
