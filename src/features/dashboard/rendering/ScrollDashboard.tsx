@@ -95,7 +95,7 @@ export const ScrollDashboard = ({
             style={{ gridTemplateRows: dashboardRows }}
           >
             <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-[15px]">
-              <Section title="主画面" minHeight="h-full">
+              <Section title="反应槽区" minHeight="h-full">
                 <div className="flex h-full items-center justify-center overflow-hidden pt-8">
                   <div className="dashboard-module-scale dashboard-module-scale--main">
                     <MainScreen data={data} alarmData={alarmData} />

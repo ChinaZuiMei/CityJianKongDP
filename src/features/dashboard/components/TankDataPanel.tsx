@@ -526,6 +526,61 @@ function createFlowLiquidFillOptionByValues(title: string, instantRaw: number, t
   };
 }
 
+function createLeakLiquidFillOption(): EChartsOption {
+  return {
+    backgroundColor: 'transparent',
+    series: [
+      {
+        type: 'liquidFill',
+        data: [0.58, 0.5, 0.4, 0.28],
+        radius: '60%',
+        outline: { show: false },
+        backgroundStyle: {
+          borderColor: '#156ACF',
+          borderWidth: 1,
+          shadowColor: 'rgba(0, 0, 0, 0.4)',
+          shadowBlur: 25,
+          color: 'rgba(180,200,200,0.08)',
+        },
+        shape:
+          'path://M367.855,428.202c-3.674-1.385-7.452-1.966-11.146-1.794c0.659-2.922,0.844-5.85,0.58-8.719 c-0.937-10.407-7.663-19.864-18.063-23.834c-10.697-4.043-22.298-1.168-29.902,6.403c3.015,0.026,6.074,0.594,9.035,1.728 c13.626,5.151,20.465,20.379,15.32,34.004c-1.905,5.02-5.177,9.115-9.22,12.05c-6.951,4.992-16.19,6.536-24.777,3.271 c-13.625-5.137-20.471-20.371-15.32-34.004c0.673-1.768,1.523-3.423,2.526-4.992h-0.014c0,0,0,0,0,0.014 c4.386-6.853,8.145-14.279,11.146-22.187c23.294-61.505-7.689-130.278-69.215-153.579c-61.532-23.293-130.279,7.69-153.579,69.202 c-6.371,16.785-8.679,34.097-7.426,50.901c0.026,0.554,0.079,1.121,0.132,1.688c4.973,57.107,41.767,109.148,98.945,130.793 c58.162,22.008,121.303,6.529,162.839-34.465c7.103-6.893,17.826-9.444,27.679-5.719c11.858,4.491,18.565,16.6,16.719,28.643 c4.438-3.126,8.033-7.564,10.117-13.045C389.751,449.992,382.411,433.709,367.855,428.202z',
+        label: { show: false },
+      } as any,
+    ],
+  };
+}
+
+function createLeakLiquidFillAltOption(): EChartsOption {
+  return {
+    backgroundColor: 'transparent',
+    series: [
+      {
+        type: 'liquidFill',
+        data: [0.52, 0.46, 0.36, 0.26],
+        radius: '64%',
+        outline: { show: false },
+        color: [
+          'rgba(34, 211, 238, 0.85)',
+          'rgba(56, 189, 248, 0.65)',
+          'rgba(99, 102, 241, 0.45)',
+        ],
+        backgroundStyle: {
+          borderColor: 'rgba(125, 211, 252, 0.65)',
+          borderWidth: 1,
+          shadowColor: 'rgba(2, 132, 199, 0.25)',
+          shadowBlur: 18,
+          color: 'rgba(180,200,200,0.06)',
+        },
+        // 使用圆形作为另一套展示风格
+        shape: 'circle',
+        amplitude: 4,
+        waveLength: '75%',
+        label: { show: false },
+      } as any,
+    ],
+  };
+}
+
 type ExternalPanelVariant = 'old' | 'drum';
 
 function createExternalEquipmentOption(data: ScadaData, variant: ExternalPanelVariant): EChartsOption {
@@ -882,6 +937,7 @@ export const TankDataPanel: React.FC<TankDataPanelProps> = ({
   embedded = false,
   style,
 }) => {
+  const [leakLiquidVariant, setLeakLiquidVariant] = React.useState<0 | 1>(0);
   const [externalVariant, setExternalVariant] = React.useState<ExternalPanelVariant>('old');
   const [externalVisible, setExternalVisible] = React.useState(true);
   const [flowVariant, setFlowVariant] = React.useState<'acid' | 'waste'>('acid');
@@ -955,6 +1011,10 @@ export const TankDataPanel: React.FC<TankDataPanelProps> = ({
   );
   const loadingOption = React.useMemo(() => createLoadingPanelOption(data), [data]);
   const leakOption = React.useMemo(() => createLeakPanelOption(data), [data]);
+  const leakLiquidOption = React.useMemo(
+    () => (leakLiquidVariant === 0 ? createLeakLiquidFillOption() : createLeakLiquidFillAltOption()),
+    [leakLiquidVariant],
+  );
   const externalEquipmentOption = React.useMemo(
     () => createExternalEquipmentOption(data, externalVariant),
     [data, externalVariant],
@@ -1102,6 +1162,20 @@ export const TankDataPanel: React.FC<TankDataPanelProps> = ({
               <div className="tank-panel-chart-meta">
                 <span>盐酸泄漏监测</span>
                 <span>单位 / ppm</span>
+              </div>
+              <div className="tank-panel-chart" style={{ height: 165 }}>
+                <Suspense fallback={<div className="tank-chart-fallback" />}>
+                  <ReactECharts
+                    option={leakLiquidOption}
+                    notMerge
+                    lazyUpdate
+                    opts={{ renderer: 'canvas' }}
+                    onEvents={{
+                      click: () => setLeakLiquidVariant((v) => (v === 0 ? 1 : 0)),
+                    }}
+                    style={{ width: '100%', height: '100%' }}
+                  />
+                </Suspense>
               </div>
               <div className="tank-panel-chart" style={{ height: 150 }}>
                 <Suspense fallback={<div className="tank-chart-fallback" />}>
