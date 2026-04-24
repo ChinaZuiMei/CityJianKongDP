@@ -21,7 +21,7 @@ export const TankAreaScreen = ({ data, alarmData }: { data: ScadaData, alarmData
               level={tank.level} 
               max={tank.max} 
               variant={tank.variant}
-              labelOffsetClassName={tank.variant === 'storage' ? 'mt-10' : undefined}
+              labelOffsetClassName="mt-10"
             />
           </div>
         );
