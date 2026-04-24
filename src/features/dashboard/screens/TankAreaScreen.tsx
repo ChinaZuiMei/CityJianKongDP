@@ -14,8 +14,19 @@ export const TankAreaScreen = ({ data, alarmData }: { data: ScadaData, alarmData
         { id: 'hcl_tank3', label: '3# 盐酸罐', level: data.hcl_tank3_level, max: 3.6, variant: 'storage' as const },
         { id: 'h2so4_tank1', label: '1# 硫酸罐', level: data.h2so4_tank1_level, max: 6.2, variant: 'cone' as const }
       ].map(tank => {
+        const isAlarm = hasAlarm(tank.id, alarmData);
+        const alarmNames = getAlarmNames(tank.id, alarmData);
         return (
-          <div key={tank.id} className="flex min-h-0 flex-col items-center gap-1.5 overflow-visible px-1 py-1">
+          <div key={tank.id} className="relative flex min-h-0 flex-col items-center gap-1.5 overflow-visible px-1 py-1">
+            {alarmNames.length > 0 && (
+              <div className="pointer-events-none absolute left-1/2 top-0 z-30 flex min-w-[110px] max-w-[170px] -translate-x-1/2 -translate-y-[92%] flex-col items-center gap-1 rounded-md border border-red-400/80 bg-slate-950/70 px-2 py-1 shadow-[0_0_12px_rgba(239,68,68,0.35)]">
+                {alarmNames.map((name, idx) => (
+                  <div key={idx} className="truncate text-center text-xs font-bold leading-5 text-red-100 xl:text-sm">
+                    {name}
+                  </div>
+                ))}
+              </div>
+            )}
             <Tank 
               label={tank.label} 
               level={tank.level} 

@@ -14,6 +14,8 @@ import bottomDecorImage from './images/网站底部图.png';
 import sideDecorImage from './images/网站侧边图.png';
 
 export default function App() {
+  const [leftPanelCollapsed, setLeftPanelCollapsed] = React.useState(false);
+  const [rightPanelCollapsed, setRightPanelCollapsed] = React.useState(false);
   const enableSidePanelPreview = shouldEnableSidePanelPreview();
   const {
     currentTime,
@@ -63,7 +65,15 @@ export default function App() {
       </AnimatePresence>
 
       {/* 左侧罐区数据面板 */}
-      <div className="tank-data-column tank-data-column--left">
+      <button
+        type="button"
+        className={leftPanelCollapsed ? 'side-panel-toggle side-panel-toggle--left side-panel-toggle--collapsed' : 'side-panel-toggle side-panel-toggle--left'}
+        onClick={() => setLeftPanelCollapsed((value) => !value)}
+        aria-label={leftPanelCollapsed ? '展开左侧面板' : '收起左侧面板'}
+      >
+        {leftPanelCollapsed ? '▶' : '◀'}
+      </button>
+      <div className={leftPanelCollapsed ? 'tank-data-column tank-data-column--left tank-data-column--collapsed-left' : 'tank-data-column tank-data-column--left'}>
         <TankDataPanel data={scadaData} embedded />
         <TankDataPanel
           data={scadaData}
@@ -82,7 +92,15 @@ export default function App() {
           embedded
         />
       </div>
-      <div className="tank-data-column tank-data-column--right">
+      <button
+        type="button"
+        className={rightPanelCollapsed ? 'side-panel-toggle side-panel-toggle--right side-panel-toggle--collapsed' : 'side-panel-toggle side-panel-toggle--right'}
+        onClick={() => setRightPanelCollapsed((value) => !value)}
+        aria-label={rightPanelCollapsed ? '展开右侧面板' : '收起右侧面板'}
+      >
+        {rightPanelCollapsed ? '◀' : '▶'}
+      </button>
+      <div className={rightPanelCollapsed ? 'tank-data-column tank-data-column--right tank-data-column--collapsed-right' : 'tank-data-column tank-data-column--right'}>
         <TankDataPanel
           data={scadaData}
           position="right"

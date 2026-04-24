@@ -1029,6 +1029,7 @@ export const TankDataPanel: React.FC<TankDataPanelProps> = ({
       style={{
         ...(!embedded && top !== undefined ? { top } : {}),
         ...(!embedded && bottom !== undefined ? { top: 'auto', bottom } : {}),
+        ...(embedded && position === 'left' && mode === 'loading' ? { minHeight: 470 } : {}),
         ...style,
       }}
     >
@@ -1126,7 +1127,7 @@ export const TankDataPanel: React.FC<TankDataPanelProps> = ({
                 <span>装车流量监测</span>
                 <span>单位 / m³</span>
               </div>
-              <div className="tank-panel-chart" style={{ height: 108 }}>
+              <div className="tank-panel-chart" style={{ height: 127 }}>
                 <Suspense fallback={<div className="tank-chart-fallback" />}>
                   <ReactECharts
                     option={loadingOption}

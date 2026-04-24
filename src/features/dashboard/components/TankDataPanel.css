@@ -45,6 +45,8 @@
   flex-direction: column;
   pointer-events: auto;
   overflow: hidden;
+  transition: transform 260ms ease, opacity 260ms ease;
+  will-change: transform, opacity;
 }
 
 .tank-data-column--left {
@@ -53,6 +55,55 @@
 
 .tank-data-column--right {
   right: 45px;
+}
+
+.tank-data-column--collapsed-left {
+  transform: translateX(calc(-100% - 32px));
+  opacity: 0;
+  pointer-events: none;
+}
+
+.tank-data-column--collapsed-right {
+  transform: translateX(calc(100% + 32px));
+  opacity: 0;
+  pointer-events: none;
+}
+
+.side-panel-toggle {
+  position: fixed;
+  top: 50%;
+  z-index: 35;
+  width: 26px;
+  height: 72px;
+  transform: translateY(-50%);
+  border: 1px solid rgba(125, 211, 252, 0.45);
+  background: rgba(2, 12, 30, 0.76);
+  color: rgba(186, 230, 253, 0.95);
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1;
+  cursor: pointer;
+  transition: all 180ms ease;
+}
+
+.side-panel-toggle:hover {
+  border-color: rgba(186, 230, 253, 0.9);
+  color: #ffffff;
+  background: rgba(7, 28, 66, 0.92);
+}
+
+.side-panel-toggle--left {
+  left: 8px;
+  border-radius: 0 8px 8px 0;
+}
+
+.side-panel-toggle--right {
+  right: 8px;
+  border-radius: 8px 0 0 8px;
+}
+
+.side-panel-toggle--collapsed {
+  opacity: 0.88;
 }
 
 /* 科技面板基础样式 */
@@ -194,7 +245,7 @@
 
 .loading-panel-status {
   display: flex;
-  min-height: 112px;
+  min-height: 130px;
   align-items: flex-end;
   justify-content: center;
   gap: 18px;
@@ -209,7 +260,7 @@
 }
 
 .loading-panel-truck {
-  width: 9.5rem;
+  width: 11rem;
   height: auto;
   object-fit: contain;
 }
