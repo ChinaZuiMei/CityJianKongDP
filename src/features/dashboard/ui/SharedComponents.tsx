@@ -34,6 +34,14 @@ export const Tank = ({
   const isImageTank = variant === 'storage' || variant === 'cone' || variant === 'reactor';
   const tankImage =
     variant === 'cone' ? coneTankImage : variant === 'reactor' ? reactorTankImage : storageTankImage;
+  /**
+   * 备注（重要）：罐区 `storage`（盐酸罐）与 `cone`（硫酸罐）两张图片的“视觉大小一致”不要再改。
+   * 当前做法依赖以下组合来保证不同电脑分辨率/屏幕比例/浏览器下观感一致：
+   * - `imageTankSizeClass` 统一外层高度
+   * - `<img className="h-full w-auto object-contain" />` 用高度撑满，宽度随图片比例自适应
+   * - `imageBaselineAdjustClass` 只做基线微调（用于对齐）
+   * 如需调整观感，优先改原始图片资源或只微调 `imageBaselineAdjustClass`，不要改整体尺寸策略。
+   */
   const imageTankSizeClass = 'h-[11.75rem]';
   const imageBaselineAdjustClass =
     variant === 'reactor'
