@@ -5,6 +5,7 @@ import { fileURLToPath } from "url";
 import cors from "cors";
 import mqtt from "mqtt";
 import fs from "fs";
+import dotenv from "dotenv";
 import { 
   initDatabase, 
   saveSensorData, 
@@ -16,10 +17,28 @@ import {
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const appEnv = process.env.APP_ENV || "local";
+const envFiles = [
+  ".env",
+  ".env.local",
+  `.env.${appEnv}`,
+  `.env.${appEnv}.local`,
+];
+
+for (const envFile of envFiles) {
+  dotenv.config({
+    path: path.resolve(__dirname, envFile),
+    override: true,
+  });
+}
 
 async function startServer() {
   const app = express();
   const PORT = 3000;
+  const mqttUrl = process.env.MQTT_URL || "ws://106.12.13.32:8083/mqtt";
+  const mqttUsername = process.env.MQTT_USERNAME || "zdzn";
+  const mqttPassword = process.env.MQTT_PASSWORD || "zdzn@1234";
+  const mqttTopic = process.env.MQTT_TOPIC || "/sensor/jl_old/pub";
 
   // 中间件
   app.use(cors());
@@ -33,15 +52,18 @@ async function startServer() {
   }
 
   // 连接 MQTT 并保存数据
-  const mqttClient = mqtt.connect('ws://106.12.13.32:8083/mqtt', {
-    username: 'zdzn',
-    password: 'zdzn@1234',
+  const mqttClient = mqtt.connect(mqttUrl, {
+    username: mqttUsername,
+    password: mqttPassword,
     clientId: 'server_client_' + Math.random().toString(16).substring(2, 8),
   });
 
   mqttClient.on('connect', () => {
     console.log('✅ 服务器 MQTT 已连接');
-    mqttClient.subscribe('/sensor/jl_old/pub', (err) => {
+    console.log(`🌍 当前环境: ${appEnv}`);
+    console.log(`🔗 MQTT 地址: ${mqttUrl}`);
+    console.log(`📡 MQTT 主题: ${mqttTopic}`);
+    mqttClient.subscribe(mqttTopic, (err) => {
       if (!err) {
         console.log('✅ 服务器已订阅 MQTT 主题');
       }

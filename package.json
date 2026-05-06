@@ -4,8 +4,14 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "tsx server.ts",
-    "build": "vite build",
+    "dev": "npm run dev:local",
+    "dev:local": "node scripts/run-with-env.mjs local tsx server.ts",
+    "dev:dev": "node scripts/run-with-env.mjs dev tsx server.ts",
+    "build": "npm run build:local",
+    "build:local": "node scripts/run-with-env.mjs local vite build --mode local",
+    "build:dev": "node scripts/run-with-env.mjs dev vite build --mode dev",
+    "start:local": "node scripts/run-with-env.mjs local tsx server.ts",
+    "start:dev": "node scripts/run-with-env.mjs dev tsx server.ts",
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit"
