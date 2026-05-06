@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>CRM销售看板</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: radial-gradient(circle at 20% 30%, #0a0f2a, #030617);
+            font-family: 'Inter', sans-serif;
+            color: #eef5ff;
+            padding: 16px 0 20px 0;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(59,130,246,0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59,130,246,0.08) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .dashboard-container {
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            background: rgba(10, 20, 40, 0.65);
+            backdrop-filter: blur(20px);
+            padding: 10px 32px;
+            border-radius: 0;
+            border-left: none;
+            border-right: none;
+            border-top: 1px solid rgba(59, 130, 246, 0.5);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.5);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05);
+            position: relative;
+            width: 100%;
+        }
+        .logo-area {
+            text-align: center;
+            flex: 1;
+        }
+        .logo-area h1 {
+            font-size: 1.7rem;
+            font-weight: 800;
+            background: linear-gradient(125deg, #fff, #60a5fa, #3b82f6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .logo-area p {
+            font-size: 0.7rem;
+            color: #a5c9ff;
+            margin-top: 2px;
+        }
+        .refresh-btn {
+            position: absolute;
+            right: 24px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            background: rgba(59,130,246,0.25);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(59,130,246,0.5);
+        }
+        .refresh-btn:hover {
+            transform: translateY(-50%) rotate(360deg) scale(1.05);
+            background: #3b82f6;
+            color: white;
+            box-shadow: 0 0 12px #3b82f6;
+        }
+
+        .dashboard-main {
+            display: grid;
+            grid-template-columns: 300px 1fr 300px;
+            gap: 18px;
+            margin-bottom: 20px;
+            align-items: start;
+            padding: 0 20px;
+        }
+
+        .glass-card {
+            background: rgba(12, 20, 35, 0.65);
+            backdrop-filter: blur(14px);
+            border-radius: 28px;
+            border: 1px solid rgba(59, 130, 246, 0.35);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.3);
+            transition: all 0.2s ease;
+        }
+        .glass-card:hover {
+            border-color: rgba(59,130,246,0.7);
+            box-shadow: 0 0 16px rgba(59,130,246,0.2);
+        }
+
+        .right-sidebar .glass-card {
+            margin-bottom: 12px;
+            padding: 0.6rem 0.7rem;
+        }
+        .right-sidebar .glass-card:last-child {
+            margin-bottom: 0;
+        }
+        .left-sidebar .glass-card {
+            margin-bottom: 16px;
+            padding: 0.8rem 0.8rem;
+        }
+        .center-area .center-hero {
+            padding: 0.9rem 1rem;
+        }
+
+        .section-title-glow {
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-left: 3px solid #3b82f6;
+            padding-left: 12px;
+            color: #fff;
+            letter-spacing: -0.2px;
+        }
+        .section-title-glow i {
+            color: #3b82f6;
+            font-size: 0.85rem;
+        }
+        .badge-tip {
+            font-size: 0.55rem;
+            margin-left: 6px;
+            font-weight: normal;
+            background: rgba(59,130,246,0.3);
+            padding: 2px 6px;
+            border-radius: 20px;
+        }
+
+        .compact-kpi {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            padding: 6px 12px;
+            margin-bottom: 8px;
+            border: 1px solid rgba(59,130,246,0.3);
+        }
+        .compact-kpi:hover {
+            background: rgba(59,130,246,0.1);
+        }
+        .kpi-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #9ab3d5;
+        }
+        .kpi-value {
+            font-size: 1.3rem;
+            font-weight: 800;
+            line-height: 1.2;
+            color: white;
+        }
+        .kpi-sub {
+            font-size: 0.6rem;
+            color: #6c8db0;
+        }
+
+        .carousel-wrapper {
+            overflow: hidden;
+            position: relative;
+        }
+        .carousel-list {
+            transition: none;
+        }
+        .carousel-list.animate-scroll {
+            animation: scrollUp linear infinite;
+            animation-play-state: running;
+        }
+        .carousel-list.animate-scroll:hover {
+            animation-play-state: paused;
+        }
+        @keyframes scrollUp {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50%); }
+        }
+
+        .activity-item-mini {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            border-bottom: 1px solid rgba(59,130,246,0.2);
+            padding: 7px 0;
+        }
+        .activity-icon {
+            width: 26px;
+            height: 26px;
+            background: rgba(59,130,246,0.2);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: #60a5fa;
+        }
+        .rank-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 2px;
+            border-bottom: 1px solid rgba(59,130,246,0.2);
+            gap: 6px;
+            font-size: 0.7rem;
+        }
+        .rank-medal {
+            width: 24px;
+            font-size: 0.85rem;
+        }
+        .rank-name {
+            flex: 2;
+            font-weight: 500;
+        }
+        .rank-count {
+            flex: 1;
+            text-align: center;
+            color: #b9d0f0;
+        }
+        .rank-amount {
+            flex: 1.5;
+            text-align: right;
+            font-weight: 600;
+            color: #60a5fa;
+        }
+        .todo-item-mini {
+            background: rgba(255,255,255,0.03);
+            border-radius: 16px;
+            padding: 5px 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.7rem;
+            margin-bottom: 5px;
+        }
+        .expiry-item-glow {
+            display: flex;
+            justify-content: space-between;
+            background: rgba(0,0,0,0.3);
+            border-radius: 16px;
+            padding: 5px 8px;
+            margin-bottom: 5px;
+            border-left: 3px solid #ef4444;
+            font-size: 0.7rem;
+        }
+        .expiry-item-glow strong {
+            font-size: 0.7rem;
+        }
+        .risk-item {
+            background: rgba(0,0,0,0.3);
+            border-radius: 16px;
+            padding: 6px 8px;
+            margin-bottom: 6px;
+            border-left: 3px solid #f97316;
+            font-size: 0.7rem;
+        }
+        .risk-item .risk-title {
+            font-weight: 600;
+            color: #facc15;
+        }
+        .grow-item {
+            background: rgba(0,0,0,0.3);
+            border-radius: 16px;
+            padding: 6px 8px;
+            margin-bottom: 6px;
+            border-left: 3px solid #10b981;
+        }
+
+        .hero-chart-container {
+            margin: 8px 0 4px 0;
+            border: 1px solid rgba(59, 130, 246, 0.5);
+            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(4px);
+            padding: 6px 4px 4px 4px;
+            transition: all 0.2s ease;
+        }
+        .hero-chart-container:hover {
+            border-color: rgba(59,130,246,0.8);
+            box-shadow: 0 0 12px rgba(59,130,246,0.2);
+        }
+        .hero-chart-container canvas {
+            width: 100%;
+            height: auto;
+            max-height: 195px;
+        }
+
+        canvas {
+            width: 100%;
+        }
+        .no-data-placeholder {
+            text-align: center;
+            padding: 12px 0;
+            color: #8aabdd;
+            font-size: 0.7rem;
+        }
+
+        .carousel-height-rank { height: 170px; }
+        .carousel-height-expiry { height: 155px; }
+        .carousel-fixed-height { height: 210px; }
+        .carousel-height-risk { height: 180px; }
+        .carousel-height-grow { height: 180px; }
+
+        .china-map-container {
+            margin: 0 0 16px 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.15), transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.12), transparent 40%),
+                linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(30, 41, 59, 0.95));
+            border-radius: 24px;
+            padding: 16px 16px;
+            border: 1px solid rgba(59,130,246,0.5);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.5),
+                0 0 60px rgba(59, 130, 246, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            position: relative;
+            overflow: hidden;
+            height: 530px;
+        }
+        .china-map-container::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(59, 130, 246, 0.03) 2px,
+                    rgba(59, 130, 246, 0.03) 4px
+                ),
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(59, 130, 246, 0.03) 2px,
+                    rgba(59, 130, 246, 0.03) 4px
+                );
+            pointer-events: none;
+            animation: gridMove 20s linear infinite;
+        }
+        .china-map-container::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, transparent 30%, rgba(15, 23, 42, 0.4) 100%);
+            pointer-events: none;
+        }
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+        #chinaMap {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .left-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+            border-radius: 10px;
+        }
+
+        @media (max-width: 1100px) {
+            .dashboard-main {
+                grid-template-columns: 1fr;
+                gap: 16px;
+                padding: 0 16px;
+            }
+            .china-map-container { 
+                height: 420px;
+                padding: 16px 12px; 
+            }
+            .hero-chart-container { margin: 8px 0; }
+            .right-sidebar .glass-card {
+                margin-bottom: 14px;
+            }
+            .top-bar {
+                border-radius: 0;
+                padding: 10px 16px;
+            }
+        }
+
+        .loading, .error {
+            text-align: center;
+            padding: 40px;
+            background: rgba(0,0,0,0.6);
+            border-radius: 32px;
+        }
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.65rem;
+            color: #6c8db0;
+            border-top: 1px solid rgba(59,130,246,0.2);
+            padding-top: 14px;
+        }
+        .map-tip-note {
+            position: absolute;
+            bottom: 12px;
+            right: 16px;
+            z-index: 20;
+            background: rgba(0,0,0,0.55);
+            backdrop-filter: blur(8px);
+            font-size: 0.6rem;
+            padding: 3px 10px;
+            border-radius: 20px;
+            color: #a5c9ff;
+            border: 1px solid rgba(59,130,246,0.5);
+            pointer-events: none;
+        }
+        .dashboard-main,
+        .center-area,
+        .left-sidebar,
+        .right-sidebar {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard-container">
+    <div class="top-bar">
+        <div class="logo-area">
+            <h1><i class="fas fa-chart-line"></i> CRM销售看板</h1>
+        </div>
+        <div class="refresh-btn" id="refreshBtn">
+            <i class="fas fa-sync-alt"></i>
+        </div>
+    </div>
+
+    <div id="dashboardContent">
+        <div class="loading"><i class="fas fa-spinner fa-pulse"></i> 正在请求数据...</div>
+    </div>
+    <footer></footer>
+</div>
+
+<script>
+    const API_URL = 'http://47.115.212.129:48080/admin-api/dashboard/all';
+    let barChart = null;
+    let chinaMapChart = null;
+    let chinaGeoJson = null;
+
+    function formatNumber(num) {
+        if (num === undefined || num === null) return '0';
+        return num.toLocaleString();
+    }
+    function formatMoney(amount) {
+        if (amount === undefined || amount === null) return '0 元';
+        const val = Number(amount);
+        if (val >= 10000) return (val / 10000).toFixed(1) + ' 万';
+        return val.toFixed(0) + ' 元';
+    }
+    function formatMoneyShort(amount) {
+        if (!amount) return '0';
+        const val = Number(amount);
+        if (val >= 10000) return (val / 10000).toFixed(1) + 'w';
+        return val.toFixed(0);
+    }
+    function formatTon(ton) {
+        if (ton === undefined || ton === null) return '0 吨';
+        const val = Number(ton);
+        if (val >= 10000) return (val / 10000).toFixed(1) + ' 万吨';
+        return val.toFixed(0) + ' 吨';
+    }
+    function formatTonShort(ton) {
+        if (!ton) return '0';
+        const val = Number(ton);
+        if (val >= 10000) return (val / 10000).toFixed(1) + 'w吨';
+        return val.toFixed(0) + 't';
+    }
+    function formatTime(dateStr) {
+        if (!dateStr) return '';
+        const date = new Date(dateStr);
+        const now = new Date();
+        const diff = now - date;
+        if (diff < 3600000) return Math.floor(diff/60000) + '分钟前';
+        if (diff < 86400000) return Math.floor(diff/3600000) + '小时前';
+        return `${date.getMonth()+1}/${date.getDate()}`;
+    }
+    function formatDate(dateStr) {
+        if (!dateStr) return '';
+        const d = new Date(dateStr);
+        return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+    }
+    function getActivityIcon(type) {
+        if (!type) return 'fa-comment';
+        if (type.includes('客户')) return 'fa-building';
+        if (type.includes('商机')) return 'fa-chart-line';
+        if (type.includes('合同')) return 'fa-file-signature';
+        return 'fa-comment';
+    }
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    function initSmartCarousel(wrapperSelector, itemPerSec = 1.6) {
+        const wrappers = document.querySelectorAll(wrapperSelector);
+        wrappers.forEach(wrapper => {
+            const container = wrapper.querySelector('.carousel-list');
+            if (!container) return;
+            const originalItems = container.children;
+            if (!originalItems.length) return;
+            const wrapperHeight = wrapper.clientHeight;
+            if (wrapperHeight === 0) return;
+            const originalHeight = container.scrollHeight;
+            if (originalHeight > wrapperHeight) {
+                if (!container.hasAttribute('data-cloned')) {
+                    const cloneItems = Array.from(originalItems).map(item => item.cloneNode(true));
+                    cloneItems.forEach(clone => container.appendChild(clone));
+                    container.setAttribute('data-cloned', 'true');
+                }
+                const totalOriginal = originalItems.length;
+                const duration = totalOriginal * itemPerSec;
+                container.classList.add('animate-scroll');
+                container.style.animationDuration = `${duration}s`;
+            } else {
+                container.classList.remove('animate-scroll');
+                container.style.animation = 'none';
+            }
+        });
+    }
+
+    async function loadChinaMapGeoJson() {
+        try {
+            const response = await fetch('/china.geojson');
+            if (!response.ok) throw new Error('地图数据请求失败');
+            const fullData = await response.json();
+            if (fullData && fullData.features) {
+                chinaGeoJson = fullData;
+                console.log('中国地图GeoJSON加载成功');
+            } else {
+                throw new Error('地图数据格式异常');
+            }
+        } catch (error) {
+            console.error('加载中国地图GeoJSON失败，尝试备用源', error);
+            try {
+                const fallbackResp = await fetch('https://cdn.jsdelivr.net/npm/echarts-map@1.0.0/map/json/china.json');
+                if (!fallbackResp.ok) throw new Error('备用源失败');
+                chinaGeoJson = await fallbackResp.json();
+                console.log('备用地图数据加载成功');
+            } catch (fallbackError) {
+                console.error('所有地图源均加载失败', fallbackError);
+                const mapContainer = document.getElementById('chinaMap');
+                if (mapContainer) {
+                    mapContainer.innerHTML = '<div style="text-align:center;padding:40px;color:#aaa;">地图数据加载失败，请刷新重试</div>';
+                }
+            }
+        }
+    }
+
+    function renderChinaMap(regionData) {
+        const mapDom = document.getElementById('chinaMap');
+        if (!mapDom) return;
+        if (!chinaGeoJson) {
+            setTimeout(() => renderChinaMap(regionData), 300);
+            return;
+        }
+        if (chinaMapChart) chinaMapChart.dispose();
+        echarts.registerMap('china', { geoJSON: chinaGeoJson });
+        chinaMapChart = echarts.init(mapDom);
+        
+        const provinceNames = regionData.filter(item => item.value && item.value > 0).map(item => item.name);
+        let highlightTimer = null;
+        let autoRotationActive = true;
+        let currentHighlightIndex = 0;
+        let savedIndex = 0;
+        
+        function stopAutoRotation() {
+            if (highlightTimer) {
+                clearInterval(highlightTimer);
+                highlightTimer = null;
+            }
+        }
+        
+        function startAutoRotation() {
+            if (!autoRotationActive) return;
+            if (highlightTimer) stopAutoRotation();
+            if (!provinceNames.length) return;
+            currentHighlightIndex = savedIndex % provinceNames.length;
+            highlightTimer = setInterval(() => {
+                if (!autoRotationActive) return;
+                if (!chinaMapChart || provinceNames.length === 0) return;
+                chinaMapChart.dispatchAction({ type: 'downplay', seriesIndex: 0 });
+                const targetProvince = provinceNames[currentHighlightIndex % provinceNames.length];
+                if (targetProvince) {
+                    chinaMapChart.dispatchAction({ type: 'highlight', seriesIndex: 0, name: targetProvince });
+                    chinaMapChart.dispatchAction({ type: 'showTip', seriesIndex: 0, name: targetProvince });
+                }
+                currentHighlightIndex++;
+                savedIndex = currentHighlightIndex;
+            }, 5000);
+        }
+        
+        function resetAndStart() {
+            stopAutoRotation();
+            if (autoRotationActive && provinceNames.length) {
+                currentHighlightIndex = 0;
+                savedIndex = 0;
+                startAutoRotation();
+            }
+        }
+        
+        const handleMouseEnter = () => {
+            if (autoRotationActive) stopAutoRotation();
+        };
+        const handleMouseLeave = () => {
+            if (autoRotationActive && provinceNames.length) {
+                startAutoRotation();
+            }
+        };
+        
+        let maxTon = 0;
+        regionData.forEach(item => { if (item.value > maxTon) maxTon = item.value; });
+        maxTon = Math.max(maxTon, 1000);
+        
+        const option = {
+            title: {
+                text: '各省份销售吨位分布',
+                left: 'center',
+                top: 8,
+                textStyle: { 
+                    color: '#ffffff', 
+                    fontSize: 14, 
+                    fontWeight: '600',
+                    textShadowColor: 'rgba(0, 0, 0, 0.8)',
+                    textShadowBlur: 6
+                }
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: function(params) {
+                    if (params.name) {
+                        let val = params.value;
+                        return `<div style="padding: 8px 12px;">
+                            <div style="font-weight: 600; font-size: 14px; margin-bottom: 6px; color: #60a5fa;">
+                                ${params.name}
+                            </div>
+                            <div style="font-size: 13px;">
+                                销售吨位：<span style="color: #fbbf24; font-weight: 600;">${val ? formatTon(val) : '暂无数据'}</span>
+                            </div>
+                        </div>`;
+                    }
+                    return params.name;
+                },
+                backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                borderColor: '#3b82f6',
+                borderWidth: 2,
+                textStyle: { color: '#e2e8f0' },
+                padding: 0,
+                extraCssText: 'border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.5);'
+            },
+            visualMap: {
+                min: 0,
+                max: maxTon,
+                calculable: true,
+                inRange: { 
+                    color: [
+                        '#0f172a', '#1e3a8a', '#2563eb', '#3b82f6', '#60a5fa',
+                        '#818cf8', '#a78bfa', '#c084fc', '#e879f9', '#fbbf24'
+                    ] 
+                },
+                textStyle: { color: '#e2e8f0', fontSize: 10, fontWeight: '500' },
+                left: 20,
+                bottom: 20,
+                itemWidth: 20,
+                itemHeight: 120,
+                borderColor: 'rgba(59, 130, 246, 0.4)',
+                borderWidth: 1,
+                backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                padding: [8, 6],
+                borderRadius: 8,
+                formatter: function(value) {
+                    return value >= 10000 ? (value/10000).toFixed(0) + 'w吨' : value.toFixed(0) + '吨';
+                }
+            },
+            series: [{
+                name: '销售吨位',
+                type: 'map',
+                map: 'china',
+                roam: false,
+                aspectScale: 0.85,
+                zoom: 1.25,
+                center: [105, 38],
+                top: 'middle',
+                left: 'center',
+                label: { 
+                    show: true,
+                    formatter: function(params) {
+                        const value = params.value;
+                        if (value && value > 0) {
+                            const tonStr = value >= 10000 ? (value/10000).toFixed(1) + 'w' : value.toFixed(0);
+                            return `{name|${params.name}}\n{value|${tonStr}吨}`;
+                        }
+                        return params.name;
+                    },
+                    rich: {
+                        name: { color: '#ffffff', fontSize: 10, fontWeight: '500', textShadowColor: 'rgba(0, 0, 0, 0.8)', textShadowBlur: 3, lineHeight: 14 },
+                        value: { color: '#fbbf24', fontSize: 9, fontWeight: '600', textShadowColor: 'rgba(0, 0, 0, 0.9)', textShadowBlur: 4, lineHeight: 12 }
+                    }
+                },
+                itemStyle: {
+                    areaColor: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: 'rgba(59, 130, 246, 0.1)' }, { offset: 1, color: 'rgba(59, 130, 246, 0.05)' }] },
+                    borderColor: 'rgba(96, 165, 250, 0.6)',
+                    borderWidth: 1.5,
+                    shadowColor: 'rgba(59, 130, 246, 0.3)',
+                    shadowBlur: 8
+                },
+                emphasis: { 
+                    label: { show: true, formatter: function(params) { const value = params.value; if (value && value > 0) { const tonStr = value >= 10000 ? (value/10000).toFixed(1) + 'w' : value.toFixed(0); return `{name|${params.name}}\n{value|${tonStr}吨}`; } return params.name; }, rich: { name: { color: '#fbbf24', fontSize: 13, fontWeight: '700', textShadowColor: 'rgba(251, 191, 36, 0.8)', textShadowBlur: 8, textBorderColor: 'rgba(0, 0, 0, 0.8)', textBorderWidth: 2 }, value: { color: '#ffffff', fontSize: 12, fontWeight: '700', textShadowColor: 'rgba(59, 130, 246, 0.8)', textShadowBlur: 8, textBorderColor: 'rgba(0, 0, 0, 0.8)', textBorderWidth: 2 } } },
+                    itemStyle: { areaColor: { type: 'radial', x: 0.5, y: 0.5, r: 0.8, colorStops: [{ offset: 0, color: 'rgba(96, 165, 250, 0.9)' }, { offset: 0.7, color: 'rgba(59, 130, 246, 0.7)' }, { offset: 1, color: 'rgba(37, 99, 235, 0.5)' }] }, borderColor: '#fbbf24', borderWidth: 2.5, shadowColor: 'rgba(59, 130, 246, 1)', shadowBlur: 20 }
+                },
+                data: regionData
+            }]
+        };
+        chinaMapChart.setOption(option);
+        
+        mapDom.removeEventListener('mouseenter', handleMouseEnter);
+        mapDom.removeEventListener('mouseleave', handleMouseLeave);
+        chinaMapChart.off('click');
+        mapDom.addEventListener('mouseenter', handleMouseEnter);
+        mapDom.addEventListener('mouseleave', handleMouseLeave);
+        
+        autoRotationActive = true;
+        currentHighlightIndex = 0;
+        savedIndex = 0;
+        resetAndStart();
+        window.addEventListener('resize', () => chinaMapChart?.resize());
+    }
+
+    function getRegionSalesData(apiData) {
+        if (apiData && apiData.regionSales && Array.isArray(apiData.regionSales) && apiData.regionSales.length) return apiData.regionSales;
+        return [
+            { name: "北京市", value: 38500 }, { name: "天津市", value: 12600 }, { name: "上海市", value: 49200 },
+            { name: "重庆市", value: 18700 }, { name: "河北省", value: 15300 }, { name: "山西省", value: 8900 },
+            { name: "辽宁省", value: 14200 }, { name: "吉林省", value: 6200 }, { name: "黑龙江省", value: 7800 },
+            { name: "江苏省", value: 52300 }, { name: "浙江省", value: 47800 }, { name: "安徽省", value: 16300 },
+            { name: "福建省", value: 25600 }, { name: "江西省", value: 9800 }, { name: "山东省", value: 39800 },
+            { name: "河南省", value: 21500 }, { name: "湖北省", value: 18900 }, { name: "湖南省", value: 17600 },
+            { name: "广东省", value: 89500 }, { name: "海南省", value: 5400 }, { name: "四川省", value: 23200 },
+            { name: "贵州省", value: 6700 }, { name: "云南省", value: 8200 }, { name: "陕西省", value: 12800 },
+            { name: "甘肃省", value: 5100 }, { name: "青海省", value: 2900 }, { name: "台湾省", value: 0 },
+            { name: "内蒙古自治区", value: 7300 }, { name: "广西壮族自治区", value: 10400 },
+            { name: "宁夏回族自治区", value: 3100 }, { name: "新疆维吾尔自治区", value: 6800 },
+            { name: "西藏自治区", value: 1500 }, { name: "香港特别行政区", value: 0 }, { name: "澳门特别行政区", value: 0 }
+        ];
+    }
+
+    async function fetchDashboard() {
+        const container = document.getElementById('dashboardContent');
+        container.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-pulse"></i> 同步星云数据...</div>';
+        try {
+            const response = await fetch(API_URL, { method: 'GET', headers: { 'Content-Type': 'application/json' } });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const data = await response.json();
+            renderCoolDashboard(data);
+        } catch (error) {
+            console.error(error);
+            renderMockDashboard();
+        }
+    }
+
+    function renderMockDashboard() {
+        const mockData = {
+            kpi: { totalCustomer: 2370, newCustomerMonth: 42, momActive: 8, wonAmount: 90071925474.1, receivableMonth: 3280000, totalReceivable: 18720000 },
+            monthlyTrend: [{ month: '1月', contractAmount: 12000000 }, { month: '2月', contractAmount: 9800000 }, { month: '3月', contractAmount: 14500000 }, { month: '4月', contractAmount: 16800000 }],
+            recentActivities: [
+                { bizTypeName: '客户拜访', content: '与祥安纸业洽谈续约', follower: '张明', createTime: new Date().toISOString() },
+                { bizTypeName: '合同签署', content: '完成新合同归档', follower: '李芳', createTime: new Date(Date.now() - 3600000).toISOString() },
+                { bizTypeName: '商机跟进', content: '测试客户报价阶段', follower: '王磊', createTime: new Date(Date.now() - 7200000).toISOString() }
+            ],
+            performanceRank: [
+                { ownerUserName: '张明远', wonCount: 12, wonAmount: 3850000 },
+                { ownerUserName: '李若曦', wonCount: 8, wonAmount: 2760000 },
+                { ownerUserName: '王振国', wonCount: 5, wonAmount: 1890000 },
+                { ownerUserName: '陈雅婷', wonCount: 3, wonAmount: 1120000 }
+            ],
+            contractExpiry: [
+                { name: '销售框架协议', customerName: '福建省祥安纸业有限公司', endTime: '2026-04-02' },
+                { name: '软件服务合同', customerName: '智云科技', endTime: '2026-04-15' }
+            ],
+            shipmentSummary: {
+                totalShipmentQuantity: 125800,
+                totalTonAmount: 125800,
+                totalSalesVolume: 125800
+            },
+            growingCustomers: [
+                { customerName: '宏达矿业', growthRate: 35.5, lastQuarterAmount: 12000000, currentQuarterAmount: 16260000 },
+                { customerName: '振华重工', growthRate: 28.3, lastQuarterAmount: 8800000, currentQuarterAmount: 11290000 },
+                { customerName: '新能源科技', growthRate: 42.1, lastQuarterAmount: 5600000, currentQuarterAmount: 7950000 }
+            ],
+            highRiskCustomers: [
+                { customerName: '华龙纸业', riskType: 'OVERDUE', riskDesc: '回款逾期超过30天', overdueDate: '2026-03-01' },
+                { customerName: '富达钢铁', riskType: 'PURCHASE_DROP', riskDesc: '采购量较上季度下降67%', compareRate: 67 }
+            ]
+        };
+        renderCoolDashboard(mockData);
+    }
+
+    function renderCoolDashboard(data) {
+        const container = document.getElementById('dashboardContent');
+        if (!data) { container.innerHTML = '<div class="error">无有效数据流</div>'; return; }
+
+        const kpi = data.kpi || {};
+        const monthly = data.monthlyTrend || [];
+        const activities = data.recentActivities || [];
+        const ranks = data.performanceRank || [];
+        const expiries = data.contractExpiry || [];
+        const regionSales = getRegionSalesData(data);
+        const shipment = data.shipmentSummary || { totalShipmentQuantity: 0, totalTonAmount: 0, totalSalesVolume: 0 };
+        const growing = data.growingCustomers || [];
+        const highRisk = data.highRiskCustomers || [];
+
+        let activityStaticHtml = activities.length ? activities.map(act => `<div class="activity-item-mini"><div class="activity-icon"><i class="fas ${getActivityIcon(act.bizTypeName)}"></i></div><div style="flex:1"><div style="font-weight:500; font-size:0.7rem;">${escapeHtml(act.content || '交流记录')}</div><div style="font-size:0.6rem; color:#8aabdd;">${act.bizTypeName || '互动'} · ${act.follower || '系统'}</div></div><div style="font-size:0.6rem;">${formatTime(act.createTime)}</div></div>`).join('') : '<div class="no-data-placeholder">✨ 暂无互动记录</div>';
+        let rankStaticHtml = ranks.length ? ranks.map((r, idx) => `<div class="rank-list-item"><div class="rank-medal">${idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : `${idx+1}`}</div><div class="rank-name">${escapeHtml(r.ownerUserName || '未分配')}</div><div class="rank-count">${r.wonCount || 0}单</div><div class="rank-amount">${formatMoneyShort(r.wonAmount)}</div></div>`).join('') : '<div class="no-data-placeholder">暂无排行数据</div>';
+        let expiryStaticHtml = expiries.length ? expiries.map(ct => `<div class="expiry-item-glow"><span><strong>${escapeHtml(ct.name)}</strong><br><span style="font-size:0.6rem;">${escapeHtml(ct.customerName)}</span></span><span style="color:#f97316; font-size:0.65rem;">${formatDate(ct.endTime)}</span></div>`).join('') : '<div class="no-data-placeholder">✅ 无30天内到期合同</div>';
+        let growingHtml = growing.length ? growing.map(g => `<div class="grow-item"><div style="display:flex; justify-content:space-between;"><span class="risk-title">${escapeHtml(g.customerName)}</span><span style="color:#10b981; font-weight:600;">+${g.growthRate}%</span></div><div style="font-size:0.6rem; color:#8aabdd;">上季:${formatMoney(g.lastQuarterAmount)} → 本季:${formatMoney(g.currentQuarterAmount)}</div></div>`).join('') : '<div class="no-data-placeholder">📊 暂无成长型客户</div>';
+        let highRiskHtml = highRisk.length ? highRisk.map(r => `<div class="risk-item"><div style="display:flex; justify-content:space-between;"><span class="risk-title">⚠️ ${escapeHtml(r.customerName)}</span><span style="color:#f97316;">${r.riskType === 'OVERDUE' ? '逾期风险' : '采购骤降'}</span></div><div style="font-size:0.6rem; color:#facc15;">${escapeHtml(r.riskDesc)}</div></div>`).join('') : '<div class="no-data-placeholder">✅ 暂无高风险客户</div>';
+
+        const shipmentHtml = `<div class="glass-card"><div class="section-title-glow"><i class="fas fa-ship"></i> 出货洞察</div>
+            <div class="compact-kpi"><div><div class="kpi-label">出货数量</div><div class="kpi-value">${formatTonShort(shipment.totalShipmentQuantity)}</div></div><div><i class="fas fa-boxes"></i></div></div>
+            <div class="compact-kpi"><div><div class="kpi-label">销售量汇总</div><div class="kpi-value">${formatTonShort(shipment.totalSalesVolume)}</div></div><div><i class="fas fa-chart-line"></i></div></div>
+        </div>`;
+
+        const leftHtml = `<div class="left-sidebar">
+            <div class="glass-card"><div class="section-title-glow"><i class="fas fa-chart-simple"></i> 核心脉冲</div>
+                <div class="compact-kpi"><div><div class="kpi-label">总客户数</div><div class="kpi-value">${formatNumber(kpi.totalCustomer)}</div></div><div><i class="fas fa-users"></i></div></div>
+                <div class="compact-kpi"><div><div class="kpi-label">本月新增客户</div><div class="kpi-value">${formatNumber(kpi.newCustomerMonth)}</div><div class="kpi-sub">较上月活跃 ${kpi.momActive ?? 0}</div></div><div><i class="fas fa-user-plus"></i></div></div>
+                <div class="compact-kpi"><div><div class="kpi-label">赢单总额</div><div class="kpi-value">${formatMoney(kpi.wonAmount)}</div></div><div><i class="fas fa-dollar-sign"></i></div></div>
+                <div class="compact-kpi"><div><div class="kpi-label">本月回款</div><div class="kpi-value">${formatMoney(kpi.receivableMonth)}</div><div class="kpi-sub">累计 ${formatMoney(kpi.totalReceivable)}</div></div><div><i class="fas fa-hand-holding-usd"></i></div></div>
+            </div>
+            ${shipmentHtml}
+            <div class="glass-card"><div class="section-title-glow"><i class="fas fa-waveform"></i> 近期互动</div><div id="activityCarousel" class="carousel-wrapper carousel-fixed-height" style="height:210px; overflow:hidden;"><div class="carousel-list">${activityStaticHtml}</div></div></div>
+        </div>`;
+
+        const rightHtml = `<div class="right-sidebar">
+            <div class="glass-card"><div class="section-title-glow"><i class="fas fa-trophy"></i> 销售人员排行榜 </div><div id="rankCarousel" class="carousel-wrapper carousel-height-rank" style="height:170px; overflow:hidden;"><div class="carousel-list">${rankStaticHtml}</div></div></div>
+            <div class="glass-card"><div class="section-title-glow"><i class="fas fa-calendar-xmark"></i> 合同临期预警 </div><div id="expiryCarousel" class="carousel-wrapper carousel-height-expiry" style="height:155px; overflow:hidden;"><div class="carousel-list">${expiryStaticHtml}</div></div></div>
+            <div class="glass-card"><div class="section-title-glow"><i class="fas fa-seedling"></i> 成长型客户（两季+20%）</div><div id="growCarousel" class="carousel-wrapper carousel-height-grow" style="height:180px; overflow:hidden;"><div class="carousel-list">${growingHtml}</div></div></div>
+            <div class="glass-card"><div class="section-title-glow"><i class="fas fa-exclamation-triangle"></i> 高风险客户预警</div><div id="riskCarousel" class="carousel-wrapper carousel-height-risk" style="height:180px; overflow:hidden;"><div class="carousel-list">${highRiskHtml}</div></div></div>
+        </div>`;
+
+        const centerHtml = `<div class="center-hero"><div class="china-map-container"><div id="chinaMap"></div></div><div class="section-title-glow"><i class="fas fa-chart-column"></i> 月度合同金额趋势 · 柱状洞察</div><div class="hero-chart-container"><canvas id="heroBarChart"></canvas></div></div>`;
+
+        container.innerHTML = `<div class="dashboard-main"><div class="left-sidebar">${leftHtml}</div><div class="center-area">${centerHtml}</div><div class="right-sidebar">${rightHtml}</div></div>`;
+
+        const months = monthly.map(item => item.month);
+        const amounts = monthly.map(item => item.contractAmount ? Number(item.contractAmount)/10000 : 0);
+        const barCtx = document.getElementById('heroBarChart').getContext('2d');
+        if (barChart) barChart.destroy();
+        barChart = new Chart(barCtx, { 
+            type: 'bar', 
+            data: { labels: months, datasets: [{ label: '合同金额 (万元)', data: amounts, backgroundColor: 'rgba(59, 130, 246, 0.7)', borderColor: '#3b82f6', borderWidth: 1, borderRadius: 6, barPercentage: 0.65 }] }, 
+            options: { responsive: true, maintainAspectRatio: true, plugins: { tooltip: { callbacks: { label: (ctx) => `${ctx.raw.toFixed(1)} 万元` } }, legend: { labels: { color: '#cbd5e6', font: { size: 9 } } } }, scales: { y: { grid: { color: 'rgba(59,130,246,0.2)' }, ticks: { color: '#b9d0f0', font: { size: 8 }, padding: 8 }, beginAtZero: true }, x: { ticks: { color: '#b9d0f0', font: { size: 8 }, padding: 6 } } }, layout: { padding: { top: 10, bottom: 5 } } } 
+        });
+        
+        renderChinaMap(regionSales);
+        setTimeout(() => {
+            initSmartCarousel('#activityCarousel', 1.5);
+            initSmartCarousel('#rankCarousel', 1.3);
+            initSmartCarousel('#expiryCarousel', 1.2);
+            initSmartCarousel('#growCarousel', 1.3);
+            initSmartCarousel('#riskCarousel', 1.4);
+        }, 100);
+    }
+
+    async function init() {
+        await loadChinaMapGeoJson();
+        fetchDashboard();
+    }
+
+    document.getElementById('refreshBtn').addEventListener('click', () => fetchDashboard());
+    init();
+</script>
+</body>
+</html>
