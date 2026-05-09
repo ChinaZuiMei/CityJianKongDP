@@ -34,7 +34,7 @@
   transform: scale(var(--side-panel-scale));
   transform-origin: top center;
 }
-
+/*左右面板间距调整 gap*/
 .tank-data-column {
   position: absolute;
   top: 90px;
