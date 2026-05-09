@@ -32,7 +32,7 @@ export default function App() {
   } = useDashboardRuntime();
 
   return (
-    <div className="relative flex h-screen w-screen flex-col overflow-hidden bg-transparent text-slate-900 font-sans selection:bg-sky-300/50">
+    <div className="relative flex h-screen w-screen flex-col overflow-x-hidden overflow-y-auto bg-transparent text-slate-900 font-sans selection:bg-sky-300/50">
       <div className="site-background" aria-hidden />
       <div className="site-decor-layer" aria-hidden>
         <img src={topDecorImage} alt="" className="site-decor site-decor--top" draggable="false" />
@@ -133,6 +133,7 @@ export default function App() {
           <SidePanelPreview data={scadaData} alarmData={alarmData} mqttConnected={mqttConnected} />
         ) : null}
       </main>
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-full h-36" />
     </div>
   );
 }

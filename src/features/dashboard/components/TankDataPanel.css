@@ -1,7 +1,7 @@
 /* 罐区数据面板样式 */
 :root {
   --side-panel-width: 360px;
-  --side-panel-scale: 0.9;
+  --side-panel-scale: 0.99;
   --side-panel-bleed: 18px;
 }
 
@@ -36,15 +36,15 @@
 }
 
 .tank-data-column {
-  position: fixed;
+  position: absolute;
   top: 90px;
-  bottom: 18px;
   width: var(--side-panel-width);
   z-index: 30;
   display: flex;
   flex-direction: column;
+  gap: 23px;
   pointer-events: auto;
-  overflow: hidden;
+  overflow: visible;
   transition: transform 260ms ease, opacity 260ms ease;
   will-change: transform, opacity;
 }
