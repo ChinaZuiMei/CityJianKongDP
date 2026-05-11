@@ -34,7 +34,8 @@ for (const envFile of envFiles) {
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  const PORT = Number(process.env.APP_PORT || 3000);
+  const HOST = process.env.APP_HOST || "192.168.4.43";
   const mqttUrl = process.env.MQTT_URL || "ws://106.12.13.32:8083/mqtt";
   const mqttUsername = process.env.MQTT_USERNAME || "zdzn";
   const mqttPassword = process.env.MQTT_PASSWORD || "zdzn@1234";
@@ -169,10 +170,10 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, "0.0.0.0", () => {
+  app.listen(PORT, HOST, () => {
     console.log(`\n🚀 服务器启动成功！`);
-    console.log(`📍 访问地址: http://localhost:${PORT}`);
-    console.log(`📊 API 文档: http://localhost:${PORT}/api/health`);
+    console.log(`📍 访问地址: http://${HOST}:${PORT}`);
+    console.log(`📊 API 文档: http://${HOST}:${PORT}/api/health`);
     console.log(`💾 MQTT 数据文件: mqtt_latest_data.json\n`);
   });
 }
