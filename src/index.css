@@ -514,3 +514,354 @@ body {
     padding: 2.6rem 0.65rem 0.65rem;
   }
 }
+
+.workshop-eight-stage {
+  position: relative;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: minmax(760px, 1fr) 320px;
+  gap: 280px;
+  height: 100%;
+  min-height: 0;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 94px 22px 22px 22px;
+  align-items: center;
+  overflow: hidden;
+}
+
+.workshop-eight-main-column {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) minmax(250px, auto);
+  gap: 44px;
+  min-width: 0;
+  min-height: 0;
+  width: min(100%, 1020px);
+  justify-self: center;
+}
+
+.workshop-eight-side-cards {
+  display: grid;
+  align-content: center;
+  gap: 22px;
+  width: 320px;
+  min-height: 0;
+  padding-top: 0;
+}
+
+.workshop-eight-flow-card {
+  display: grid;
+  gap: 16px;
+  min-height: 190px;
+  padding: 17px 15px 15px;
+  border: 1px solid rgba(58, 88, 146, 0.55);
+  border-radius: 22px;
+  background: transparent;
+  box-shadow: none;
+}
+
+.workshop-eight-flow-card--red {
+  border-color: rgba(190, 49, 72, 0.7);
+  box-shadow: 0 0 18px rgba(181, 34, 56, 0.16), inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+}
+
+.workshop-eight-flow-card--blue {
+  border-color: rgba(34, 103, 214, 0.7);
+  box-shadow: 0 0 18px rgba(40, 98, 204, 0.16), inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+}
+
+.workshop-eight-flow-card__header {
+  display: grid;
+  gap: 2px;
+}
+
+.workshop-eight-flow-card__title {
+  color: #355eff;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.workshop-eight-flow-card__subtitle {
+  color: #355eff;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.workshop-eight-flow-card--red .workshop-eight-flow-card__title,
+.workshop-eight-flow-card--red .workshop-eight-flow-card__subtitle {
+  color: #ff4c55;
+}
+
+.workshop-eight-flow-card__row {
+  display: grid;
+  grid-template-columns: 102px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+}
+
+.workshop-eight-flow-card__label {
+  color: #dbe9ff;
+  font-size: 14px;
+  font-weight: 800;
+  text-shadow: 0 0 8px rgba(91, 175, 255, 0.2);
+}
+
+.workshop-eight-flow-card__value {
+  min-height: 38px;
+  padding: 0 12px;
+  border: 1px solid rgba(180, 205, 255, 0.72);
+  border-radius: 4px;
+  background: transparent;
+  color: #f3f8ff;
+  font-family: "Times New Roman", serif;
+  font-size: 14px;
+  line-height: 38px;
+  text-align: right;
+  box-shadow: none;
+}
+
+.workshop-eight-stage__top,
+.workshop-eight-stage__bottom {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  min-height: 0;
+}
+
+.workshop-eight-section-block {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: 8px;
+  width: 100%;
+  max-width: 960px;
+  padding-left: 34px;
+  padding-top: 0;
+}
+
+.workshop-eight-section-block--bottom {
+  width: min(100%, 860px);
+  gap: 6px;
+  padding-top: 2px;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.workshop-eight-section-heading {
+  color: #dce9ff;
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1;
+  text-shadow: 0 0 12px rgba(110, 178, 255, 0.24);
+}
+
+.workshop-eight-tank-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(130px, 168px));
+  align-items: end;
+  justify-content: start;
+  gap: 16px;
+  width: 100%;
+  max-width: 760px;
+  margin-top: 0;
+}
+
+.workshop-eight-tank-item {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+}
+
+.workshop-eight-tank-item__label {
+  color: #61a8ff;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.workshop-eight-tank-item__image {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 220px;
+  object-fit: contain;
+}
+
+.workshop-eight-tank-item__metrics {
+  display: grid;
+  gap: 6px;
+  width: min(92%, 168px);
+}
+
+.workshop-eight-tank-item__metric {
+  min-height: 34px;
+  border: 1px solid rgba(180, 205, 255, 0.72);
+  border-radius: 4px;
+  background: transparent;
+  color: #f3f8ff;
+  font-family: "Times New Roman", serif;
+  font-size: 16px;
+  line-height: 34px;
+  text-align: center;
+  box-shadow: none;
+}
+
+.workshop-eight-stage__bottom {
+  overflow: visible;
+  margin-top: 12px;
+  min-height: 370px;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.workshop-eight-production-header {
+  position: absolute;
+  top: 68px;
+  left: 0;
+  right: 0;
+  display: block;
+  width: 100%;
+  margin-left: 0;
+}
+
+.workshop-eight-production-title {
+  position: absolute;
+  left: 34px;
+  top: 42px;
+  min-width: 220px;
+  padding: 8px 14px;
+  border: 1px solid rgba(180, 205, 255, 0.72);
+  border-radius: 4px;
+  background: transparent;
+  color: #dbe9ff;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.workshop-eight-ship-count {
+  position: absolute;
+  right: 36px;
+  top: 48px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid rgba(180, 205, 255, 0.72);
+  border-radius: 4px;
+  background: transparent;
+}
+
+.workshop-eight-ship-count__label {
+  color: #dbe9ff;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.workshop-eight-ship-count__value {
+  min-width: 92px;
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #f3f8ff;
+  font-family: "Times New Roman", serif;
+  font-size: 16px;
+  line-height: 1.2;
+  text-align: center;
+  box-shadow: none;
+}
+
+.workshop-eight-ship-scene {
+  position: absolute;
+  left: 50%;
+  bottom: -11%;
+  width: min(82%, 980px);
+  height: 30%;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.workshop-eight-ship-scene__wake {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  border-radius: 999px;
+  filter: blur(10px);
+  opacity: 0.75;
+}
+
+.workshop-eight-ship-scene__wake--rear {
+  bottom: 12%;
+  height: 22px;
+  background:
+    linear-gradient(90deg, rgba(64, 175, 255, 0) 0%, rgba(91, 205, 255, 0.85) 18%, rgba(142, 234, 255, 1) 52%, rgba(64, 175, 255, 0.18) 100%);
+  animation: workshop-eight-ship-wake 1.8s linear infinite;
+}
+
+.workshop-eight-ship-scene__wake--mid {
+  left: 24%;
+  right: 24%;
+  bottom: 20%;
+  height: 12px;
+  background:
+    linear-gradient(90deg, rgba(64, 175, 255, 0) 0%, rgba(120, 220, 255, 0.75) 25%, rgba(211, 247, 255, 1) 58%, rgba(64, 175, 255, 0) 100%);
+  animation: workshop-eight-ship-wake 1.2s linear infinite reverse;
+}
+/* 产量统计航母大小 */
+.workshop-eight-ship {
+  display: block;
+  position: absolute;
+  left: 50%;
+  bottom: -20%;
+  z-index: 2;
+  width: min(82%, 980px);
+  height: auto;
+  max-height: 400px;
+  object-fit: contain;
+  filter: drop-shadow(0 16px 28px rgba(60, 184, 255, 0.24));
+  transform-origin: 50% 65%;
+  animation: workshop-eight-ship-drive 2.4s ease-in-out infinite;
+  margin: 0;
+  transform: translateX(-50%);
+}
+
+@keyframes workshop-eight-ship-drive {
+  0% {
+    transform: translate3d(-50%, 0, 0) scale(1);
+    filter: drop-shadow(0 16px 28px rgba(60, 184, 255, 0.2));
+  }
+
+  35% {
+    transform: translate3d(calc(-50% + 10px), -3px, 0) scale(1.012);
+    filter: drop-shadow(0 22px 34px rgba(84, 204, 255, 0.34));
+  }
+
+  65% {
+    transform: translate3d(calc(-50% - 4px), 2px, 0) scale(1.006);
+    filter: drop-shadow(0 18px 30px rgba(68, 191, 255, 0.28));
+  }
+
+  100% {
+    transform: translate3d(-50%, 0, 0) scale(1);
+    filter: drop-shadow(0 16px 28px rgba(60, 184, 255, 0.2));
+  }
+}
+
+@keyframes workshop-eight-ship-wake {
+  0% {
+    transform: translateX(-28px) scaleX(0.92);
+    opacity: 0.28;
+  }
+
+  50% {
+    transform: translateX(18px) scaleX(1.04);
+    opacity: 0.88;
+  }
+
+  100% {
+    transform: translateX(52px) scaleX(1.1);
+    opacity: 0.18;
+  }
+}

@@ -870,7 +870,6 @@ function createTemperatureGaugeOption(value: number, name: string): EChartsOptio
           },
           'transparent',
         ],
-        hoverAnimation: false,
         legendHoverLink: false,
         z: 10,
         label: {
@@ -887,10 +886,9 @@ function createTemperatureGaugeOption(value: number, name: string): EChartsOptio
             value: 100 - (50 + percent * 50),
           },
         ],
-      },
+      } as any,
       {
         type: 'pie',
-        hoverAnimation: false,
         label: {
           show: false,
         },
@@ -921,7 +919,7 @@ function createTemperatureGaugeOption(value: number, name: string): EChartsOptio
             },
           },
         ],
-      },
+      } as any,
     ],
   };
 }

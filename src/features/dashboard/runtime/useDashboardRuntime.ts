@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { dashboardPageSchema } from '../schema/dashboardSchema';
 import { extractAlarmData, mapPayloadToScadaData } from '../schema/dataBindings';
 import { type Alarm, type AlarmData, DEFAULT_DATA, type ScadaData } from '../model/types';
+import { defaultWorkshopId, workshopRegistry } from '../../workshops/registry';
 
 interface MqttApiResponse {
   success?: boolean;
@@ -25,7 +26,7 @@ function getRefreshPolicy(id: string, mode: 'live' | 'mock') {
 
 export function useDashboardRuntime() {
   const dataMode = getDataMode();
-  const workshops = dashboardPageSchema.workshops;
+  const workshops = workshopRegistry;
 
   const [currentTime, setCurrentTime] = useState(() => new Date());
   const [scadaData, setScadaData] = useState<ScadaData>(DEFAULT_DATA);
@@ -33,7 +34,12 @@ export function useDashboardRuntime() {
   const [alarmData, setAlarmData] = useState<AlarmData>({});
   const [activeAlarms, setActiveAlarms] = useState<Alarm[]>([]);
   const [isAlarmPanelOpen, setIsAlarmPanelOpen] = useState(false);
-  const [selectedWorkshop, setSelectedWorkshop] = useState(workshops[0]);
+  const [selectedWorkshop, setSelectedWorkshop] = useState(defaultWorkshopId);
+
+  const selectedWorkshopDefinition = useMemo(
+    () => workshops.find((workshop) => workshop.id === selectedWorkshop) ?? workshops[0],
+    [selectedWorkshop, workshops],
+  );
 
   useEffect(() => {
     const timer = window.setInterval(() => setCurrentTime(new Date()), 1000);
@@ -112,6 +118,7 @@ export function useDashboardRuntime() {
   return {
     currentTime,
     workshops,
+    selectedWorkshopDefinition,
     scadaData,
     mqttConnected,
     alarmData,
