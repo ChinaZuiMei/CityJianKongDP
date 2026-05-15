@@ -15,6 +15,20 @@ interface TankDataPanelProps {
   subtitle?: string;
   position?: 'left' | 'right';
   mode?: 'level' | 'temperature' | 'external' | 'loading' | 'flow' | 'leak';
+  levelLabels?: string[];
+  levelValues?: number[];
+  temperatureLabels?: [string, string];
+  temperatureValues?: [number, number];
+  externalLabels?: string[];
+  externalValues?: number[];
+  externalMeta?: [string, string];
+  disableExternalCarousel?: boolean;
+  flowVariantOverride?: 'acid' | 'waste';
+  flowValues?: { instant: number; total: number };
+  hideFlowName?: boolean;
+  leakLabels?: string[];
+  leakValues?: number[];
+  leakMeta?: [string, string];
   top?: number;
   bottom?: number;
   embedded?: boolean;
@@ -36,10 +50,10 @@ const tankMetrics: TankMetric[] = [
   { id: 'h2so4_tank1_level', label: '1# 硫酸罐', max: 6.2, unit: 'm', color: ['rgba(31, 239, 216, 0.14)', 'rgba(76, 238, 221, 1)'] },
 ];
 
-function createTankPanelOption(data: ScadaData): EChartsOption {
-  const categoryLabels = ['盐酸罐', '盐酸罐', '盐酸罐', '硫酸罐'];
+function createTankPanelOption(data: ScadaData, labelOverrides?: string[], valueOverrides?: number[]): EChartsOption {
+  const categoryLabels = labelOverrides ?? ['盐酸罐', '盐酸罐', '盐酸罐', '硫酸罐'];
   const rows = tankMetrics.map((item, index) => {
-    const rawValue = data[item.id];
+    const rawValue = valueOverrides?.[index] ?? data[item.id];
     const safeValue = Number.isFinite(rawValue) ? rawValue : 0;
     return {
       ...item,
@@ -260,24 +274,24 @@ function createLoadingPanelOption(data: ScadaData): EChartsOption {
   };
 }
 
-function createLeakPanelOption(data: ScadaData): EChartsOption {
+function createLeakPanelOption(data: ScadaData, labelOverrides?: string[], valueOverrides?: number[]): EChartsOption {
   const rows = [
     {
-      label: '1# 泄漏',
-      value: Math.max(Number.isFinite(data.leak1) ? data.leak1 : 0, 0),
-      rawValue: Number.isFinite(data.leak1) ? data.leak1 : 0,
+      label: labelOverrides?.[0] ?? '1# 泄漏',
+      value: Math.max(Number.isFinite(valueOverrides?.[0] ?? data.leak1) ? valueOverrides?.[0] ?? data.leak1 : 0, 0),
+      rawValue: Number.isFinite(valueOverrides?.[0] ?? data.leak1) ? valueOverrides?.[0] ?? data.leak1 : 0,
       unit: 'ppm',
     },
     {
-      label: '2# 泄漏',
-      value: Math.max(Number.isFinite(data.leak2) ? data.leak2 : 0, 0),
-      rawValue: Number.isFinite(data.leak2) ? data.leak2 : 0,
+      label: labelOverrides?.[1] ?? '2# 泄漏',
+      value: Math.max(Number.isFinite(valueOverrides?.[1] ?? data.leak2) ? valueOverrides?.[1] ?? data.leak2 : 0, 0),
+      rawValue: Number.isFinite(valueOverrides?.[1] ?? data.leak2) ? valueOverrides?.[1] ?? data.leak2 : 0,
       unit: 'ppm',
     },
     {
-      label: '3# 泄漏',
-      value: Math.max(Number.isFinite(data.leak3) ? data.leak3 : 0, 0),
-      rawValue: Number.isFinite(data.leak3) ? data.leak3 : 0,
+      label: labelOverrides?.[2] ?? '3# 泄漏',
+      value: Math.max(Number.isFinite(valueOverrides?.[2] ?? data.leak3) ? valueOverrides?.[2] ?? data.leak3 : 0, 0),
+      rawValue: Number.isFinite(valueOverrides?.[2] ?? data.leak3) ? valueOverrides?.[2] ?? data.leak3 : 0,
       unit: 'ppm',
     },
   ];
@@ -583,9 +597,19 @@ function createLeakLiquidFillAltOption(): EChartsOption {
 
 type ExternalPanelVariant = 'old' | 'drum';
 
-function createExternalEquipmentOption(data: ScadaData, variant: ExternalPanelVariant): EChartsOption {
+function createExternalEquipmentOption(
+  data: ScadaData,
+  variant: ExternalPanelVariant,
+  labelOverrides?: string[],
+  valueOverrides?: number[],
+): EChartsOption {
   const categories =
-    variant === 'drum'
+    labelOverrides || valueOverrides
+      ? (labelOverrides ?? ['无', '无', '无', '无']).map((name, index) => ({
+          name,
+          value: Number.isFinite(valueOverrides?.[index]) ? valueOverrides?.[index] ?? 0 : 0,
+        }))
+      : variant === 'drum'
       ? [
           { name: '风机', value: Number.isFinite(data.drum_fan_v) ? data.drum_fan_v : 0 },
           { name: '循环泵1', value: Number.isFinite(data.drum_pump1_v) ? data.drum_pump1_v : 0 },
@@ -930,6 +954,20 @@ export const TankDataPanel: React.FC<TankDataPanelProps> = ({
   subtitle = 'TANK AREA PARAMETERS',
   position = 'left',
   mode = 'level',
+  levelLabels,
+  levelValues,
+  temperatureLabels,
+  temperatureValues,
+  externalLabels,
+  externalValues,
+  externalMeta,
+  disableExternalCarousel = false,
+  flowVariantOverride,
+  flowValues,
+  hideFlowName = false,
+  leakLabels,
+  leakValues,
+  leakMeta,
   top,
   bottom,
   embedded = false,
@@ -944,7 +982,7 @@ export const TankDataPanel: React.FC<TankDataPanelProps> = ({
   const flowSwitchTimeoutRef = React.useRef<number | null>(null);
 
   React.useEffect(() => {
-    if (mode !== 'external') return;
+    if (mode !== 'external' || disableExternalCarousel) return;
 
     const timer = window.setInterval(() => {
       setExternalVisible(false);
@@ -965,10 +1003,10 @@ export const TankDataPanel: React.FC<TankDataPanelProps> = ({
         externalSwitchTimeoutRef.current = null;
       }
     };
-  }, [mode]);
+  }, [disableExternalCarousel, mode]);
 
   React.useEffect(() => {
-    if (mode !== 'flow') return;
+    if (mode !== 'flow' || flowVariantOverride) return;
 
     const timer = window.setInterval(() => {
       setFlowVisible(false);
@@ -989,33 +1027,36 @@ export const TankDataPanel: React.FC<TankDataPanelProps> = ({
         flowSwitchTimeoutRef.current = null;
       }
     };
-  }, [mode]);
+  }, [flowVariantOverride, mode]);
 
-  const option = React.useMemo(() => createTankPanelOption(data), [data]);
+  const effectiveFlowVariant = flowVariantOverride ?? flowVariant;
+  const option = React.useMemo(() => createTankPanelOption(data, levelLabels, levelValues), [data, levelLabels, levelValues]);
   const tank1TempOption = React.useMemo(
-    () => createTemperatureGaugeOption(data.tank1_temp, '1# 反应槽'),
-    [data.tank1_temp],
+    () => createTemperatureGaugeOption(temperatureValues?.[0] ?? data.tank1_temp, temperatureLabels?.[0] ?? '1# 反应槽'),
+    [data.tank1_temp, temperatureLabels, temperatureValues],
   );
   const tank2TempOption = React.useMemo(
-    () => createTemperatureGaugeOption(data.tank2_temp, '2# 反应槽'),
-    [data.tank2_temp],
+    () => createTemperatureGaugeOption(temperatureValues?.[1] ?? data.tank2_temp, temperatureLabels?.[1] ?? '2# 反应槽'),
+    [data.tank2_temp, temperatureLabels, temperatureValues],
   );
   const flowOption = React.useMemo(
     () =>
-      flowVariant === 'acid'
-        ? createFlowLiquidFillOption(data)
-        : createFlowLiquidFillOptionByValues('', data.waste_flow_instant, data.waste_flow_total),
-    [data, flowVariant],
+      flowValues
+        ? createFlowLiquidFillOptionByValues('', flowValues.instant, flowValues.total)
+        : effectiveFlowVariant === 'acid'
+          ? createFlowLiquidFillOption(data)
+          : createFlowLiquidFillOptionByValues('', data.waste_flow_instant, data.waste_flow_total),
+    [data, effectiveFlowVariant, flowValues],
   );
   const loadingOption = React.useMemo(() => createLoadingPanelOption(data), [data]);
-  const leakOption = React.useMemo(() => createLeakPanelOption(data), [data]);
+  const leakOption = React.useMemo(() => createLeakPanelOption(data, leakLabels, leakValues), [data, leakLabels, leakValues]);
   const leakLiquidOption = React.useMemo(
     () => (leakLiquidVariant === 0 ? createLeakLiquidFillOption() : createLeakLiquidFillAltOption()),
     [leakLiquidVariant],
   );
   const externalEquipmentOption = React.useMemo(
-    () => createExternalEquipmentOption(data, externalVariant),
-    [data, externalVariant],
+    () => createExternalEquipmentOption(data, externalVariant, externalLabels, externalValues),
+    [data, externalLabels, externalValues, externalVariant],
   );
   const chartHeight = React.useMemo(() => {
     return Math.max(tankMetrics.length * 38 + 40, 200);
@@ -1059,7 +1100,7 @@ export const TankDataPanel: React.FC<TankDataPanelProps> = ({
                       />
                     </Suspense>
                   </div>
-                  <div className="temp-gauge-label">1# 反应槽温度</div>
+                  <div className="temp-gauge-label">{temperatureLabels?.[0] ?? '1# 反应槽温度'}</div>
                 </div>
                 <div className="temp-gauge-card">
                   <div className="temp-gauge-chart">
@@ -1073,15 +1114,15 @@ export const TankDataPanel: React.FC<TankDataPanelProps> = ({
                       />
                     </Suspense>
                   </div>
-                  <div className="temp-gauge-label">2# 反应槽温度</div>
+                  <div className="temp-gauge-label">{temperatureLabels?.[1] ?? '2# 反应槽温度'}</div>
                 </div>
               </div>
             </>
           ) : mode === 'external' ? (
             <div className={externalVisible ? 'external-panel-content' : 'external-panel-content external-panel-content--hidden'}>
               <div className="tank-panel-chart-meta">
-                <span>{externalVariant === 'old' ? '聚铝老厂动态监测' : '滚筒干燥动态监测'}</span>
-                <span>{externalVariant === 'old' ? '聚铝老厂' : '滚筒干燥'} / A</span>
+                <span>{externalMeta?.[0] ?? (externalVariant === 'old' ? '聚铝老厂动态监测' : '滚筒干燥动态监测')}</span>
+                <span>{externalMeta?.[1] ?? `${externalVariant === 'old' ? '聚铝老厂' : '滚筒干燥'} / A`}</span>
               </div>
               <div className="tank-panel-chart external-panel-chart" style={{ height: 236 }}>
                 <Suspense fallback={<div className="tank-chart-fallback" />}>
@@ -1140,7 +1181,7 @@ export const TankDataPanel: React.FC<TankDataPanelProps> = ({
           ) : mode === 'flow' ? (
             <>
               <div className="tank-panel-chart-meta">
-                <span>{flowVariant === 'acid' ? '盐酸硫酸流量' : '东氟废水流量'}</span>
+                {hideFlowName ? null : <span>{effectiveFlowVariant === 'acid' ? '盐酸硫酸流量' : '东氟废水流量'}</span>}
               </div>
               <div className={flowVisible ? 'external-panel-content' : 'external-panel-content external-panel-content--hidden'}>
                 <div className="tank-panel-chart" style={{ height: 210 }}>
@@ -1159,8 +1200,8 @@ export const TankDataPanel: React.FC<TankDataPanelProps> = ({
           ) : mode === 'leak' ? (
             <>
               <div className="tank-panel-chart-meta">
-                <span>盐酸泄漏监测</span>
-                <span>单位 / ppm</span>
+                <span>{leakMeta?.[0] ?? '盐酸泄漏监测'}</span>
+                <span>{leakMeta?.[1] ?? '单位 / ppm'}</span>
               </div>
               <div className="tank-panel-chart" style={{ height: 165 }}>
                 <Suspense fallback={<div className="tank-chart-fallback" />}>

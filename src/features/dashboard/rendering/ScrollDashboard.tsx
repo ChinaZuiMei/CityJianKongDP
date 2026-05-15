@@ -14,8 +14,7 @@ type RegionAlarm = {
   level: string;
 };
 
-const REGION_ROTATE_MS = 9000;
-const ALARM_ROTATE_MS = 3200;
+const REGION_ROTATE_MS = 3000;
 
 const buildAlarmGroups = (alarms: RegionAlarm[]) => {
   if (alarms.length === 0) {
@@ -59,10 +58,12 @@ export const ScrollDashboard = ({
   data,
   alarmData,
   sidePanelPreviewEnabled = false,
+  hideRegionBody = false,
 }: {
   data: ScadaData;
   alarmData: AlarmData;
   sidePanelPreviewEnabled?: boolean;
+  hideRegionBody?: boolean;
 }) => {
   const outerClassName = sidePanelPreviewEnabled ? 'pl-[420px] pr-[420px]' : '';
   const [scale, setScale] = useState(0.92);
@@ -70,6 +71,7 @@ export const ScrollDashboard = ({
   const [dragging, setDragging] = useState(false);
   const [activeRegionIndex, setActiveRegionIndex] = useState(0);
   const [activeAlarmGroupIndex, setActiveAlarmGroupIndex] = useState(0);
+  const [regionDirection, setRegionDirection] = useState(1);
   const dragStartRef = useRef<{ x: number; y: number; originX: number; originY: number } | null>(null);
 
   const regions = useMemo(() => ([
@@ -137,32 +139,34 @@ export const ScrollDashboard = ({
   }, [alarmData, regions]);
 
   const activeRegion = regions[activeRegionIndex] ?? regions[0];
+  const bodyRegions = useMemo(() => [...regions].reverse(), [regions]);
+  const bodyRegionIndex = regions.length - 1 - activeRegionIndex;
   const activeAlarmGroups = useMemo(
     () => buildAlarmGroups(alarmsByRegion[activeRegion.id]),
     [activeRegion.id, alarmsByRegion],
   );
 
   useEffect(() => {
+    if (regions.length <= 1) return undefined;
+
     const timer = window.setInterval(() => {
-      setActiveRegionIndex((current) => (current + 1) % regions.length);
+      setActiveRegionIndex((current) => {
+        const next = current + regionDirection;
+        if (next >= regions.length) {
+          setRegionDirection(-1);
+          return Math.max(regions.length - 2, 0);
+        }
+        if (next < 0) {
+          setRegionDirection(1);
+          return 1;
+        }
+        return next;
+      });
+      setActiveAlarmGroupIndex((current) => current + 1);
     }, REGION_ROTATE_MS);
 
     return () => window.clearInterval(timer);
-  }, [regions.length]);
-
-  useEffect(() => {
-    setActiveAlarmGroupIndex(0);
-  }, [activeRegion.id]);
-
-  useEffect(() => {
-    if (activeAlarmGroups.length <= 1) return undefined;
-
-    const timer = window.setInterval(() => {
-      setActiveAlarmGroupIndex((current) => (current + 1) % activeAlarmGroups.length);
-    }, ALARM_ROTATE_MS);
-
-    return () => window.clearInterval(timer);
-  }, [activeAlarmGroups.length]);
+  }, [regionDirection, regions.length]);
 
   const handleWheel: React.WheelEventHandler<HTMLDivElement> = (event) => {
     event.preventDefault();
@@ -217,64 +221,73 @@ export const ScrollDashboard = ({
         >
           <div className="mx-auto h-[760px] w-[1040px] max-w-full overflow-hidden">
             <div className="relative mx-auto h-full w-full">
-              <div className="absolute inset-x-[72px] top-[24px] z-10 overflow-hidden">
+              <div className="absolute inset-x-[72px] top-[42px] z-10 overflow-hidden">
                 <div
                   className="flex transition-transform duration-700 ease-out"
-                  style={{ transform: `translateX(-${activeAlarmGroupIndex * 100}%)` }}
+                  style={{ transform: `translateX(-${activeRegionIndex * 100}%)` }}
                 >
-                  {activeAlarmGroups.map((group, groupIndex) => (
-                    <div key={`${activeRegion.id}-${groupIndex}`} className="grid min-w-full grid-cols-3 gap-4">
-                      {group.map((alarm) => {
-                        const isPlaceholder = alarm.key.startsWith('placeholder-');
-                        return (
-                          <div
-                            key={alarm.key}
-                            className={isPlaceholder
-                              ? 'flex h-[150px] flex-col justify-between rounded-[14px] border border-red-400/65 bg-transparent px-6 py-5'
-                              : 'flex h-[150px] flex-col justify-between rounded-[14px] border border-red-400/90 bg-transparent px-6 py-5'}
-                          >
-                            <div className="text-red-100">
-                              <span className="text-xs font-black tracking-[0.16em]">
-                                {isPlaceholder ? 'ALARM SLOT' : alarm.level}
-                              </span>
-                            </div>
-                            <div className={isPlaceholder ? 'text-[1.6rem] font-black tracking-[0.02em] text-red-100/68' : 'text-[1.6rem] font-black tracking-[0.02em] text-red-50'}>
-                              {alarm.title}
-                            </div>
-                            <div className="text-[13px] font-semibold tracking-[0.08em] text-red-100/72">
-                              {alarm.label}
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  ))}
-                </div>
-                <div className="pointer-events-none mt-7 flex items-center justify-center gap-4 text-base font-black tracking-[0.24em] text-sky-100/62">
-                  <span>{activeRegion.title}</span>
-                  <span className="h-px w-12 bg-sky-200/28" aria-hidden />
-                  <span>{activeRegion.subtitle}</span>
+                  {regions.map((region) => {
+                    const groups = buildAlarmGroups(alarmsByRegion[region.id]);
+                    const group = groups[activeAlarmGroupIndex % groups.length] ?? groups[0];
+
+                    return (
+                      <div key={region.id} className="min-w-full">
+                        <div className="grid grid-cols-3 gap-4">
+                          {group.map((alarm) => {
+                            const isPlaceholder = alarm.key.startsWith('placeholder-');
+                            return (
+                              <div
+                                key={alarm.key}
+                                className={isPlaceholder
+                                  ? 'flex h-[150px] flex-col justify-between rounded-[14px] border border-red-400/65 bg-transparent px-6 py-5'
+                                  : 'flex h-[150px] flex-col justify-between rounded-[14px] border border-red-400/90 bg-transparent px-6 py-5'}
+                              >
+                                <div className="text-red-100">
+                                  <span className="text-xs font-black tracking-[0.16em]">
+                                    {isPlaceholder ? 'ALARM SLOT' : alarm.level}
+                                  </span>
+                                </div>
+                                <div className={isPlaceholder ? 'text-[1.6rem] font-black tracking-[0.02em] text-red-100/68' : 'text-[1.6rem] font-black tracking-[0.02em] text-red-50'}>
+                                  {alarm.title}
+                                </div>
+                                <div className="text-[13px] font-semibold tracking-[0.08em] text-red-100/72">
+                                  {alarm.label}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                        <div className="pointer-events-none mt-7 flex items-center justify-center gap-4 text-base font-black tracking-[0.24em] text-sky-100/62">
+                          <span>{region.title}</span>
+                          <span className="h-px w-12 bg-sky-200/28" aria-hidden />
+                          <span>{region.subtitle}</span>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 
-              <div className="absolute inset-x-0 bottom-0 top-[300px] overflow-hidden">
-                <div
-                  className="flex h-full transition-transform duration-1000 ease-out"
-                  style={{ transform: `translateX(-${activeRegionIndex * 100}%)` }}
-                >
-                  {regions.map((region) => (
-                    <div key={region.id} className="flex min-w-full flex-col">
-                      <div className={`flex h-full overflow-visible ${region.bodyClassName}`}>
-                        <div className={region.scaleClassName}>
-                          <div className={region.contentClassName}>
-                            {region.render()}
+              {!hideRegionBody ? (
+                <div className="absolute inset-x-0 bottom-0 top-[300px] overflow-hidden">
+                  <div
+                    className="flex h-full transition-transform duration-1000 ease-out"
+                    style={{ transform: `translateX(-${bodyRegionIndex * 100}%)` }}
+                  >
+                    {bodyRegions.map((region) => (
+                      <div key={region.id} className="flex min-w-full flex-col">
+                        <div className={`flex h-full overflow-visible ${region.bodyClassName}`}>
+                          <div className={region.scaleClassName}>
+                            <div className={region.contentClassName}>
+                              {region.render()}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
+              ) : null}
             </div>
           </div>
         </div>

@@ -17,5 +17,8 @@ export interface WorkshopDefinition {
   name: string;
   enabled: boolean;
   hasContent: boolean;
+  dataWorkshopIds?: string[];
+  dataWorkshopNames?: string[];
+  alarmNamePrefixes?: string[];
   render: (runtime: WorkshopRuntimeData) => ReactNode;
 }

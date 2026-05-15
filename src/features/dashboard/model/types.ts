@@ -35,6 +35,8 @@ export interface Alarm {
   alarm_type: string;
   alarm_name: string;
   alarm_status: boolean;
+  workshop_id?: string;
+  workshop_name?: string;
   timestamp: string;
 }
 
