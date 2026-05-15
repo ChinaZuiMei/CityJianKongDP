@@ -88,7 +88,7 @@ export const ScrollDashboard = ({
       id: 'tanks' as const,
       title: '罐区',
       subtitle: 'TANK AREA',
-      bodyClassName: 'items-end justify-center px-2 pt-32',
+      bodyClassName: 'items-end justify-center px-2 pt-12',
       scaleClassName: 'dashboard-module-scale dashboard-module-scale--tank',
       contentClassName: 'w-full max-w-[950px]',
       render: () => <TankAreaScreen data={data} alarmData={alarmData} hideTankAlarmOverlay />,
@@ -269,7 +269,7 @@ export const ScrollDashboard = ({
               </div>
 
               {!hideRegionBody ? (
-                <div className="absolute inset-x-0 bottom-0 top-[300px] overflow-hidden">
+                <div className="absolute inset-x-0 bottom-0 top-[282px] overflow-hidden">
                   <div
                     className="flex h-full transition-transform duration-1000 ease-out"
                     style={{ transform: `translateX(-${bodyRegionIndex * 100}%)` }}

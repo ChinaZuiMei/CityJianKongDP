@@ -14,8 +14,8 @@ export const TankAreaScreen = ({
   alarmData: AlarmData;
   hideTankAlarmOverlay?: boolean;
 }) => (
-  <div className="flex h-full w-full flex-col gap-4 overflow-visible px-2 py-1 xl:px-3 xl:py-2">
-    <div className="grid min-h-0 grid-cols-4 gap-4 pb-4 overflow-visible">
+  <div className="flex h-full w-full flex-col gap-2 overflow-visible px-2 py-1 xl:px-3 xl:py-2">
+    <div className="grid min-h-0 grid-cols-4 gap-4 pb-2 overflow-visible">
       {[
         { id: 'hcl_tank1', label: '1# 盐酸罐', level: data.hcl_tank1_level, max: 3.6, variant: 'storage' as const },
         { id: 'hcl_tank2', label: '2# 盐酸罐', level: data.hcl_tank2_level, max: 3.6, variant: 'storage' as const },
@@ -25,7 +25,7 @@ export const TankAreaScreen = ({
         const isAlarm = hasAlarm(tank.id, alarmData);
         const alarmNames = getAlarmNames(tank.id, alarmData);
         return (
-          <div key={tank.id} className="relative flex min-h-0 flex-col items-center gap-1.5 overflow-visible px-1 py-1">
+          <div key={tank.id} className="relative flex min-h-0 flex-col items-center gap-1 overflow-visible px-1 py-0.5">
             {!hideTankAlarmOverlay && alarmNames.length > 0 && (
               <div className="pointer-events-none absolute left-1/2 top-0 z-30 flex min-w-[110px] max-w-[170px] -translate-x-1/2 -translate-y-[92%] flex-col items-center gap-1 rounded-md border border-red-400/80 bg-slate-950/70 px-2 py-1 shadow-[0_0_12px_rgba(239,68,68,0.35)]">
                 {alarmNames.map((name, idx) => (
@@ -40,13 +40,13 @@ export const TankAreaScreen = ({
               level={tank.level} 
               max={tank.max} 
               variant={tank.variant}
-              labelOffsetClassName="mt-10"
+              labelOffsetClassName="mt-8"
             />
           </div>
         );
       })}
     </div>
-    <div className="-translate-y-2 grid grid-cols-3 gap-4 pt-2">
+    <div className="grid grid-cols-3 gap-4 pt-1">
       {[
         { id: 1, val: data.leak1, component: 'leak1' },
         { id: 2, val: data.leak2, component: 'leak2' },
@@ -55,7 +55,7 @@ export const TankAreaScreen = ({
         const isAlarm = hasAlarm(leak.component, alarmData);
         const alarmNames = getAlarmNames(leak.component, alarmData);
         return (
-          <div key={leak.id} className="group flex min-h-[92px] flex-col items-center justify-start gap-1.5 overflow-hidden px-2 py-2">
+          <div key={leak.id} className="group flex min-h-[112px] flex-col items-center justify-start gap-1 overflow-visible px-2 py-1.5">
             <div className={cn("flex items-center gap-1 text-xs font-black uppercase tracking-[0.1em] xl:text-sm", isAlarm ? "text-red-200 animate-pulse" : "text-slate-100")}>
               <AlertTriangle size={14} className={cn(isAlarm ? "text-red-400 animate-pulse" : "text-sky-300")} /> 盐酸泄漏 {leak.id}
             </div>
