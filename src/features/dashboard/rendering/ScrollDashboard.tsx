@@ -59,11 +59,13 @@ export const ScrollDashboard = ({
   alarmData,
   sidePanelPreviewEnabled = false,
   hideRegionBody = false,
+  detachedRegionBody = false,
 }: {
   data: ScadaData;
   alarmData: AlarmData;
   sidePanelPreviewEnabled?: boolean;
   hideRegionBody?: boolean;
+  detachedRegionBody?: boolean;
 }) => {
   const outerClassName = sidePanelPreviewEnabled ? 'pl-[420px] pr-[420px]' : '';
   const [scale, setScale] = useState(0.92);
@@ -219,7 +221,7 @@ export const ScrollDashboard = ({
             transform: `translate(calc(-50% + ${offset.x}px), calc(-50% + ${offset.y}px)) scale(${scale})`,
           }}
         >
-          <div className="mx-auto h-[760px] w-[1040px] max-w-full overflow-hidden">
+          <div className={detachedRegionBody ? 'mx-auto h-[760px] w-[1040px] max-w-full overflow-visible' : 'mx-auto h-[760px] w-[1040px] max-w-full overflow-hidden'}>
             <div className="relative mx-auto h-full w-full">
               <div className="absolute inset-x-[72px] top-[42px] z-10 overflow-hidden">
                 <div
@@ -269,22 +271,24 @@ export const ScrollDashboard = ({
               </div>
 
               {!hideRegionBody ? (
-                <div className="absolute inset-x-0 bottom-0 top-[282px] overflow-hidden">
-                  <div
-                    className="flex h-full transition-transform duration-1000 ease-out"
-                    style={{ transform: `translateX(-${bodyRegionIndex * 100}%)` }}
-                  >
-                    {bodyRegions.map((region) => (
-                      <div key={region.id} className="flex min-w-full flex-col">
-                        <div className={`flex h-full overflow-visible ${region.bodyClassName}`}>
-                          <div className={region.scaleClassName}>
-                            <div className={region.contentClassName}>
-                              {region.render()}
+                <div className={detachedRegionBody ? 'absolute left-1/2 top-[49%] z-10 w-[1040px] max-w-full -translate-x-1/2 overflow-visible' : 'absolute inset-x-0 bottom-0 top-[282px] overflow-hidden'}>
+                  <div className={detachedRegionBody ? 'h-[520px] overflow-hidden' : 'h-full overflow-hidden'}>
+                    <div
+                      className="flex h-full transition-transform duration-1000 ease-out"
+                      style={{ transform: `translateX(-${bodyRegionIndex * 100}%)` }}
+                    >
+                      {bodyRegions.map((region) => (
+                        <div key={region.id} className="flex min-w-full flex-col">
+                          <div className={`flex h-full overflow-visible ${region.bodyClassName}`}>
+                            <div className={region.scaleClassName}>
+                              <div className={region.contentClassName}>
+                                {region.render()}
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
                 </div>
               ) : null}

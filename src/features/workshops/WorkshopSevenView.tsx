@@ -104,7 +104,7 @@ export function WorkshopSevenView({
           subtitle="STEAM FLOW LIQUID ALUMINUM SULFATE"
           mode="flow"
           flowVariantOverride="acid"
-          flowValues={{ instant: 0, total: 0 }}
+          flowValues={{ instant: 0, total: 93789 }}
           hideFlowName
           embedded
         />

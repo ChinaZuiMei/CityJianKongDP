@@ -96,7 +96,12 @@ export function ExistingWorkshopView({
       </div>
 
       <main className="relative z-10 flex-1 overflow-hidden bg-transparent">
-        <ScrollDashboard data={scadaData} alarmData={alarmData} sidePanelPreviewEnabled={enableSidePanelPreview} />
+        <ScrollDashboard
+          data={scadaData}
+          alarmData={alarmData}
+          sidePanelPreviewEnabled={enableSidePanelPreview}
+          detachedRegionBody
+        />
         {enableSidePanelPreview ? (
           <SidePanelPreview data={scadaData} alarmData={alarmData} mqttConnected={mqttConnected} />
         ) : null}
