@@ -12,6 +12,12 @@ type WorkshopSevenTank = {
   current: string;
 };
 
+type WorkshopRegionHeader = {
+  id: string;
+  title: string;
+  subtitle: string;
+};
+
 const tankGroups: WorkshopSevenTank[][] = [
   [
     { id: 'F0101A', pressure: '0.00 Mpa', temperature: '0.0°C', current: '0.0A' },
@@ -46,7 +52,12 @@ export function WorkshopSevenView({
   activeAlarms,
   isAlarmPanelOpen,
   setIsAlarmPanelOpen,
-}: WorkshopRuntimeData) {
+  dashboardHeaderRegions,
+  hideDashboardRegionHeader = true,
+}: WorkshopRuntimeData & {
+  dashboardHeaderRegions?: WorkshopRegionHeader[];
+  hideDashboardRegionHeader?: boolean;
+}) {
   const [leftPanelCollapsed, setLeftPanelCollapsed] = React.useState(false);
   const [rightPanelCollapsed, setRightPanelCollapsed] = React.useState(false);
   const [activeTankGroupIndex, setActiveTankGroupIndex] = React.useState(0);
@@ -168,7 +179,13 @@ export function WorkshopSevenView({
       </div>
 
       <main className="relative z-10 flex-1 overflow-hidden bg-transparent">
-        <ScrollDashboard data={scadaData} alarmData={alarmData} hideRegionBody hideRegionHeader />
+        <ScrollDashboard
+          data={scadaData}
+          alarmData={alarmData}
+          hideRegionBody
+          hideRegionHeader={hideDashboardRegionHeader}
+          headerRegions={dashboardHeaderRegions}
+        />
         <section className="workshop-seven-carousel" aria-label="车间7罐组轮播">
           <div className="workshop-seven-carousel__viewport">
             <div

@@ -14,6 +14,13 @@ type RegionAlarm = {
   level: string;
 };
 
+type HeaderRegion = {
+  id: string;
+  title: string;
+  subtitle: string;
+  alarmRegionId?: RegionId;
+};
+
 const REGION_ROTATE_MS = 3000;
 
 const buildAlarmGroups = (alarms: RegionAlarm[]) => {
@@ -61,6 +68,7 @@ export const ScrollDashboard = ({
   hideRegionBody = false,
   detachedRegionBody = false,
   hideRegionHeader = false,
+  headerRegions: customHeaderRegions,
 }: {
   data: ScadaData;
   alarmData: AlarmData;
@@ -68,6 +76,7 @@ export const ScrollDashboard = ({
   hideRegionBody?: boolean;
   detachedRegionBody?: boolean;
   hideRegionHeader?: boolean;
+  headerRegions?: HeaderRegion[];
 }) => {
   const outerClassName = sidePanelPreviewEnabled ? 'pl-[420px] pr-[420px]' : '';
   const scale = 0.92;
@@ -142,23 +151,34 @@ export const ScrollDashboard = ({
     return grouped;
   }, [alarmData, regions]);
 
-  const activeRegion = regions[activeRegionIndex] ?? regions[0];
+  const defaultHeaderRegions = useMemo<HeaderRegion[]>(
+    () => regions.map((region) => ({
+      id: region.id,
+      title: region.title,
+      subtitle: region.subtitle,
+      alarmRegionId: region.id,
+    })),
+    [regions],
+  );
+  const headerRegions = customHeaderRegions?.length ? customHeaderRegions : defaultHeaderRegions;
+  const rotationCount = hideRegionBody ? headerRegions.length : regions.length;
+  const activeHeaderRegion = headerRegions[activeRegionIndex] ?? headerRegions[0];
   const bodyRegions = useMemo(() => [...regions].reverse(), [regions]);
   const bodyRegionIndex = regions.length - 1 - activeRegionIndex;
   const activeAlarmGroups = useMemo(
-    () => buildAlarmGroups(alarmsByRegion[activeRegion.id]),
-    [activeRegion.id, alarmsByRegion],
+    () => buildAlarmGroups(activeHeaderRegion?.alarmRegionId ? alarmsByRegion[activeHeaderRegion.alarmRegionId] : []),
+    [activeHeaderRegion?.alarmRegionId, alarmsByRegion],
   );
 
   useEffect(() => {
-    if (regions.length <= 1) return undefined;
+    if (rotationCount <= 1) return undefined;
 
     const timer = window.setInterval(() => {
       setActiveRegionIndex((current) => {
         const next = current + regionDirection;
-        if (next >= regions.length) {
+        if (next >= rotationCount) {
           setRegionDirection(-1);
-          return Math.max(regions.length - 2, 0);
+          return Math.max(rotationCount - 2, 0);
         }
         if (next < 0) {
           setRegionDirection(1);
@@ -170,7 +190,7 @@ export const ScrollDashboard = ({
     }, REGION_ROTATE_MS);
 
     return () => window.clearInterval(timer);
-  }, [regionDirection, regions.length]);
+  }, [regionDirection, rotationCount]);
 
   const handleMouseDown: React.MouseEventHandler<HTMLDivElement> = (event) => {
     if (event.button !== 0) return;
@@ -220,8 +240,8 @@ export const ScrollDashboard = ({
                   className="flex transition-transform duration-700 ease-out"
                   style={{ transform: `translateX(-${activeRegionIndex * 100}%)` }}
                 >
-                  {regions.map((region) => {
-                    const groups = buildAlarmGroups(alarmsByRegion[region.id]);
+                  {headerRegions.map((region) => {
+                    const groups = region.alarmRegionId ? buildAlarmGroups(alarmsByRegion[region.alarmRegionId]) : activeAlarmGroups;
                     const group = groups[activeAlarmGroupIndex % groups.length] ?? groups[0];
 
                     return (
