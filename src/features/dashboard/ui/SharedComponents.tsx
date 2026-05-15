@@ -42,7 +42,12 @@ export const Tank = ({
    * - `imageBaselineAdjustClass` 只做基线微调（用于对齐）
    * 如需调整观感，优先改原始图片资源或只微调 `imageBaselineAdjustClass`，不要改整体尺寸策略。
    */
-  const imageTankSizeClass = 'h-[11.75rem]';
+  const imageTankSizeClass =
+    variant === 'reactor'
+      ? 'h-[13.5rem]'
+      : variant === 'cone'
+        ? 'h-[13rem]'
+        : 'h-[13rem]';
   const imageBaselineAdjustClass =
     variant === 'reactor'
       ? '-translate-y-[58px]'
@@ -69,7 +74,7 @@ export const Tank = ({
           {hasAlarm ? <div className="absolute inset-0 z-10 bg-red-500/10 mix-blend-screen pointer-events-none animate-pulse" /> : null}
           {variant === 'reactor' && (
             <div className="absolute inset-x-0 bottom-[1.8rem] z-20 flex justify-center">
-              <div className={cn("rounded border px-2 py-0.5 text-xs font-bold shadow-[0_0_12px_rgba(15,23,42,0.35)]", hasAlarm ? "border-red-400 bg-slate-950/50 text-red-100" : "panel-frame bg-slate-950/40 data-glow")}>
+              <div className={cn("rounded border px-2.5 py-1 text-sm font-bold shadow-[0_0_12px_rgba(15,23,42,0.35)]", hasAlarm ? "border-red-400 bg-slate-950/50 text-red-100" : "panel-frame bg-slate-950/40 data-glow")}>
                 {level.toFixed(2)} {unit}
               </div>
             </div>
@@ -77,7 +82,7 @@ export const Tank = ({
           {variant !== 'reactor' && (
             // 液位数据会再往下，落在图片和名称之间更靠下的位置，因此需要将bottom-3改为-bottom-6
             <div className="absolute inset-x-0 -bottom-8 z-20 flex justify-center">
-              <div className={cn("rounded border px-2 py-0.5 text-xs font-bold shadow-[0_0_12px_rgba(15,23,42,0.35)]", hasAlarm ? "border-red-400 bg-slate-950/50 text-red-100" : "panel-frame bg-slate-950/40 data-glow")}>
+              <div className={cn("rounded border px-2.5 py-1 text-sm font-bold shadow-[0_0_12px_rgba(15,23,42,0.35)]", hasAlarm ? "border-red-400 bg-slate-950/50 text-red-100" : "panel-frame bg-slate-950/40 data-glow")}>
                 {level.toFixed(2)} {unit}
               </div>
             </div>
@@ -99,19 +104,19 @@ export const Tank = ({
           </div>
         </div>
       )}
-      <div className={cn("mt-1 flex h-[3.15rem] flex-col items-center text-center", variant === 'reactor' && "-translate-y-6", labelOffsetClassName)}>
+      <div className={cn("mt-1 flex h-[3.8rem] flex-col items-center text-center", variant === 'reactor' && "-translate-y-6", labelOffsetClassName)}>
         <div className="flex items-center justify-center gap-2">
-          <div className={cn("flex h-5 items-center text-sm font-bold tracking-wide", hasAlarm ? "font-extrabold text-red-200" : "panel-title-glow")}>
+          <div className={cn("flex h-6 items-center text-base font-bold tracking-wide", hasAlarm ? "font-extrabold text-red-200" : "panel-title-glow")}>
             {label}
           </div>
           {temp !== undefined && variant === 'reactor' && (
-            <div className={cn("rounded-md border bg-transparent px-2 py-0.5 text-[11px] font-black leading-none", hasAlarm ? "border-red-400 text-red-100" : "panel-frame data-glow")}>
+            <div className={cn("rounded-md border bg-transparent px-2.5 py-1 text-xs font-black leading-none", hasAlarm ? "border-red-400 text-red-100" : "panel-frame data-glow")}>
               {temp.toFixed(1)} °C
             </div>
           )}
         </div>
         {temp !== undefined && variant !== 'reactor' && (
-          <div className={cn("mt-1.5 rounded-md border bg-transparent px-2.5 py-1 text-xs font-black", hasAlarm ? "border-red-400 text-red-100" : "panel-frame data-glow")}>
+          <div className={cn("mt-1.5 rounded-md border bg-transparent px-3 py-1 text-sm font-black", hasAlarm ? "border-red-400 text-red-100" : "panel-frame data-glow")}>
             {temp.toFixed(1)} °C
           </div>
         )}
@@ -121,22 +126,22 @@ export const Tank = ({
 };
 
 export const FlowBox = ({ title, instant, total, unit = 'm³/h', hasAlarm = false }: { title: string, instant: number, total: number, unit?: string, hasAlarm?: boolean }) => (
-  <div className={cn("group w-60 rounded-xl border bg-transparent p-3 transition-all", hasAlarm ? "border-red-500 animate-pulse-border" : "panel-frame hover:border-sky-300/50")}>
-    <div className={cn("mb-2 flex items-center justify-between border-b pb-2 text-xs font-black", hasAlarm ? "border-red-400/60 text-red-200" : "panel-frame panel-title-glow")}>
+  <div className={cn("group w-68 rounded-xl border bg-transparent p-3.5 transition-all", hasAlarm ? "border-red-500 animate-pulse-border" : "panel-frame hover:border-sky-300/50")}>
+    <div className={cn("mb-2 flex items-center justify-between border-b pb-2 text-sm font-black", hasAlarm ? "border-red-400/60 text-red-200" : "panel-frame panel-title-glow")}>
       {title}
-      <Activity size={12} className={hasAlarm ? "text-red-600" : "text-sky-500"} />
+      <Activity size={14} className={hasAlarm ? "text-red-600" : "text-sky-500"} />
     </div>
     <div className="space-y-2.5">
       <div className="flex justify-between items-center">
-        <span className="text-xs font-medium text-slate-200">瞬时流量:</span>
-        <div className={cn("min-w-[98px] rounded border bg-transparent px-2.5 py-1 text-right font-mono text-sm font-bold", hasAlarm ? "border-red-400 text-red-100" : "panel-frame data-glow")}>
-          {instant.toFixed(1)} <span className="text-[10px] text-slate-300">{unit}</span>
+        <span className="text-sm font-medium text-slate-200">瞬时流量:</span>
+        <div className={cn("min-w-[118px] rounded border bg-transparent px-3 py-1.5 text-right font-mono text-base font-bold", hasAlarm ? "border-red-400 text-red-100" : "panel-frame data-glow")}>
+          {instant.toFixed(1)} <span className="text-xs text-slate-300">{unit}</span>
         </div>
       </div>
       <div className="flex justify-between items-center">
-        <span className="text-xs font-medium text-slate-200">累计流量:</span>
-        <div className={cn("min-w-[98px] rounded border bg-transparent px-2.5 py-1 text-right font-mono text-sm font-bold", hasAlarm ? "border-red-400 text-red-100" : "border-emerald-200/45 data-glow-emerald")}>
-          {total.toFixed(1)} <span className="text-[10px] text-slate-300">m³</span>
+        <span className="text-sm font-medium text-slate-200">累计流量:</span>
+        <div className={cn("min-w-[118px] rounded border bg-transparent px-3 py-1.5 text-right font-mono text-base font-bold", hasAlarm ? "border-red-400 text-red-100" : "border-emerald-200/45 data-glow-emerald")}>
+          {total.toFixed(1)} <span className="text-xs text-slate-300">m³</span>
         </div>
       </div>
     </div>

@@ -220,10 +220,10 @@
   margin-bottom: 2px;
   padding: 0 2px;
   font-family: "Segoe UI", "Arial", sans-serif;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
   letter-spacing: 1px;
-  color: rgba(168, 207, 236, 0.88);
+  color: rgba(255, 255, 255, 1);
   text-transform: uppercase;
 }
 

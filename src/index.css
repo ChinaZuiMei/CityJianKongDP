@@ -6,8 +6,8 @@
 }
 
 :root {
-  --dashboard-module-scale: 0.9;
-  --dashboard-module-scale-external: 0.94;
+  --dashboard-module-scale: 0.98;
+  --dashboard-module-scale-external: 1.06;
   --dashboard-module-bleed: 24px;
   /*--app-scale: 0.9;*/
 }

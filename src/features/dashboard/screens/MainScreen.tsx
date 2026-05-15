@@ -5,7 +5,7 @@ import { FlowBox, Tank } from '../ui/SharedComponents';
 
 export const MainScreen = ({ data, alarmData }: { data: ScadaData, alarmData: AlarmData }) => {
   return (
-    <div className="-translate-y-11 relative h-full w-full overflow-hidden px-3 py-2 xl:px-4 xl:py-3">
+    <div className="-translate-y-6 relative h-full w-full overflow-visible px-3 py-2 xl:px-4 xl:py-3">
       <div className="grid h-full min-h-0 grid-cols-[minmax(0,1.55fr)_minmax(220px,0.95fr)] items-center gap-4 xl:gap-5">
         <div className="flex min-w-0 items-center justify-center gap-4 xl:gap-5">
           <div className="flex min-w-0 items-center gap-2">
@@ -27,7 +27,7 @@ export const MainScreen = ({ data, alarmData }: { data: ScadaData, alarmData: Al
           </div>
         </div>
         {/* 主画面瞬时流量区域调整 translate-y-6*/}
-        <div className="-translate-y-8 flex min-h-0 min-w-0 flex-col justify-center gap-2.5">
+        <div className="-translate-y-4 flex min-h-0 min-w-0 flex-col justify-center gap-2.5">
           <div className="flex min-w-0 items-start gap-2">
             <FlowBox 
               title="盐酸硫酸流量" 

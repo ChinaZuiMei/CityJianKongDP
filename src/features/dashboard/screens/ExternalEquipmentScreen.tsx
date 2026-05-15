@@ -7,11 +7,11 @@ import fanDrumImage from '../../../images/风机_滚筒.png';
 import scrubberTowerImage from '../../../images/洗涤塔.png';
 import centrifugeImage from '../../../images/img_5.png';
 
-const equipmentValueClass = "rounded-md px-3 py-1 text-sm font-black bg-transparent";
+const equipmentValueClass = "rounded-md px-3.5 py-1.5 text-base font-black bg-transparent";
 const panelClass = "relative h-full min-h-0 overflow-visible rounded-xl bg-transparent pb-2";
-const fanIconClass = "h-24 w-24 object-contain";
-const towerIconClass = "h-32 w-18 object-contain";
-const centrifugeIconClass = "h-20 w-28 object-contain";
+const fanIconClass = "h-28 w-28 object-contain";
+const towerIconClass = "h-40 w-24 object-contain";
+const centrifugeIconClass = "h-28 w-36 object-contain";
 
 const OldPlantBlock = ({ data, alarmData }: { data: ScadaData; alarmData: AlarmData }) => (
   <div className="relative min-h-0">
@@ -75,13 +75,13 @@ const OldPlantBlock = ({ data, alarmData }: { data: ScadaData; alarmData: AlarmD
               <line x1="87.5%" y1="75%" x2="87.5%" y2="65%" stroke="#38bdf8" strokeWidth="2" opacity="0.75" />
             </svg>
 
-            <div className="relative z-10 grid h-full grid-cols-[0.95fr_1fr_1fr_1fr] items-center gap-2 px-3">
+            <div className="relative z-10 grid h-full grid-cols-[0.95fr_1fr_1fr_1fr] items-center gap-3 px-3">
               {/* 风机 */}
               <div
                 className="relative flex flex-col items-center gap-2 rounded-lg p-2 transition-all"
               >
                 <img src={fanDrumImage} alt="风机" className={fanIconClass} />
-                <div className="panel-title-glow text-xs font-bold">风机</div>
+                <div className="panel-title-glow text-sm font-bold">风机</div>
                 <div
                   className={cn(
                     equipmentValueClass,
@@ -95,12 +95,12 @@ const OldPlantBlock = ({ data, alarmData }: { data: ScadaData; alarmData: AlarmD
               {/* 洗涤塔1 + 循环泵1 */}
               <div className="relative flex flex-col items-center gap-1">
                 <img src={scrubberTowerImage} alt="洗涤塔" className={towerIconClass} />
-                <div className="panel-title-glow text-xs font-bold">洗涤塔1</div>
-                <div className="flex flex-col items-center gap-1 mt-1">
-                  <Settings className={cn(hasAlarm('old_pump1', alarmData) ? "text-red-600 animate-spin-slow" : "text-sky-600", data.old_pump1_v > 0 && !hasAlarm('old_pump1', alarmData) && "animate-spin-slow")} size={22} />
-                  <div className="panel-title-glow text-xs font-bold">循环泵1</div>
+                <div className="panel-title-glow text-sm font-bold">洗涤塔1</div>
+                <div className="mt-1 flex flex-col items-center gap-1">
+                  <Settings className={cn(hasAlarm('old_pump1', alarmData) ? "text-red-600 animate-spin-slow" : "text-sky-600", data.old_pump1_v > 0 && !hasAlarm('old_pump1', alarmData) && "animate-spin-slow")} size={26} />
+                  <div className="panel-title-glow text-sm font-bold">循环泵1</div>
                   <div
-                    className="rounded bg-transparent px-2 py-0.5 font-mono text-xs font-black data-glow"
+                    className="rounded bg-transparent px-2.5 py-1 font-mono text-sm font-black data-glow"
                   >
                     {data.old_pump1_v.toFixed(1)} A
                   </div>
@@ -110,12 +110,12 @@ const OldPlantBlock = ({ data, alarmData }: { data: ScadaData; alarmData: AlarmD
               {/* 洗涤塔2 + 循环泵2 */}
               <div className="relative flex flex-col items-center gap-1">
                 <img src={scrubberTowerImage} alt="洗涤塔" className={towerIconClass} />
-                <div className="panel-title-glow text-xs font-bold">洗涤塔2</div>
-                <div className="flex flex-col items-center gap-1 mt-1">
-                  <Settings className={cn(hasAlarm('old_pump2', alarmData) ? "text-red-600 animate-spin-slow" : "text-sky-600", data.old_pump2_v > 0 && !hasAlarm('old_pump2', alarmData) && "animate-spin-slow")} size={22} />
-                  <div className="panel-title-glow text-xs font-bold">循环泵2</div>
+                <div className="panel-title-glow text-sm font-bold">洗涤塔2</div>
+                <div className="mt-1 flex flex-col items-center gap-1">
+                  <Settings className={cn(hasAlarm('old_pump2', alarmData) ? "text-red-600 animate-spin-slow" : "text-sky-600", data.old_pump2_v > 0 && !hasAlarm('old_pump2', alarmData) && "animate-spin-slow")} size={26} />
+                  <div className="panel-title-glow text-sm font-bold">循环泵2</div>
                   <div
-                    className="rounded bg-transparent px-2 py-0.5 font-mono text-xs font-black data-glow"
+                    className="rounded bg-transparent px-2.5 py-1 font-mono text-sm font-black data-glow"
                   >
                     {data.old_pump2_v.toFixed(1)} A
                   </div>
@@ -125,12 +125,12 @@ const OldPlantBlock = ({ data, alarmData }: { data: ScadaData; alarmData: AlarmD
               {/* 洗涤塔3 + 循环泵3 */}
               <div className="relative flex flex-col items-center gap-1">
                 <img src={scrubberTowerImage} alt="洗涤塔" className={towerIconClass} />
-                <div className="panel-title-glow text-xs font-bold">洗涤塔3</div>
-                <div className="flex flex-col items-center gap-1 mt-1">
-                  <Settings className={cn(hasAlarm('old_pump3', alarmData) ? "text-red-600 animate-spin-slow" : "text-sky-600", data.old_pump3_v > 0 && !hasAlarm('old_pump3', alarmData) && "animate-spin-slow")} size={22} />
-                  <div className="panel-title-glow text-xs font-bold">循环泵3</div>
+                <div className="panel-title-glow text-sm font-bold">洗涤塔3</div>
+                <div className="mt-1 flex flex-col items-center gap-1">
+                  <Settings className={cn(hasAlarm('old_pump3', alarmData) ? "text-red-600 animate-spin-slow" : "text-sky-600", data.old_pump3_v > 0 && !hasAlarm('old_pump3', alarmData) && "animate-spin-slow")} size={26} />
+                  <div className="panel-title-glow text-sm font-bold">循环泵3</div>
                   <div
-                    className="rounded bg-transparent px-2 py-0.5 font-mono text-xs font-black data-glow"
+                    className="rounded bg-transparent px-2.5 py-1 font-mono text-sm font-black data-glow"
                   >
                     {data.old_pump3_v.toFixed(1)} A
                   </div>
@@ -192,13 +192,13 @@ const DrumBlock = ({ data, alarmData }: { data: ScadaData; alarmData: AlarmData 
               <line x1="62.5%" y1="85%" x2="62.5%" y2="74%" stroke="#22d3ee" strokeWidth="2" opacity="0.75" />
             </svg>
 
-            <div className="relative z-10 grid h-full grid-cols-[0.95fr_1fr_1fr_0.92fr] items-center gap-2 px-3">
+            <div className="relative z-10 grid h-full grid-cols-[0.95fr_1fr_1fr_0.92fr] items-center gap-3 px-3">
               {/* 风机 */}
               <div
                 className="relative flex flex-col items-center gap-2 rounded-lg p-2 transition-all"
               >
                 <img src={fanDrumImage} alt="风机" className={fanIconClass} />
-                <div className="panel-title-glow-cyan text-xs font-bold">风机</div>
+                <div className="panel-title-glow-cyan text-sm font-bold">风机</div>
                 <div
                   className={cn(
                     equipmentValueClass,
@@ -212,12 +212,12 @@ const DrumBlock = ({ data, alarmData }: { data: ScadaData; alarmData: AlarmData 
               {/* 洗涤塔1 + 循环泵1 */}
               <div className="relative flex flex-col items-center gap-1">
                 <img src={scrubberTowerImage} alt="洗涤塔" className={towerIconClass} />
-                <div className="panel-title-glow-cyan text-xs font-bold">洗涤塔1</div>
-                <div className="flex flex-col items-center gap-1 mt-1">
-                  <Settings className={cn(hasAlarm('drum_pump1', alarmData) ? "text-red-600 animate-spin-slow" : "text-cyan-600", data.drum_pump1_v > 0 && !hasAlarm('drum_pump1', alarmData) && "animate-spin-slow")} size={22} />
-                  <div className="panel-title-glow-cyan text-xs font-bold">循环泵1</div>
+                <div className="panel-title-glow-cyan text-sm font-bold">洗涤塔1</div>
+                <div className="mt-1 flex flex-col items-center gap-1">
+                  <Settings className={cn(hasAlarm('drum_pump1', alarmData) ? "text-red-600 animate-spin-slow" : "text-cyan-600", data.drum_pump1_v > 0 && !hasAlarm('drum_pump1', alarmData) && "animate-spin-slow")} size={26} />
+                  <div className="panel-title-glow-cyan text-sm font-bold">循环泵1</div>
                   <div
-                    className="rounded bg-transparent px-2 py-0.5 font-mono text-xs font-black data-glow-cyan"
+                    className="rounded bg-transparent px-2.5 py-1 font-mono text-sm font-black data-glow-cyan"
                   >
                     {data.drum_pump1_v.toFixed(1)} A
                   </div>
@@ -227,12 +227,12 @@ const DrumBlock = ({ data, alarmData }: { data: ScadaData; alarmData: AlarmData 
               {/* 洗涤塔2 + 循环泵2 */}
               <div className="relative flex flex-col items-center gap-1">
                 <img src={scrubberTowerImage} alt="洗涤塔" className={towerIconClass} />
-                <div className="panel-title-glow-cyan text-xs font-bold">洗涤塔2</div>
-                <div className="flex flex-col items-center gap-1 mt-1">
-                  <Settings className={cn(hasAlarm('drum_pump2', alarmData) ? "text-red-600 animate-spin-slow" : "text-cyan-600", data.drum_pump2_v > 0 && !hasAlarm('drum_pump2', alarmData) && "animate-spin-slow")} size={22} />
-                  <div className="panel-title-glow-cyan text-xs font-bold">循环泵2</div>
+                <div className="panel-title-glow-cyan text-sm font-bold">洗涤塔2</div>
+                <div className="mt-1 flex flex-col items-center gap-1">
+                  <Settings className={cn(hasAlarm('drum_pump2', alarmData) ? "text-red-600 animate-spin-slow" : "text-cyan-600", data.drum_pump2_v > 0 && !hasAlarm('drum_pump2', alarmData) && "animate-spin-slow")} size={26} />
+                  <div className="panel-title-glow-cyan text-sm font-bold">循环泵2</div>
                   <div
-                    className="rounded bg-transparent px-2 py-0.5 font-mono text-xs font-black data-glow-cyan"
+                    className="rounded bg-transparent px-2.5 py-1 font-mono text-sm font-black data-glow-cyan"
                   >
                     {data.drum_pump2_v.toFixed(1)} A
                   </div>
@@ -251,7 +251,7 @@ const DrumBlock = ({ data, alarmData }: { data: ScadaData; alarmData: AlarmData 
                     data.drum_centrifuge_v > 0 && !hasAlarm('old_centrifuge', alarmData) && "animate-bounce"
                   )}
                 />
-                <div className="panel-title-glow text-xs font-bold">离心机</div>
+                <div className="panel-title-glow text-sm font-bold">离心机</div>
                 <div
                   className={cn(
                     equipmentValueClass,
