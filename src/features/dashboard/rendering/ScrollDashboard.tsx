@@ -60,15 +60,17 @@ export const ScrollDashboard = ({
   sidePanelPreviewEnabled = false,
   hideRegionBody = false,
   detachedRegionBody = false,
+  hideRegionHeader = false,
 }: {
   data: ScadaData;
   alarmData: AlarmData;
   sidePanelPreviewEnabled?: boolean;
   hideRegionBody?: boolean;
   detachedRegionBody?: boolean;
+  hideRegionHeader?: boolean;
 }) => {
   const outerClassName = sidePanelPreviewEnabled ? 'pl-[420px] pr-[420px]' : '';
-  const [scale, setScale] = useState(0.92);
+  const scale = 0.92;
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
   const [activeRegionIndex, setActiveRegionIndex] = useState(0);
@@ -170,12 +172,6 @@ export const ScrollDashboard = ({
     return () => window.clearInterval(timer);
   }, [regionDirection, regions.length]);
 
-  const handleWheel: React.WheelEventHandler<HTMLDivElement> = (event) => {
-    event.preventDefault();
-    const nextScale = Math.max(0.2, Math.min(1.28, scale - event.deltaY * 0.001));
-    setScale(Number(nextScale.toFixed(3)));
-  };
-
   const handleMouseDown: React.MouseEventHandler<HTMLDivElement> = (event) => {
     if (event.button !== 0) return;
     setDragging(true);
@@ -206,15 +202,11 @@ export const ScrollDashboard = ({
     <div className={`dashboard-scroll-shell flex h-full w-full min-h-0 min-w-0 items-center justify-center overflow-y-auto overflow-x-hidden ${outerClassName}`}>
       <div
         className={`dashboard-workspace relative mx-auto flex h-full w-full items-center justify-center overflow-visible rounded-[32px] ${dragging ? 'cursor-grabbing' : 'cursor-grab'}`}
-        onWheel={handleWheel}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={stopDragging}
         onMouseLeave={stopDragging}
       >
-        <div className="pointer-events-none fixed bottom-5 right-5 z-20 rounded-full border border-sky-300/35 bg-slate-950 px-3.5 py-1.5 text-[11px] font-black tracking-[0.14em] text-sky-100 shadow-[0_10px_30px_rgba(2,8,23,0.45)]">
-          缩放 {Math.round(scale * 100)}%
-        </div>
         <div
           className="absolute left-1/2 top-1/2 w-[1680px] origin-center"
           style={{
@@ -259,11 +251,13 @@ export const ScrollDashboard = ({
                             );
                           })}
                         </div>
-                        <div className="pointer-events-none mt-7 flex items-center justify-center gap-4 text-base font-black tracking-[0.24em] text-sky-100/62">
-                          <span>{region.title}</span>
-                          <span className="h-px w-12 bg-sky-200/28" aria-hidden />
-                          <span>{region.subtitle}</span>
-                        </div>
+                        {!hideRegionHeader ? (
+                          <div className="pointer-events-none mt-7 flex items-center justify-center gap-4 text-base font-black tracking-[0.24em] text-sky-100/62">
+                            <span>{region.title}</span>
+                            <span className="h-px w-12 bg-sky-200/28" aria-hidden />
+                            <span>{region.subtitle}</span>
+                          </div>
+                        ) : null}
                       </div>
                     );
                   })}

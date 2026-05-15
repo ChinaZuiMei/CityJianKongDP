@@ -46,10 +46,13 @@ export const workshopRegistry: WorkshopDefinition[] = [
   },
   {
     id: 'workshop-06',
-    name: '车间 6',
+    name: '聚合硫酸铁',
     enabled: true,
-    hasContent: false,
-    render: () => <BlankWorkshopView />,
+    hasContent: true,
+    dataWorkshopIds: ['workshop-06', 'JH_WORKSHOP_06', 'JH_POLYMERIC_FERRIC_SULFATE'],
+    dataWorkshopNames: ['聚合硫酸铁', '车间 6', '车间6'],
+    alarmNamePrefixes: ['F0101', '聚合硫酸铁', '蒸汽'],
+    render: (runtime) => <WorkshopSevenView {...runtime} />,
   },
   {
     id: 'workshop-07',

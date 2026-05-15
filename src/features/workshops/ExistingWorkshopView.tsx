@@ -88,9 +88,9 @@ export function ExistingWorkshopView({
         <TankDataPanel
           data={scadaData}
           position="right"
-          title="盐酸泄漏数据面板"
-          subtitle="HCL LEAK DATA PANEL"
-          mode="leak"
+          title="装车可视化面板"
+          subtitle="LOADING VISUALIZATION PANEL"
+          mode="loading"
           embedded
         />
       </div>

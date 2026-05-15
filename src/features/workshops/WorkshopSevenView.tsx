@@ -37,8 +37,6 @@ const tankGroups: WorkshopSevenTank[][] = [
 
 const zeroLevels = [0, 0, 0, 0];
 const noLabels = ['无', '无', '无', '无'];
-const noLeakLabels = ['无', '无', '无'];
-const noLeakValues = [0, 0, 0];
 const noTemperatures: [number, number] = [0, 0];
 const noTemperatureLabels: [string, string] = ['无', '无'];
 
@@ -162,18 +160,15 @@ export function WorkshopSevenView({
         <TankDataPanel
           data={scadaData}
           position="right"
-          title="盐酸泄漏数据面板"
-          subtitle="HCL LEAK DATA PANEL"
-          mode="leak"
-          leakLabels={noLeakLabels}
-          leakValues={noLeakValues}
-          leakMeta={['无', '无']}
+          title="装车可视化面板"
+          subtitle="LOADING VISUALIZATION PANEL"
+          mode="loading"
           embedded
         />
       </div>
 
       <main className="relative z-10 flex-1 overflow-hidden bg-transparent">
-        <ScrollDashboard data={scadaData} alarmData={alarmData} hideRegionBody />
+        <ScrollDashboard data={scadaData} alarmData={alarmData} hideRegionBody hideRegionHeader />
         <section className="workshop-seven-carousel" aria-label="车间7罐组轮播">
           <div className="workshop-seven-carousel__viewport">
             <div
