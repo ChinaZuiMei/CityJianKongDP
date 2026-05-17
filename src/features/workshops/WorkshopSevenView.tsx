@@ -211,11 +211,15 @@ export function WorkshopSevenView({
               ))}
             </div>
           </div>
-          <div className="workshop-seven-carousel__dots" aria-hidden>
+          <div className="workshop-seven-carousel__dots" aria-label="液体硫酸铝罐组轮播切换">
             {tankGroups.map((group, index) => (
-              <span
+              <button
                 key={group.map((tank) => tank.id).join('-')}
+                type="button"
                 className={index === activeTankGroupIndex ? 'workshop-seven-carousel__dot workshop-seven-carousel__dot--active' : 'workshop-seven-carousel__dot'}
+                onClick={() => setActiveTankGroupIndex(index)}
+                aria-label={`切换到第 ${index + 1} 组罐`}
+                aria-current={index === activeTankGroupIndex ? 'true' : undefined}
               />
             ))}
           </div>

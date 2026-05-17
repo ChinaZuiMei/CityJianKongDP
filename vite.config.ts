@@ -5,7 +5,8 @@ import {defineConfig, loadEnv} from 'vite';
 
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, '.', '');
-  const appHost = env.APP_HOST || '192.168.4.43';
+  const appHost = env.APP_HOST || '0.0.0.0';
+  const proxyHost = appHost === '0.0.0.0' ? '127.0.0.1' : appHost;
   const appPort = env.APP_PORT || '3000';
   return {
     plugins: [react(), tailwindcss()],
@@ -31,7 +32,7 @@ export default defineConfig(({mode}) => {
       // 开发环境代理配置
       proxy: {
         '/api': {
-          target: `http://${appHost}:${appPort}`,
+          target: `http://${proxyHost}:${appPort}`,
           changeOrigin: true,
         },
       },

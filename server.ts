@@ -6,6 +6,7 @@ import cors from "cors";
 import mqtt from "mqtt";
 import fs from "fs";
 import dotenv from "dotenv";
+import os from "os";
 import { 
   initDatabase, 
   saveSensorData, 
@@ -35,7 +36,7 @@ for (const envFile of envFiles) {
 async function startServer() {
   const app = express();
   const PORT = Number(process.env.APP_PORT || 3000);
-  const HOST = process.env.APP_HOST || "192.168.4.43";
+  const HOST = process.env.APP_HOST || "0.0.0.0";
   const mqttUrl = process.env.MQTT_URL || "ws://106.12.13.32:8083/mqtt";
   const mqttUsername = process.env.MQTT_USERNAME || "zdzn";
   const mqttPassword = process.env.MQTT_PASSWORD || "zdzn@1234";
@@ -158,7 +159,10 @@ async function startServer() {
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
-      server: { middlewareMode: true },
+      server: {
+        middlewareMode: true,
+        hmr: process.env.DISABLE_HMR === "true" ? false : undefined,
+      },
       appType: "spa",
     });
     app.use(vite.middlewares);
@@ -170,11 +174,35 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, HOST, () => {
+  const server = app.listen(PORT, HOST, () => {
+    const localUrl = `http://localhost:${PORT}`;
+    const networkAddress = Object.values(os.networkInterfaces())
+      .flat()
+      .find((item) => item?.family === "IPv4" && !item.internal)?.address;
+    const networkUrl = networkAddress ? `http://${networkAddress}:${PORT}` : null;
+
     console.log(`\n🚀 服务器启动成功！`);
-    console.log(`📍 访问地址: http://${HOST}:${PORT}`);
-    console.log(`📊 API 文档: http://${HOST}:${PORT}/api/health`);
+    console.log(`📍 本机访问: ${localUrl}`);
+    if (networkUrl) {
+      console.log(`🌐 局域网访问: ${networkUrl}`);
+    }
+    console.log(`📊 API 文档: ${localUrl}/api/health`);
     console.log(`💾 MQTT 数据文件: mqtt_latest_data.json\n`);
+  });
+
+  server.on("error", (error: NodeJS.ErrnoException) => {
+    if (error.code === "EADDRNOTAVAIL") {
+      console.error(`启动失败：当前电脑没有可绑定的地址 ${HOST}:${PORT}`);
+      console.error("请把 APP_HOST 改成 0.0.0.0、127.0.0.1，或当前电脑实际的局域网 IP。");
+      process.exit(1);
+    }
+
+    if (error.code === "EADDRINUSE") {
+      console.error(`启动失败：端口 ${PORT} 已被占用，请修改 APP_PORT 或关闭占用该端口的进程。`);
+      process.exit(1);
+    }
+
+    throw error;
   });
 }
 

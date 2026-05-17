@@ -69,6 +69,8 @@ export const ScrollDashboard = ({
   detachedRegionBody = false,
   hideRegionHeader = false,
   headerRegions: customHeaderRegions,
+  activeRegionIndex: controlledActiveRegionIndex,
+  onActiveRegionIndexChange,
 }: {
   data: ScadaData;
   alarmData: AlarmData;
@@ -77,12 +79,14 @@ export const ScrollDashboard = ({
   detachedRegionBody?: boolean;
   hideRegionHeader?: boolean;
   headerRegions?: HeaderRegion[];
+  activeRegionIndex?: number;
+  onActiveRegionIndexChange?: (index: number) => void;
 }) => {
   const outerClassName = sidePanelPreviewEnabled ? 'pl-[420px] pr-[420px]' : '';
   const scale = 0.92;
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
-  const [activeRegionIndex, setActiveRegionIndex] = useState(0);
+  const [internalActiveRegionIndex, setInternalActiveRegionIndex] = useState(0);
   const [activeAlarmGroupIndex, setActiveAlarmGroupIndex] = useState(0);
   const [regionDirection, setRegionDirection] = useState(1);
   const dragStartRef = useRef<{ x: number; y: number; originX: number; originY: number } | null>(null);
@@ -162,6 +166,10 @@ export const ScrollDashboard = ({
   );
   const headerRegions = customHeaderRegions?.length ? customHeaderRegions : defaultHeaderRegions;
   const rotationCount = hideRegionBody ? headerRegions.length : regions.length;
+  const activeRegionIndex = Math.min(
+    Math.max(controlledActiveRegionIndex ?? internalActiveRegionIndex, 0),
+    Math.max(rotationCount - 1, 0),
+  );
   const activeHeaderRegion = headerRegions[activeRegionIndex] ?? headerRegions[0];
   const bodyRegions = useMemo(() => [...regions].reverse(), [regions]);
   const bodyRegionIndex = regions.length - 1 - activeRegionIndex;
@@ -170,11 +178,23 @@ export const ScrollDashboard = ({
     [activeHeaderRegion?.alarmRegionId, alarmsByRegion],
   );
 
+  const updateActiveRegionIndex = React.useCallback((updater: (current: number) => number) => {
+    const next = Math.min(Math.max(updater(activeRegionIndex), 0), Math.max(rotationCount - 1, 0));
+    if (controlledActiveRegionIndex === undefined) {
+      setInternalActiveRegionIndex(next);
+    }
+    onActiveRegionIndexChange?.(next);
+  }, [activeRegionIndex, controlledActiveRegionIndex, onActiveRegionIndexChange, rotationCount]);
+
+  useEffect(() => {
+    onActiveRegionIndexChange?.(activeRegionIndex);
+  }, [activeRegionIndex, onActiveRegionIndexChange]);
+
   useEffect(() => {
     if (rotationCount <= 1) return undefined;
 
     const timer = window.setInterval(() => {
-      setActiveRegionIndex((current) => {
+      updateActiveRegionIndex((current) => {
         const next = current + regionDirection;
         if (next >= rotationCount) {
           setRegionDirection(-1);
@@ -190,7 +210,7 @@ export const ScrollDashboard = ({
     }, REGION_ROTATE_MS);
 
     return () => window.clearInterval(timer);
-  }, [regionDirection, rotationCount]);
+  }, [regionDirection, rotationCount, updateActiveRegionIndex]);
 
   const handleMouseDown: React.MouseEventHandler<HTMLDivElement> = (event) => {
     if (event.button !== 0) return;

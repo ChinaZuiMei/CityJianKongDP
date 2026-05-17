@@ -2,6 +2,7 @@ import React from 'react';
 import { BlankWorkshopView } from './BlankWorkshopView';
 import { ExistingWorkshopView } from './ExistingWorkshopView';
 import { WorkshopEightView } from './WorkshopEightView';
+import { WorkshopSixView } from './WorkshopSixView';
 import { WorkshopSevenView } from './WorkshopSevenView';
 import type { WorkshopDefinition } from './types';
 
@@ -41,8 +42,8 @@ export const workshopRegistry: WorkshopDefinition[] = [
     id: 'workshop-05',
     name: '车间 5',
     enabled: true,
-    hasContent: false,
-    render: () => <BlankWorkshopView />,
+    hasContent: true,
+    render: (runtime) => <WorkshopSixView {...runtime} />,
   },
   {
     id: 'workshop-06',
@@ -52,17 +53,7 @@ export const workshopRegistry: WorkshopDefinition[] = [
     dataWorkshopIds: ['workshop-06', 'JH_WORKSHOP_06', 'JH_POLYMERIC_FERRIC_SULFATE'],
     dataWorkshopNames: ['聚合硫酸铁', '车间 6', '车间6'],
     alarmNamePrefixes: ['F0101', '聚合硫酸铁', '蒸汽'],
-    render: (runtime) => (
-      <WorkshopSevenView
-        {...runtime}
-        hideDashboardRegionHeader={false}
-        dashboardHeaderRegions={[
-          { id: 'main', title: '主画面', subtitle: 'MAIN SCREEN' },
-          { id: 'level-1', title: '液位1', subtitle: 'LEVEL 1' },
-          { id: 'level-3', title: '液位3', subtitle: 'LEVEL 3' },
-        ]}
-      />
-    ),
+    render: (runtime) => <WorkshopSixView {...runtime} />,
   },
   {
     id: 'workshop-07',
