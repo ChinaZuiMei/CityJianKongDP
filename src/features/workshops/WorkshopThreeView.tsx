@@ -39,6 +39,7 @@ type WorkshopThreeVerticalReactorProps = React.Attributes & {
   label: string;
   temp: number;
   current?: number;
+  showCurrent?: boolean;
 };
 
 const regionHeaders = [
@@ -133,23 +134,22 @@ function WorkshopThreeVerticalReactor({
   label,
   temp,
   current,
+  showCurrent = false,
 }: WorkshopThreeVerticalReactorProps) {
   return (
     <article className="workshop-three-vertical-reactor">
       <div className="workshop-three-vertical-reactor__label">{label}</div>
       <div className="workshop-three-vertical-reactor__visual">
-        <span className="workshop-three-vertical-reactor__top-line" aria-hidden="true" />
-        <span className="workshop-three-vertical-reactor__bottom-line" aria-hidden="true" />
         <img src={reactorTankImage} alt={label} className="workshop-three-vertical-reactor__image" draggable="false" />
-        <div className="workshop-three-vertical-reactor__metrics">
-          {current !== undefined ? (
-            <div className="workshop-three-vertical-reactor__metric">
-              {current.toFixed(1)} A
-            </div>
-          ) : null}
+      </div>
+      <div className="workshop-three-vertical-reactor__metrics workshop-three-vertical-reactor__metrics--below">
+        {showCurrent && current !== undefined ? (
           <div className="workshop-three-vertical-reactor__metric">
-            {temp.toFixed(1)}°C
+            {current.toFixed(1)} A
           </div>
+        ) : null}
+        <div className="workshop-three-vertical-reactor__metric">
+          {temp.toFixed(1)}°C
         </div>
       </div>
     </article>
@@ -165,6 +165,7 @@ function UndergroundSlide() {
             key={tank.id}
             label={tank.label}
             temp={tank.temp}
+            showCurrent={false}
           />
         ))}
       </div>
@@ -182,6 +183,7 @@ function GlassSlide() {
             label={tank.label}
             temp={tank.temp}
             current={tank.current}
+            showCurrent
           />
         ))}
       </div>
@@ -297,12 +299,12 @@ function WorkshopThreeBody({
           </div>
         ))}
       </div>
-      <div className="workshop-three-carousel__dots" aria-label="新聚铝反应轮播切换">
+      <div className="workshop-carousel__dots workshop-carousel__dots--bottom" aria-label="新聚铝反应轮播切换">
         {slides.map((slide, index) => (
           <button
             key={slide.id}
             type="button"
-            className={index === activeRegionIndex ? 'workshop-three-carousel__dot workshop-three-carousel__dot--active' : 'workshop-three-carousel__dot'}
+            className={index === activeRegionIndex ? 'workshop-carousel__dot workshop-carousel__dot--active' : 'workshop-carousel__dot'}
             onClick={() => onActiveRegionIndexChange(index)}
             aria-label={`切换到${regionHeaders[index]?.title ?? `第 ${index + 1} 页`}`}
             aria-current={index === activeRegionIndex ? 'true' : undefined}

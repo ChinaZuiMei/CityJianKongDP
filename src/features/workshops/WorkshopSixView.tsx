@@ -202,12 +202,12 @@ function WorkshopSixBody({
           </div>
         ))}
       </div>
-      <div className="workshop-six-carousel__dots" aria-label="聚合硫酸铁轮播切换">
+      <div className="workshop-carousel__dots workshop-carousel__dots--bottom" aria-label="聚合硫酸铁轮播切换">
         {slides.map((slide, index) => (
           <button
             key={slide.id}
             type="button"
-            className={index === activeRegionIndex ? 'workshop-six-carousel__dot workshop-six-carousel__dot--active' : 'workshop-six-carousel__dot'}
+            className={index === activeRegionIndex ? 'workshop-carousel__dot workshop-carousel__dot--active' : 'workshop-carousel__dot'}
             onClick={() => onActiveRegionIndexChange(index)}
             aria-label={`切换到${regionHeaders[index]?.title ?? `第 ${index + 1} 页`}`}
             aria-current={index === activeRegionIndex ? 'true' : undefined}
