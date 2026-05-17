@@ -8,32 +8,28 @@ import shipImage from '../../mingfanImg/chaungjian.png';
 
 const zeroLevels = [0, 0, 0, 0];
 const noLabels = ['无', '无', '无', '无'];
-const noTemperatures: [number, number] = [0, 0];
-const noTemperatureLabels: [string, string] = ['无', '无'];
 
 const regionHeaders = [
   { id: 'main-1', title: '主画面-区域1', subtitle: 'MAIN SCREEN - AREA 1', alarmRegionId: 'main' as const },
   { id: 'main-2', title: '主画面-区域2', subtitle: 'MAIN SCREEN - AREA 2', alarmRegionId: 'main' as const },
-  { id: 'output-1', title: '产量-区域1', subtitle: 'OUTPUT - AREA 1' },
-  { id: 'output-2', title: '产量-区域2', subtitle: 'OUTPUT - AREA 2' },
+  { id: 'output', title: '产量区域', subtitle: 'OUTPUT AREA' },
 ];
 
 const mainTankGroups = [
   [
-    { id: 'F0101A', current: '14.0A', temperature: '106.4°C', pressure: '0.02Mpa' },
-    { id: 'F0101B', current: '13.5A', temperature: '94.5°C', pressure: '0.00Mpa' },
-    { id: 'F0101C', current: '16.3A', temperature: '107.4°C', pressure: '0.02Mpa' },
+    { id: 'FO101A', current: '0.0 A', temperature: '66.0°C', pressure: '0.00 Mpa' },
+    { id: 'FO101B', current: '0.0 A', temperature: '38.6°C', pressure: '0.00 Mpa' },
+    { id: 'FO101C', current: '0.0 A', temperature: '39.2°C', pressure: '-0.00 Mpa' },
   ],
   [
-    { id: 'F0101D', current: '15.1A', temperature: '126.9°C', pressure: '0.00Mpa' },
-    { id: 'F0101E', current: '15.6A', temperature: '89.7°C', pressure: '0.00Mpa' },
-    { id: 'F0101F', current: '14.0A', temperature: '114.1°C', pressure: '0.06Mpa' },
+    { id: 'FO101D', current: '0.0 A', temperature: '40.8°C', pressure: '0.00 Mpa' },
+    { id: 'FO101E', current: '0.0 A', temperature: '48.6°C', pressure: '-0.00 Mpa' },
+    { id: 'FO101F', current: '0.0 A', temperature: '33.5°C', pressure: '-0.00 Mpa' },
   ],
 ];
 
 const productionGroups = [
   { id: 'output-1', title: '产线1包装统计', quantity: '3896 P' },
-  { id: 'output-2', title: '产线2包装统计', quantity: '2 P' },
 ];
 
 function WorkshopFourTankCard({
@@ -120,12 +116,8 @@ function WorkshopFourBody({
       content: <WorkshopFourMainScreen tanks={mainTankGroups[1]} />,
     },
     {
-      id: 'output-1',
+      id: 'output',
       content: <WorkshopFourOutputScreen title={productionGroups[0].title} quantity={productionGroups[0].quantity} />,
-    },
-    {
-      id: 'output-2',
-      content: <WorkshopFourOutputScreen title={productionGroups[1].title} quantity={productionGroups[1].quantity} />,
     },
   ];
 
@@ -190,11 +182,11 @@ export function WorkshopFourView({
       <div className={leftPanelCollapsed ? 'tank-data-column tank-data-column--left tank-data-column--collapsed-left' : 'tank-data-column tank-data-column--left'}>
         <TankDataPanel
           data={scadaData}
-          title="蒸汽流量聚铝新厂喷雾干燥"
-          subtitle="STEAM FLOW NEW PLANT SPRAY DRYING"
+          title="福邦硫酸氢钾流量面板"
+          subtitle="FUBANG POTASSIUM BISULFATE FLOW PANEL"
           mode="flow"
           flowVariantOverride="acid"
-          flowValues={{ instant: 0, total: 93789 }}
+          flowValues={{ instant: 0, total: 27377.6 }}
           hideFlowName
           embedded
         />
@@ -230,11 +222,12 @@ export function WorkshopFourView({
         <TankDataPanel
           data={scadaData}
           position="right"
-          title="主画面可视化面板"
-          subtitle="MAIN SCREEN VISUALIZATION"
-          mode="temperature"
-          temperatureLabels={noTemperatureLabels}
-          temperatureValues={noTemperatures}
+          title="福邦盐酸流量面板"
+          subtitle="FUBANG HYDROCHLORIC ACID FLOW PANEL"
+          mode="flow"
+          flowVariantOverride="acid"
+          flowValues={{ instant: 0, total: 5501.2 }}
+          hideFlowName
           embedded
         />
         <TankDataPanel
