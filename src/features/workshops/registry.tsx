@@ -2,6 +2,7 @@ import React from 'react';
 import { BlankWorkshopView } from './BlankWorkshopView';
 import { ExistingWorkshopView } from './ExistingWorkshopView';
 import { WorkshopEightView } from './WorkshopEightView';
+import { WorkshopFiveView } from './WorkshopFiveView';
 import { WorkshopSixView } from './WorkshopSixView';
 import { WorkshopSevenView } from './WorkshopSevenView';
 import type { WorkshopDefinition } from './types';
@@ -40,10 +41,10 @@ export const workshopRegistry: WorkshopDefinition[] = [
   },
   {
     id: 'workshop-05',
-    name: '车间 5',
+    name: '低铁硫酸铝',
     enabled: true,
     hasContent: true,
-    render: (runtime) => <WorkshopSixView {...runtime} />,
+    render: (runtime) => <WorkshopFiveView {...runtime} />,
   },
   {
     id: 'workshop-06',
