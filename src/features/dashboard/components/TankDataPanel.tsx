@@ -25,6 +25,7 @@ interface TankDataPanelProps {
   disableExternalCarousel?: boolean;
   flowVariantOverride?: 'acid' | 'waste';
   flowValues?: { instant: number; total: number };
+  flowItems?: Array<{ title: string; instant: number; total: number }>;
   hideFlowName?: boolean;
   leakLabels?: string[];
   leakValues?: number[];
@@ -964,6 +965,7 @@ export const TankDataPanel: React.FC<TankDataPanelProps> = ({
   disableExternalCarousel = false,
   flowVariantOverride,
   flowValues,
+  flowItems,
   hideFlowName = false,
   leakLabels,
   leakValues,
@@ -978,6 +980,7 @@ export const TankDataPanel: React.FC<TankDataPanelProps> = ({
   const [externalVisible, setExternalVisible] = React.useState(true);
   const [flowVariant, setFlowVariant] = React.useState<'acid' | 'waste'>('acid');
   const [flowVisible, setFlowVisible] = React.useState(true);
+  const [flowItemIndex, setFlowItemIndex] = React.useState(0);
   const externalSwitchTimeoutRef = React.useRef<number | null>(null);
   const flowSwitchTimeoutRef = React.useRef<number | null>(null);
 
@@ -1006,7 +1009,31 @@ export const TankDataPanel: React.FC<TankDataPanelProps> = ({
   }, [disableExternalCarousel, mode]);
 
   React.useEffect(() => {
-    if (mode !== 'flow' || flowVariantOverride) return;
+    if (mode !== 'flow') return;
+
+    if (flowItems?.length) {
+      const timer = window.setInterval(() => {
+        setFlowVisible(false);
+        if (flowSwitchTimeoutRef.current !== null) {
+          window.clearTimeout(flowSwitchTimeoutRef.current);
+        }
+        flowSwitchTimeoutRef.current = window.setTimeout(() => {
+          setFlowItemIndex((current) => (current + 1) % flowItems.length);
+          setFlowVisible(true);
+          flowSwitchTimeoutRef.current = null;
+        }, 220);
+      }, 3500);
+
+      return () => {
+        window.clearInterval(timer);
+        if (flowSwitchTimeoutRef.current !== null) {
+          window.clearTimeout(flowSwitchTimeoutRef.current);
+          flowSwitchTimeoutRef.current = null;
+        }
+      };
+    }
+
+    if (flowVariantOverride) return;
 
     const timer = window.setInterval(() => {
       setFlowVisible(false);
@@ -1027,9 +1054,10 @@ export const TankDataPanel: React.FC<TankDataPanelProps> = ({
         flowSwitchTimeoutRef.current = null;
       }
     };
-  }, [flowVariantOverride, mode]);
+  }, [flowItems, flowVariantOverride, mode]);
 
   const effectiveFlowVariant = flowVariantOverride ?? flowVariant;
+  const activeFlowItem = flowItems?.length ? flowItems[flowItemIndex % flowItems.length] : null;
   const option = React.useMemo(() => createTankPanelOption(data, levelLabels, levelValues), [data, levelLabels, levelValues]);
   const tank1TempOption = React.useMemo(
     () => createTemperatureGaugeOption(temperatureValues?.[0] ?? data.tank1_temp, temperatureLabels?.[0] ?? '1# 反应槽'),
@@ -1041,12 +1069,14 @@ export const TankDataPanel: React.FC<TankDataPanelProps> = ({
   );
   const flowOption = React.useMemo(
     () =>
-      flowValues
+      activeFlowItem
+        ? createFlowLiquidFillOptionByValues('', activeFlowItem.instant, activeFlowItem.total)
+        : flowValues
         ? createFlowLiquidFillOptionByValues('', flowValues.instant, flowValues.total)
         : effectiveFlowVariant === 'acid'
           ? createFlowLiquidFillOption(data)
           : createFlowLiquidFillOptionByValues('', data.waste_flow_instant, data.waste_flow_total),
-    [data, effectiveFlowVariant, flowValues],
+    [activeFlowItem, data, effectiveFlowVariant, flowValues],
   );
   const loadingOption = React.useMemo(() => createLoadingPanelOption(data), [data]);
   const leakOption = React.useMemo(() => createLeakPanelOption(data, leakLabels, leakValues), [data, leakLabels, leakValues]);
@@ -1181,7 +1211,9 @@ export const TankDataPanel: React.FC<TankDataPanelProps> = ({
           ) : mode === 'flow' ? (
             <>
               <div className="tank-panel-chart-meta">
-                {hideFlowName ? null : <span>{effectiveFlowVariant === 'acid' ? '盐酸硫酸流量' : '东氟废水流量'}</span>}
+                <span>
+                  {activeFlowItem?.title ?? (hideFlowName ? '' : effectiveFlowVariant === 'acid' ? '盐酸硫酸流量' : '东氟废水流量')}
+                </span>
               </div>
               <div className={flowVisible ? 'external-panel-content' : 'external-panel-content external-panel-content--hidden'}>
                 <div className="tank-panel-chart" style={{ height: 210 }}>

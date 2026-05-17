@@ -6,6 +6,8 @@ import { WorkshopFourView } from './WorkshopFourView';
 import { WorkshopFiveView } from './WorkshopFiveView';
 import { WorkshopSixView } from './WorkshopSixView';
 import { WorkshopSevenView } from './WorkshopSevenView';
+import { WorkshopThreeView } from './WorkshopThreeView';
+import { WorkshopTwoView } from './WorkshopTwoView';
 import type { WorkshopDefinition } from './types';
 
 export const workshopRegistry: WorkshopDefinition[] = [
@@ -21,17 +23,17 @@ export const workshopRegistry: WorkshopDefinition[] = [
   },
   {
     id: 'workshop-02',
-    name: '车间 2',
+    name: '新聚铝液位',
     enabled: true,
-    hasContent: false,
-    render: () => <BlankWorkshopView />,
+    hasContent: true,
+    render: (runtime) => <WorkshopTwoView {...runtime} />,
   },
   {
     id: 'workshop-03',
-    name: '车间 3',
+    name: '新聚铝反应',
     enabled: true,
-    hasContent: false,
-    render: () => <BlankWorkshopView />,
+    hasContent: true,
+    render: (runtime) => <WorkshopThreeView {...runtime} />,
   },
   {
     id: 'workshop-04',
