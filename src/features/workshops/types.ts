@@ -1,24 +1,24 @@
-import type { ReactNode } from 'react';
-import type { Alarm, AlarmData, ScadaData } from '../dashboard/model/types';
+import type {ReactNode} from 'react';
+import type {Alarm, AlarmData, ScadaData} from '../dashboard/model/types';
 
 export interface WorkshopRuntimeData {
-  currentTime: Date;
-  scadaData: ScadaData;
-  mqttConnected: boolean;
-  alarmData: AlarmData;
-  activeAlarms: Alarm[];
-  alarmCount: number;
-  isAlarmPanelOpen: boolean;
-  setIsAlarmPanelOpen: (open: boolean) => void;
+    currentTime: Date;
+    scadaData: ScadaData;
+    mqttConnected: boolean;
+    alarmData: AlarmData;
+    activeAlarms: Alarm[];
+    alarmCount: number;
+    isAlarmPanelOpen: boolean;
+    setIsAlarmPanelOpen: (open: boolean) => void;
 }
 
 export interface WorkshopDefinition {
-  id: string;
-  name: string;
-  enabled: boolean;
-  hasContent: boolean;
-  dataWorkshopIds?: string[];
-  dataWorkshopNames?: string[];
-  alarmNamePrefixes?: string[];
-  render: (runtime: WorkshopRuntimeData) => ReactNode;
+    id: string;
+    name: string;
+    enabled: boolean;
+    hasContent: boolean;
+    dataWorkshopIds?: string[];
+    dataWorkshopNames?: string[];
+    alarmNamePrefixes?: string[];
+    render: (runtime: WorkshopRuntimeData) => ReactNode;
 }

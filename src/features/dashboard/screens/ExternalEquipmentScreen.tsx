@@ -1,8 +1,8 @@
 import React from 'react';
-import { Settings } from 'lucide-react';
-import { cn } from '../../../utils/cn';
-import { hasAlarm } from '../lib/alarmUtils';
-import { AlarmData, ScadaData } from '../model/types';
+import {Settings} from 'lucide-react';
+import {cn} from '../../../utils/cn';
+import {hasAlarm} from '../lib/alarmUtils';
+import {AlarmData, ScadaData} from '../model/types';
 import fanDrumImage from '../../../images/风机_滚筒.png';
 import scrubberTowerImage from '../../../images/洗涤塔.png';
 import centrifugeImage from '../../../images/img_5.png';
@@ -13,287 +13,297 @@ const fanIconClass = "h-28 w-28 object-contain";
 const towerIconClass = "h-40 w-24 object-contain";
 const centrifugeIconClass = "h-28 w-36 object-contain";
 
-const OldPlantBlock = ({ data, alarmData }: { data: ScadaData; alarmData: AlarmData }) => (
-  <div className="relative min-h-0">
-    <div className={panelClass}>
-            <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 1 }}>
-              {/* 技改风格：粉色背景装饰线 - 匹配图片中的连续折线 */}
-              <polyline
-                  points="0,25% 5%,25% 5%,10% 15%,10% 15%,25% 25%,25% 25%,10% 35%,10% 35%,25% 45%,25% 45%,10% 55%,10% 55%,25% 65%,25% 65%,10% 75%,10% 75%,25% 85%,25% 85%,10% 95%,10% 95%,25% 100%,25%"
-                  fill="none"
-                  stroke="#fbcfe8"
-                  strokeWidth="1.5"
-                  opacity="0.55"
-              />
+const OldPlantBlock = ({data, alarmData}: { data: ScadaData; alarmData: AlarmData }) => (
+    <div className="relative min-h-0">
+        <div className={panelClass}>
+            <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{zIndex: 1}}>
+                {/* 技改风格：粉色背景装饰线 - 匹配图片中的连续折线 */}
+                <polyline
+                    points="0,25% 5%,25% 5%,10% 15%,10% 15%,25% 25%,25% 25%,10% 35%,10% 35%,25% 45%,25% 45%,10% 55%,10% 55%,25% 65%,25% 65%,10% 75%,10% 75%,25% 85%,25% 85%,10% 95%,10% 95%,25% 100%,25%"
+                    fill="none"
+                    stroke="#fbcfe8"
+                    strokeWidth="1.5"
+                    opacity="0.55"
+                />
 
-              {/* 蓝色工艺流程线 - 匹配图片中的连接方式 */}
-              {/* 1. 风机 -> 洗涤塔1 */}
-              <polyline
-                  points="18%,45% 25%,45% 25%,18% 37.5%,18%"
-                  fill="none"
-                  stroke="#38bdf8"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  opacity="0.9"
-              />
-              {/* 2. 洗涤塔1 -> 洗涤塔2 */}
-              <polyline
-                  points="42%,55% 50%,55% 50%,18% 62.5%,18%"
-                  fill="none"
-                  stroke="#38bdf8"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  opacity="0.9"
-              />
-              {/* 3. 洗涤塔2 -> 洗涤塔3 */}
-              <polyline
-                  points="67%,55% 75%,55% 75%,18% 87.5%,18%"
-                  fill="none"
-                  stroke="#38bdf8"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  opacity="0.9"
-              />
-              {/* 4. 洗涤塔3 出口 */}
-              <polyline
-                  points="92%,55% 100%,55%"
-                  fill="none"
-                  stroke="#38bdf8"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  opacity="0.9"
-              />
+                {/* 蓝色工艺流程线 - 匹配图片中的连接方式 */}
+                {/* 1. 风机 -> 洗涤塔1 */}
+                <polyline
+                    points="18%,45% 25%,45% 25%,18% 37.5%,18%"
+                    fill="none"
+                    stroke="#38bdf8"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    opacity="0.9"
+                />
+                {/* 2. 洗涤塔1 -> 洗涤塔2 */}
+                <polyline
+                    points="42%,55% 50%,55% 50%,18% 62.5%,18%"
+                    fill="none"
+                    stroke="#38bdf8"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    opacity="0.9"
+                />
+                {/* 3. 洗涤塔2 -> 洗涤塔3 */}
+                <polyline
+                    points="67%,55% 75%,55% 75%,18% 87.5%,18%"
+                    fill="none"
+                    stroke="#38bdf8"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    opacity="0.9"
+                />
+                {/* 4. 洗涤塔3 出口 */}
+                <polyline
+                    points="92%,55% 100%,55%"
+                    fill="none"
+                    stroke="#38bdf8"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    opacity="0.9"
+                />
 
-              {/* 底部循环回流线 */}
-              <line x1="37.5%" y1="75%" x2="87.5%" y2="75%" stroke="#38bdf8" strokeWidth="2" opacity="0.75" />
-              <line x1="37.5%" y1="75%" x2="37.5%" y2="65%" stroke="#38bdf8" strokeWidth="2" opacity="0.75" />
-              <line x1="62.5%" y1="75%" x2="62.5%" y2="65%" stroke="#38bdf8" strokeWidth="2" opacity="0.75" />
-              <line x1="87.5%" y1="75%" x2="87.5%" y2="65%" stroke="#38bdf8" strokeWidth="2" opacity="0.75" />
+                {/* 底部循环回流线 */}
+                <line x1="37.5%" y1="75%" x2="87.5%" y2="75%" stroke="#38bdf8" strokeWidth="2" opacity="0.75"/>
+                <line x1="37.5%" y1="75%" x2="37.5%" y2="65%" stroke="#38bdf8" strokeWidth="2" opacity="0.75"/>
+                <line x1="62.5%" y1="75%" x2="62.5%" y2="65%" stroke="#38bdf8" strokeWidth="2" opacity="0.75"/>
+                <line x1="87.5%" y1="75%" x2="87.5%" y2="65%" stroke="#38bdf8" strokeWidth="2" opacity="0.75"/>
             </svg>
 
             <div className="relative z-10 grid h-full grid-cols-[0.95fr_1fr_1fr_1fr] items-center gap-3 px-3">
-              {/* 风机 */}
-              <div
-                className="relative flex flex-col items-center gap-2 rounded-lg p-2 transition-all"
-              >
-                <img src={fanDrumImage} alt="风机" className={fanIconClass} />
-                <div className="panel-title-glow text-sm font-bold">风机</div>
+                {/* 风机 */}
                 <div
-                  className={cn(
-                    equipmentValueClass,
-                    "data-glow"
-                  )}
+                    className="relative flex flex-col items-center gap-2 rounded-lg p-2 transition-all"
                 >
-                  {data.old_fan_v.toFixed(1)} A
+                    <img src={fanDrumImage} alt="风机" className={fanIconClass}/>
+                    <div className="panel-title-glow text-sm font-bold">风机</div>
+                    <div
+                        className={cn(
+                            equipmentValueClass,
+                            "data-glow"
+                        )}
+                    >
+                        {data.old_fan_v.toFixed(1)} A
+                    </div>
                 </div>
-              </div>
 
-              {/* 洗涤塔1 + 循环泵1 */}
-              <div className="relative flex flex-col items-center gap-1">
-                <img src={scrubberTowerImage} alt="洗涤塔" className={towerIconClass} />
-                <div className="panel-title-glow text-sm font-bold">洗涤塔1</div>
-                <div className="mt-1 flex flex-col items-center gap-1">
-                  <Settings className={cn(hasAlarm('old_pump1', alarmData) ? "text-red-600 animate-spin-slow" : "text-sky-600", data.old_pump1_v > 0 && !hasAlarm('old_pump1', alarmData) && "animate-spin-slow")} size={26} />
-                  <div className="panel-title-glow text-sm font-bold">循环泵1</div>
-                  <div
-                    className="rounded bg-transparent px-2.5 py-1 font-mono text-sm font-black data-glow"
-                  >
-                    {data.old_pump1_v.toFixed(1)} A
-                  </div>
+                {/* 洗涤塔1 + 循环泵1 */}
+                <div className="relative flex flex-col items-center gap-1">
+                    <img src={scrubberTowerImage} alt="洗涤塔" className={towerIconClass}/>
+                    <div className="panel-title-glow text-sm font-bold">洗涤塔1</div>
+                    <div className="mt-1 flex flex-col items-center gap-1">
+                        <Settings
+                            className={cn(hasAlarm('old_pump1', alarmData) ? "text-red-600 animate-spin-slow" : "text-sky-600", data.old_pump1_v > 0 && !hasAlarm('old_pump1', alarmData) && "animate-spin-slow")}
+                            size={26}/>
+                        <div className="panel-title-glow text-sm font-bold">循环泵1</div>
+                        <div
+                            className="rounded bg-transparent px-2.5 py-1 font-mono text-sm font-black data-glow"
+                        >
+                            {data.old_pump1_v.toFixed(1)} A
+                        </div>
+                    </div>
                 </div>
-              </div>
 
-              {/* 洗涤塔2 + 循环泵2 */}
-              <div className="relative flex flex-col items-center gap-1">
-                <img src={scrubberTowerImage} alt="洗涤塔" className={towerIconClass} />
-                <div className="panel-title-glow text-sm font-bold">洗涤塔2</div>
-                <div className="mt-1 flex flex-col items-center gap-1">
-                  <Settings className={cn(hasAlarm('old_pump2', alarmData) ? "text-red-600 animate-spin-slow" : "text-sky-600", data.old_pump2_v > 0 && !hasAlarm('old_pump2', alarmData) && "animate-spin-slow")} size={26} />
-                  <div className="panel-title-glow text-sm font-bold">循环泵2</div>
-                  <div
-                    className="rounded bg-transparent px-2.5 py-1 font-mono text-sm font-black data-glow"
-                  >
-                    {data.old_pump2_v.toFixed(1)} A
-                  </div>
+                {/* 洗涤塔2 + 循环泵2 */}
+                <div className="relative flex flex-col items-center gap-1">
+                    <img src={scrubberTowerImage} alt="洗涤塔" className={towerIconClass}/>
+                    <div className="panel-title-glow text-sm font-bold">洗涤塔2</div>
+                    <div className="mt-1 flex flex-col items-center gap-1">
+                        <Settings
+                            className={cn(hasAlarm('old_pump2', alarmData) ? "text-red-600 animate-spin-slow" : "text-sky-600", data.old_pump2_v > 0 && !hasAlarm('old_pump2', alarmData) && "animate-spin-slow")}
+                            size={26}/>
+                        <div className="panel-title-glow text-sm font-bold">循环泵2</div>
+                        <div
+                            className="rounded bg-transparent px-2.5 py-1 font-mono text-sm font-black data-glow"
+                        >
+                            {data.old_pump2_v.toFixed(1)} A
+                        </div>
+                    </div>
                 </div>
-              </div>
 
-              {/* 洗涤塔3 + 循环泵3 */}
-              <div className="relative flex flex-col items-center gap-1">
-                <img src={scrubberTowerImage} alt="洗涤塔" className={towerIconClass} />
-                <div className="panel-title-glow text-sm font-bold">洗涤塔3</div>
-                <div className="mt-1 flex flex-col items-center gap-1">
-                  <Settings className={cn(hasAlarm('old_pump3', alarmData) ? "text-red-600 animate-spin-slow" : "text-sky-600", data.old_pump3_v > 0 && !hasAlarm('old_pump3', alarmData) && "animate-spin-slow")} size={26} />
-                  <div className="panel-title-glow text-sm font-bold">循环泵3</div>
-                  <div
-                    className="rounded bg-transparent px-2.5 py-1 font-mono text-sm font-black data-glow"
-                  >
-                    {data.old_pump3_v.toFixed(1)} A
-                  </div>
+                {/* 洗涤塔3 + 循环泵3 */}
+                <div className="relative flex flex-col items-center gap-1">
+                    <img src={scrubberTowerImage} alt="洗涤塔" className={towerIconClass}/>
+                    <div className="panel-title-glow text-sm font-bold">洗涤塔3</div>
+                    <div className="mt-1 flex flex-col items-center gap-1">
+                        <Settings
+                            className={cn(hasAlarm('old_pump3', alarmData) ? "text-red-600 animate-spin-slow" : "text-sky-600", data.old_pump3_v > 0 && !hasAlarm('old_pump3', alarmData) && "animate-spin-slow")}
+                            size={26}/>
+                        <div className="panel-title-glow text-sm font-bold">循环泵3</div>
+                        <div
+                            className="rounded bg-transparent px-2.5 py-1 font-mono text-sm font-black data-glow"
+                        >
+                            {data.old_pump3_v.toFixed(1)} A
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
+        </div>
     </div>
-  </div>
 );
 
-const DrumBlock = ({ data, alarmData }: { data: ScadaData; alarmData: AlarmData }) => (
-  <div className="relative min-h-0">
-    <div className={panelClass}>
-            <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 1 }}>
-              {/* 粉色背景装饰线 */}
-              <polyline
-                  points="0,25% 5%,25% 5%,10% 15%,10% 15%,25% 25%,25% 25%,10% 35%,10% 35%,25% 45%,25% 45%,10% 55%,10% 55%,25% 65%,25% 65%,10% 75%,10% 75%,25% 85%,25% 85%,10% 95%,10% 95%,25% 100%,25%"
-                  fill="none"
-                  stroke="#a5f3fc"
-                  strokeWidth="1.5"
-                  opacity="0.5"
-              />
+const DrumBlock = ({data, alarmData}: { data: ScadaData; alarmData: AlarmData }) => (
+    <div className="relative min-h-0">
+        <div className={panelClass}>
+            <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{zIndex: 1}}>
+                {/* 粉色背景装饰线 */}
+                <polyline
+                    points="0,25% 5%,25% 5%,10% 15%,10% 15%,25% 25%,25% 25%,10% 35%,10% 35%,25% 45%,25% 45%,10% 55%,10% 55%,25% 65%,25% 65%,10% 75%,10% 75%,25% 85%,25% 85%,10% 95%,10% 95%,25% 100%,25%"
+                    fill="none"
+                    stroke="#a5f3fc"
+                    strokeWidth="1.5"
+                    opacity="0.5"
+                />
 
-              {/* 蓝色工艺流程线 */}
-              {/* 1. 风机 -> 洗涤塔1 */}
-              <polyline
-                  points="18%,45% 25%,45% 25%,18% 37.5%,18%"
-                  fill="none"
-                  stroke="#22d3ee"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  opacity="0.9"
-              />
-              {/* 2. 洗涤塔1 -> 洗涤塔2 */}
-              <polyline
-                  points="42%,55% 50%,55% 50%,18% 62.5%,18%"
-                  fill="none"
-                  stroke="#22d3ee"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  opacity="0.9"
-              />
-              {/* 3. 洗涤塔2 -> 离心机 */}
-              <polyline
-                  points="67%,64% 75%,64% 75%,74% 85%,74%"
-                  fill="none"
-                  stroke="#22d3ee"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  opacity="0.9"
-              />
+                {/* 蓝色工艺流程线 */}
+                {/* 1. 风机 -> 洗涤塔1 */}
+                <polyline
+                    points="18%,45% 25%,45% 25%,18% 37.5%,18%"
+                    fill="none"
+                    stroke="#22d3ee"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    opacity="0.9"
+                />
+                {/* 2. 洗涤塔1 -> 洗涤塔2 */}
+                <polyline
+                    points="42%,55% 50%,55% 50%,18% 62.5%,18%"
+                    fill="none"
+                    stroke="#22d3ee"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    opacity="0.9"
+                />
+                {/* 3. 洗涤塔2 -> 离心机 */}
+                <polyline
+                    points="67%,64% 75%,64% 75%,74% 85%,74%"
+                    fill="none"
+                    stroke="#22d3ee"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    opacity="0.9"
+                />
 
-              {/* 底部循环回流线 */}
-              <line x1="37.5%" y1="85%" x2="62.5%" y2="85%" stroke="#22d3ee" strokeWidth="2" opacity="0.75" />
-              <line x1="37.5%" y1="85%" x2="37.5%" y2="74%" stroke="#22d3ee" strokeWidth="2" opacity="0.75" />
-              <line x1="62.5%" y1="85%" x2="62.5%" y2="74%" stroke="#22d3ee" strokeWidth="2" opacity="0.75" />
+                {/* 底部循环回流线 */}
+                <line x1="37.5%" y1="85%" x2="62.5%" y2="85%" stroke="#22d3ee" strokeWidth="2" opacity="0.75"/>
+                <line x1="37.5%" y1="85%" x2="37.5%" y2="74%" stroke="#22d3ee" strokeWidth="2" opacity="0.75"/>
+                <line x1="62.5%" y1="85%" x2="62.5%" y2="74%" stroke="#22d3ee" strokeWidth="2" opacity="0.75"/>
             </svg>
 
             <div className="relative z-10 grid h-full grid-cols-[0.95fr_1fr_1fr_0.92fr] items-center gap-3 px-3">
-              {/* 风机 */}
-              <div
-                className="relative flex flex-col items-center gap-2 rounded-lg p-2 transition-all"
-              >
-                <img src={fanDrumImage} alt="风机" className={fanIconClass} />
-                <div className="panel-title-glow-cyan text-sm font-bold">风机</div>
+                {/* 风机 */}
                 <div
-                  className={cn(
-                    equipmentValueClass,
-                    "data-glow-cyan"
-                  )}
+                    className="relative flex flex-col items-center gap-2 rounded-lg p-2 transition-all"
                 >
-                  {data.drum_fan_v.toFixed(1)} A
+                    <img src={fanDrumImage} alt="风机" className={fanIconClass}/>
+                    <div className="panel-title-glow-cyan text-sm font-bold">风机</div>
+                    <div
+                        className={cn(
+                            equipmentValueClass,
+                            "data-glow-cyan"
+                        )}
+                    >
+                        {data.drum_fan_v.toFixed(1)} A
+                    </div>
                 </div>
-              </div>
 
-              {/* 洗涤塔1 + 循环泵1 */}
-              <div className="relative flex flex-col items-center gap-1">
-                <img src={scrubberTowerImage} alt="洗涤塔" className={towerIconClass} />
-                <div className="panel-title-glow-cyan text-sm font-bold">洗涤塔1</div>
-                <div className="mt-1 flex flex-col items-center gap-1">
-                  <Settings className={cn(hasAlarm('drum_pump1', alarmData) ? "text-red-600 animate-spin-slow" : "text-cyan-600", data.drum_pump1_v > 0 && !hasAlarm('drum_pump1', alarmData) && "animate-spin-slow")} size={26} />
-                  <div className="panel-title-glow-cyan text-sm font-bold">循环泵1</div>
-                  <div
-                    className="rounded bg-transparent px-2.5 py-1 font-mono text-sm font-black data-glow-cyan"
-                  >
-                    {data.drum_pump1_v.toFixed(1)} A
-                  </div>
+                {/* 洗涤塔1 + 循环泵1 */}
+                <div className="relative flex flex-col items-center gap-1">
+                    <img src={scrubberTowerImage} alt="洗涤塔" className={towerIconClass}/>
+                    <div className="panel-title-glow-cyan text-sm font-bold">洗涤塔1</div>
+                    <div className="mt-1 flex flex-col items-center gap-1">
+                        <Settings
+                            className={cn(hasAlarm('drum_pump1', alarmData) ? "text-red-600 animate-spin-slow" : "text-cyan-600", data.drum_pump1_v > 0 && !hasAlarm('drum_pump1', alarmData) && "animate-spin-slow")}
+                            size={26}/>
+                        <div className="panel-title-glow-cyan text-sm font-bold">循环泵1</div>
+                        <div
+                            className="rounded bg-transparent px-2.5 py-1 font-mono text-sm font-black data-glow-cyan"
+                        >
+                            {data.drum_pump1_v.toFixed(1)} A
+                        </div>
+                    </div>
                 </div>
-              </div>
 
-              {/* 洗涤塔2 + 循环泵2 */}
-              <div className="relative flex flex-col items-center gap-1">
-                <img src={scrubberTowerImage} alt="洗涤塔" className={towerIconClass} />
-                <div className="panel-title-glow-cyan text-sm font-bold">洗涤塔2</div>
-                <div className="mt-1 flex flex-col items-center gap-1">
-                  <Settings className={cn(hasAlarm('drum_pump2', alarmData) ? "text-red-600 animate-spin-slow" : "text-cyan-600", data.drum_pump2_v > 0 && !hasAlarm('drum_pump2', alarmData) && "animate-spin-slow")} size={26} />
-                  <div className="panel-title-glow-cyan text-sm font-bold">循环泵2</div>
-                  <div
-                    className="rounded bg-transparent px-2.5 py-1 font-mono text-sm font-black data-glow-cyan"
-                  >
-                    {data.drum_pump2_v.toFixed(1)} A
-                  </div>
+                {/* 洗涤塔2 + 循环泵2 */}
+                <div className="relative flex flex-col items-center gap-1">
+                    <img src={scrubberTowerImage} alt="洗涤塔" className={towerIconClass}/>
+                    <div className="panel-title-glow-cyan text-sm font-bold">洗涤塔2</div>
+                    <div className="mt-1 flex flex-col items-center gap-1">
+                        <Settings
+                            className={cn(hasAlarm('drum_pump2', alarmData) ? "text-red-600 animate-spin-slow" : "text-cyan-600", data.drum_pump2_v > 0 && !hasAlarm('drum_pump2', alarmData) && "animate-spin-slow")}
+                            size={26}/>
+                        <div className="panel-title-glow-cyan text-sm font-bold">循环泵2</div>
+                        <div
+                            className="rounded bg-transparent px-2.5 py-1 font-mono text-sm font-black data-glow-cyan"
+                        >
+                            {data.drum_pump2_v.toFixed(1)} A
+                        </div>
+                    </div>
                 </div>
-              </div>
 
-              {/* 离心机 */}
-              <div
-                className="relative flex flex-col items-center gap-2 rounded-lg p-2 transition-all"
-              >
-                <img
-                  src={centrifugeImage}
-                  alt="离心机"
-                  className={cn(
-                    centrifugeIconClass,
-                    data.drum_centrifuge_v > 0 && !hasAlarm('old_centrifuge', alarmData) && "animate-bounce"
-                  )}
-                />
-                <div className="panel-title-glow text-sm font-bold">离心机</div>
+                {/* 离心机 */}
                 <div
-                  className={cn(
-                    equipmentValueClass,
-                    "data-glow"
-                  )}
+                    className="relative flex flex-col items-center gap-2 rounded-lg p-2 transition-all"
                 >
-                  {data.drum_centrifuge_v.toFixed(1)} A
+                    <img
+                        src={centrifugeImage}
+                        alt="离心机"
+                        className={cn(
+                            centrifugeIconClass,
+                            data.drum_centrifuge_v > 0 && !hasAlarm('old_centrifuge', alarmData) && "animate-bounce"
+                        )}
+                    />
+                    <div className="panel-title-glow text-sm font-bold">离心机</div>
+                    <div
+                        className={cn(
+                            equipmentValueClass,
+                            "data-glow"
+                        )}
+                    >
+                        {data.drum_centrifuge_v.toFixed(1)} A
+                    </div>
                 </div>
-              </div>
             </div>
+        </div>
     </div>
-  </div>
 );
 
 export const ExternalEquipmentScreen = ({
-  data,
-  alarmData,
-  layout = 'stacked',
-  section = 'both',
-}: {
-  data: ScadaData;
-  alarmData: AlarmData;
-  layout?: 'stacked' | 'sideBySide';
-  section?: 'both' | 'oldPlant' | 'drum';
+                                            data,
+                                            alarmData,
+                                            layout = 'stacked',
+                                            section = 'both',
+                                        }: {
+    data: ScadaData;
+    alarmData: AlarmData;
+    layout?: 'stacked' | 'sideBySide';
+    section?: 'both' | 'oldPlant' | 'drum';
 }) => (
     <div className="external-screen w-full h-full bg-transparent">
-      {section === 'oldPlant' ? (
-        <div className="h-full px-4 py-3 overflow-visible">
-          <OldPlantBlock data={data} alarmData={alarmData} />
-        </div>
-      ) : section === 'drum' ? (
-        <div className="h-full px-4 py-3 overflow-visible">
-          <DrumBlock data={data} alarmData={alarmData} />
-        </div>
-      ) : (
-        <div className={layout === 'sideBySide'
-          ? "grid h-full grid-cols-2 gap-4 px-4 py-3 overflow-visible"
-          : "grid h-full grid-rows-2 gap-2.5 px-4 py-3 overflow-visible"}
-        >
-          <OldPlantBlock data={data} alarmData={alarmData} />
-          <DrumBlock data={data} alarmData={alarmData} />
-        </div>
-      )}
+        {section === 'oldPlant' ? (
+            <div className="h-full px-4 py-3 overflow-visible">
+                <OldPlantBlock data={data} alarmData={alarmData}/>
+            </div>
+        ) : section === 'drum' ? (
+            <div className="h-full px-4 py-3 overflow-visible">
+                <DrumBlock data={data} alarmData={alarmData}/>
+            </div>
+        ) : (
+            <div className={layout === 'sideBySide'
+                ? "grid h-full grid-cols-2 gap-4 px-4 py-3 overflow-visible"
+                : "grid h-full grid-rows-2 gap-2.5 px-4 py-3 overflow-visible"}
+            >
+                <OldPlantBlock data={data} alarmData={alarmData}/>
+                <DrumBlock data={data} alarmData={alarmData}/>
+            </div>
+        )}
     </div>
 );
