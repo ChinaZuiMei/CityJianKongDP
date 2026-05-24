@@ -44,16 +44,18 @@ export default function App() {
                 selectedWorkshop={selectedWorkshop}
                 onWorkshopChange={setSelectedWorkshop}
             />
-            {selectedWorkshopDefinition?.render({
-                currentTime,
-                scadaData,
-                mqttConnected,
-                alarmData,
-                activeAlarms,
-                alarmCount,
-                isAlarmPanelOpen,
-                setIsAlarmPanelOpen,
-            })}
+            <div className="contents" key={selectedWorkshop}>
+                {selectedWorkshopDefinition?.render({
+                    currentTime,
+                    scadaData,
+                    mqttConnected,
+                    alarmData,
+                    activeAlarms,
+                    alarmCount,
+                    isAlarmPanelOpen,
+                    setIsAlarmPanelOpen,
+                })}
+            </div>
             <div aria-hidden className="pointer-events-none absolute inset-x-0 top-full h-36"/>
         </div>
     );

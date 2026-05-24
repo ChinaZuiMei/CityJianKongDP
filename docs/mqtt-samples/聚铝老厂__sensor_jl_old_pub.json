@@ -1,0 +1,443 @@
+{
+  "workshopId": "JH_JL_OLD",
+  "workshopName": "聚铝老厂",
+  "timestamp": "2026-04-24 09:50:15",
+  "timestampMs": 1776995415667,
+  "data": {
+    "槽1出料阀开到位": {
+      "value": false,
+      "unit": null
+    },
+    "槽1出料阀关到位": {
+      "value": false,
+      "unit": null
+    },
+    "槽2出料阀开到位": {
+      "value": false,
+      "unit": null
+    },
+    "槽2出料阀关到位": {
+      "value": false,
+      "unit": null
+    },
+    "反应槽1温度低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应槽1温度高报警": {
+      "value": true,
+      "unit": null
+    },
+    "反应槽1温度高保护": {
+      "value": false,
+      "unit": null
+    },
+    "反应槽2温度低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应槽2温度高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应槽2温度高保护": {
+      "value": false,
+      "unit": null
+    },
+    "1#盐酸罐液位低报警": {
+      "value": true,
+      "unit": null
+    },
+    "1#盐酸罐液位高报警": {
+      "value": true,
+      "unit": null
+    },
+    "2#盐酸罐液位低报警": {
+      "value": false,
+      "unit": null
+    },
+    "2#盐酸罐液位高报警": {
+      "value": true,
+      "unit": null
+    },
+    "3#盐酸罐液位低报警": {
+      "value": false,
+      "unit": null
+    },
+    "3#盐酸罐液位高报警": {
+      "value": true,
+      "unit": null
+    },
+    "1#硫酸罐液位低报警": {
+      "value": false,
+      "unit": null
+    },
+    "1#硫酸罐液位高报警": {
+      "value": true,
+      "unit": null
+    },
+    "1#泄漏检测值低报警": {
+      "value": false,
+      "unit": null
+    },
+    "1#泄漏检测值高报警": {
+      "value": false,
+      "unit": null
+    },
+    "2#泄漏检测值低报警": {
+      "value": true,
+      "unit": null
+    },
+    "2#泄漏检测值高报警": {
+      "value": false,
+      "unit": null
+    },
+    "3#泄漏检测值低报警": {
+      "value": false,
+      "unit": null
+    },
+    "3#泄漏检测值高报警": {
+      "value": true,
+      "unit": null
+    },
+    "老厂风机电流低报警": {
+      "value": true,
+      "unit": null
+    },
+    "老厂风机电流高报警": {
+      "value": false,
+      "unit": null
+    },
+    "老厂水泵1电流低报警": {
+      "value": false,
+      "unit": null
+    },
+    "老厂水泵1电流高报警": {
+      "value": true,
+      "unit": null
+    },
+    "老厂水泵2电流低报警": {
+      "value": true,
+      "unit": null
+    },
+    "老厂水泵2电流高报警": {
+      "value": false,
+      "unit": null
+    },
+    "老厂离心机电流低报警": {
+      "value": false,
+      "unit": null
+    },
+    "老厂离心机电流高报警": {
+      "value": true,
+      "unit": null
+    },
+    "老厂水泵3电流低报警": {
+      "value": false,
+      "unit": null
+    },
+    "老厂水泵3电流高报警": {
+      "value": true,
+      "unit": null
+    },
+    "盐酸流量低报警": {
+      "value": true,
+      "unit": null
+    },
+    "滚筒风机电流低报警": {
+      "value": true,
+      "unit": null
+    },
+    "滚筒风机电流高报警": {
+      "value": false,
+      "unit": null
+    },
+    "滚筒水泵1电流低报警": {
+      "value": false,
+      "unit": null
+    },
+    "滚筒水泵1电流高报警": {
+      "value": false,
+      "unit": null
+    },
+    "滚筒水泵2电流低报警": {
+      "value": false,
+      "unit": null
+    },
+    "滚筒水泵2电流高报警": {
+      "value": false,
+      "unit": null
+    },
+    "槽1出料阀故障": {
+      "value": false,
+      "unit": null
+    },
+    "槽2出料阀故障": {
+      "value": false,
+      "unit": null
+    },
+    "反应槽1温度值": {
+      "value": 207.523,
+      "unit": "℃"
+    },
+    "反应槽2温度值": {
+      "value": 206.429,
+      "unit": "℃"
+    },
+    "1#盐酸罐液位值": {
+      "value": 1.888,
+      "unit": "m"
+    },
+    "2#盐酸罐液位值": {
+      "value": 1.106,
+      "unit": "m"
+    },
+    "3#盐酸罐液位值": {
+      "value": 1.442,
+      "unit": "m"
+    },
+    "1#硫酸罐液位值": {
+      "value": 1.635,
+      "unit": "m"
+    },
+    "1#泄漏检测值": {
+      "value": 0.049,
+      "unit": "ppm"
+    },
+    "2#泄漏检测值": {
+      "value": 0.016,
+      "unit": "ppm"
+    },
+    "3#泄漏检测值": {
+      "value": -0.042,
+      "unit": "ppm"
+    },
+    "老厂风机电流值": {
+      "value": 17.438,
+      "unit": "A"
+    },
+    "老厂水泵1电流值": {
+      "value": 9.875,
+      "unit": "A"
+    },
+    "老厂水泵2电流值": {
+      "value": 13.5,
+      "unit": "A"
+    },
+    "老厂离心机电流值": {
+      "value": 0,
+      "unit": "A"
+    },
+    "盐酸硫酸流量-瞬时": {
+      "value": 0.003,
+      "unit": "m³/h"
+    },
+    "盐酸硫酸流量-累计": {
+      "value": 894505.063,
+      "unit": "m³"
+    },
+    "东氟废水流量-瞬时": {
+      "value": 0,
+      "unit": "m³/h"
+    },
+    "东氟废水流量-累计整数": {
+      "value": 685,
+      "unit": "m³"
+    },
+    "东氟废水流量-累计小数": {
+      "value": 0.3,
+      "unit": "m³"
+    },
+    "滚筒风机电流": {
+      "value": 0,
+      "unit": "A"
+    },
+    "滚筒水泵1电流": {
+      "value": 0,
+      "unit": "A"
+    },
+    "滚筒水泵2电流": {
+      "value": 0,
+      "unit": "A"
+    },
+    "装车流量-瞬时": {
+      "value": 0,
+      "unit": "m³/h"
+    },
+    "装车流量-累计整数": {
+      "value": 4305,
+      "unit": "m³"
+    },
+    "装车流量-累计小数": {
+      "value": 0.15,
+      "unit": "m³"
+    },
+    "装车-本次装入量": {
+      "value": 3.263,
+      "unit": "T"
+    },
+    "反应槽1蒸汽阀开度": {
+      "value": 0,
+      "unit": "%"
+    },
+    "反应槽2蒸汽阀开度": {
+      "value": 0,
+      "unit": "%"
+    },
+    "反应槽1温度低报警设定值": {
+      "value": 0,
+      "unit": "℃"
+    },
+    "反应槽1温度高报警设定值": {
+      "value": 120,
+      "unit": "℃"
+    },
+    "反应槽1温度高保护设定值": {
+      "value": 120,
+      "unit": "℃"
+    },
+    "反应槽2温度低报警设定值": {
+      "value": 0,
+      "unit": "℃"
+    },
+    "反应槽2温度高报警设定值": {
+      "value": 120,
+      "unit": "℃"
+    },
+    "反应槽2温度高保护设定值": {
+      "value": 120,
+      "unit": "℃"
+    },
+    "1#盐酸罐液位低报警设定值": {
+      "value": -1,
+      "unit": "m"
+    },
+    "1#盐酸罐液位高报警设定值": {
+      "value": 3.6,
+      "unit": "m"
+    },
+    "2#盐酸罐液位低报警设定值": {
+      "value": -1,
+      "unit": "m"
+    },
+    "2#盐酸罐液位高报警设定值": {
+      "value": 3.6,
+      "unit": "m"
+    },
+    "3#盐酸罐液位低报警设定值": {
+      "value": -1,
+      "unit": "m"
+    },
+    "3#盐酸罐液位高报警设定值": {
+      "value": 3.6,
+      "unit": "m"
+    },
+    "1#硫酸罐液位低报警设定值": {
+      "value": -1,
+      "unit": "m"
+    },
+    "1#硫酸罐液位高报警设定值": {
+      "value": 6.2,
+      "unit": "m"
+    },
+    "1#泄漏检测值低报警设定值": {
+      "value": 0,
+      "unit": "ppm"
+    },
+    "1#泄漏检测值高报警设定值": {
+      "value": -1,
+      "unit": "ppm"
+    },
+    "2#泄漏检测值低报警设定值": {
+      "value": 2,
+      "unit": "ppm"
+    },
+    "2#泄漏检测值高报警设定值": {
+      "value": 2,
+      "unit": "ppm"
+    },
+    "3#泄漏检测值低报警设定值": {
+      "value": -1,
+      "unit": "ppm"
+    },
+    "3#泄漏检测值高报警设定值": {
+      "value": 2,
+      "unit": "ppm"
+    },
+    "老厂风机电流低报警设定值": {
+      "value": -2,
+      "unit": "A"
+    },
+    "老厂风机电流高报警设定值": {
+      "value": 20,
+      "unit": "A"
+    },
+    "老厂水泵1电流低报警设定值": {
+      "value": -2,
+      "unit": "A"
+    },
+    "老厂水泵1电流高报警设定值": {
+      "value": 20,
+      "unit": "A"
+    },
+    "老厂水泵2电流低报警设定值": {
+      "value": -2,
+      "unit": "A"
+    },
+    "老厂水泵2电流高报警设定值": {
+      "value": 20,
+      "unit": "A"
+    },
+    "老厂离心机电流低报警设定值": {
+      "value": -5,
+      "unit": "A"
+    },
+    "老厂离心机电流高报警设定值": {
+      "value": 45,
+      "unit": "A"
+    },
+    "老厂水泵3电流低报警设定值": {
+      "value": -2,
+      "unit": "A"
+    },
+    "老厂水泵3电流高报警设定值": {
+      "value": 20,
+      "unit": "A"
+    },
+    "盐酸流量低报警设定值": {
+      "value": -2,
+      "unit": "m³/h"
+    },
+    "滚筒风机电流低报警设定值": {
+      "value": -2,
+      "unit": "A"
+    },
+    "滚筒风机电流高报警设定值": {
+      "value": 30,
+      "unit": "A"
+    },
+    "滚筒水泵1电流低报警设定值": {
+      "value": -2,
+      "unit": "A"
+    },
+    "滚筒水泵1电流高报警设定值": {
+      "value": 20,
+      "unit": "A"
+    },
+    "滚筒水泵2电流低报警设定值": {
+      "value": -2,
+      "unit": "A"
+    },
+    "滚筒水泵2电流高报警设定值": {
+      "value": 20,
+      "unit": "A"
+    }
+  },
+  "_captureMeta": {
+    "topic": "/sensor/jl_old/pub",
+    "topicCode": "JL_OLD",
+    "capturedAt": "2026-05-23T02:36:55.589Z",
+    "source": "mqtt_latest_data.json",
+    "note": "实时订阅120s无消息，使用项目内历史缓存补全"
+  }
+}

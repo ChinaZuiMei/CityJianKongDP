@@ -2,6 +2,7 @@ import React from 'react';
 import {motion} from 'motion/react';
 import {Activity} from 'lucide-react';
 import {cn} from '../../../utils/cn';
+import {formatMetricValue} from '../../../utils/formatMetricValue';
 import coneTankImage from '../../../images/硫酸02.png';
 import reactorTankImage from '../../../images/反应槽.png';
 import storageTankImage from '../../../images/盐酸罐02.png';
@@ -78,7 +79,7 @@ export const Tank = ({
                         <div className="absolute inset-x-0 bottom-[1.8rem] z-20 flex justify-center">
                             <div
                                 className={cn("rounded border px-2.5 py-1 text-sm font-bold shadow-[0_0_12px_rgba(15,23,42,0.35)]", hasAlarm ? "border-red-400 bg-slate-950/50 text-red-100" : "panel-frame bg-slate-950/40 data-glow")}>
-                                {level.toFixed(2)} {unit}
+                                {formatMetricValue(level)} {unit}
                             </div>
                         </div>
                     )}
@@ -87,7 +88,7 @@ export const Tank = ({
                         <div className="absolute inset-x-0 -bottom-8 z-20 flex justify-center">
                             <div
                                 className={cn("rounded border px-2.5 py-1 text-sm font-bold shadow-[0_0_12px_rgba(15,23,42,0.35)]", hasAlarm ? "border-red-400 bg-slate-950/50 text-red-100" : "panel-frame bg-slate-950/40 data-glow")}>
-                                {level.toFixed(2)} {unit}
+                                {formatMetricValue(level)} {unit}
                             </div>
                         </div>
                     )}
@@ -104,7 +105,7 @@ export const Tank = ({
                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
                         <div
                             className={cn("rounded border px-2 py-1 text-sm font-bold", hasAlarm ? "border-red-400 bg-transparent text-red-100" : "panel-frame data-glow bg-transparent")}>
-                            {level.toFixed(2)} {unit}
+                            {formatMetricValue(level)} {unit}
                         </div>
                     </div>
                     <div
@@ -123,14 +124,14 @@ export const Tank = ({
                     {temp !== undefined && variant === 'reactor' && (
                         <div
                             className={cn("rounded-md border bg-transparent px-2.5 py-1 text-xs font-black leading-none", hasAlarm ? "border-red-400 text-red-100" : "panel-frame data-glow")}>
-                            {temp.toFixed(1)} °C
+                            {formatMetricValue(temp)} °C
                         </div>
                     )}
                 </div>
                 {temp !== undefined && variant !== 'reactor' && (
                     <div
                         className={cn("mt-1.5 rounded-md border bg-transparent px-3 py-1 text-sm font-black", hasAlarm ? "border-red-400 text-red-100" : "panel-frame data-glow")}>
-                        {temp.toFixed(1)} °C
+                        {formatMetricValue(temp)} °C
                     </div>
                 )}
             </div>
@@ -157,14 +158,14 @@ export const FlowBox = ({title, instant, total, unit = 'm³/h', hasAlarm = false
                 <span className="text-sm font-medium text-slate-200">瞬时流量:</span>
                 <div
                     className={cn("min-w-[118px] rounded border bg-transparent px-3 py-1.5 text-right font-mono text-base font-bold", hasAlarm ? "border-red-400 text-red-100" : "panel-frame data-glow")}>
-                    {instant.toFixed(1)} <span className="text-xs text-slate-300">{unit}</span>
+                    {formatMetricValue(instant)} <span className="text-xs text-slate-300">{unit}</span>
                 </div>
             </div>
             <div className="flex justify-between items-center">
                 <span className="text-sm font-medium text-slate-200">累计流量:</span>
                 <div
                     className={cn("min-w-[118px] rounded border bg-transparent px-3 py-1.5 text-right font-mono text-base font-bold", hasAlarm ? "border-red-400 text-red-100" : "border-emerald-200/45 data-glow-emerald")}>
-                    {total.toFixed(1)} <span className="text-xs text-slate-300">m³</span>
+                    {formatMetricValue(total)} <span className="text-xs text-slate-300">m³</span>
                 </div>
             </div>
         </div>

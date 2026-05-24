@@ -1,5 +1,6 @@
 import React from 'react';
 import {AlertTriangle} from 'lucide-react';
+import {formatMetricValue} from '../../../utils/formatMetricValue';
 import {cn} from '../../../utils/cn';
 import {getAlarmNames, hasAlarm} from '../lib/alarmUtils';
 import {AlarmData, ScadaData} from '../model/types';
@@ -97,7 +98,8 @@ export const TankAreaScreen = ({
                                     : "border-sky-300/70 bg-transparent data-glow"
                             )}
                         >
-                            {leak.val.toFixed(3)} <span className="text-[10px] xl:text-xs text-slate-300">ppm</span>
+                            {formatMetricValue(leak.val)} <span
+                            className="text-[10px] xl:text-xs text-slate-300">ppm</span>
                         </div>
                         <div className="flex min-h-[32px] flex-col items-center gap-1">
                             {alarmNames.map((name, idx) => (

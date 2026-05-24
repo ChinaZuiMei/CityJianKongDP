@@ -1,9 +1,10 @@
 import React from 'react';
 import {AnimatePresence} from 'motion/react';
 import {AlarmPanel, ScrollDashboard} from '../dashboard';
-import {TankDataPanel} from '../dashboard/components/TankDataPanel';
+import {WorkshopSixLeftPanels, WorkshopSixRightPanels} from './workshop-six';
 import {Tank} from '../dashboard/ui/SharedComponents';
 import type {WorkshopRuntimeData} from './types';
+import {formatMetricValue} from '../../utils/formatMetricValue';
 import undergroundTankImage from '../../mingfanImg/地下罐子.png';
 import reactorTankImage from '../../images/反应槽.png';
 
@@ -14,11 +15,6 @@ type LevelTank = {
     max: number;
     variant: 'cone' | 'storage' | 'underground';
 };
-
-const zeroLevels = [0, 0, 0, 0];
-const noLabels = ['无', '无', '无', '无'];
-const noTemperatures: [number, number] = [0, 0];
-const noTemperatureLabels: [string, string] = ['无', '无'];
 
 const mainTanks = [
     {id: 'F0101A', pressure: '0.00 Mpa'},
@@ -75,7 +71,7 @@ function UndergroundTank({label, level}: { label: string; level: number }) {
         <div className="workshop-six-underground-tank">
             <img src={undergroundTankImage} alt={label} className="workshop-six-underground-tank__image"
                  draggable="false"/>
-            <div className="workshop-six-underground-tank__value">{level.toFixed(2)} m</div>
+            <div className="workshop-six-underground-tank__value">{formatMetricValue(level)} m</div>
             <div className="workshop-six-underground-tank__label">{label}</div>
         </div>
     );
@@ -243,84 +239,28 @@ export function WorkshopSixView({
 
             <button
                 type="button"
-                className={leftPanelCollapsed ? 'side-panel-toggle side-panel-toggle--left side-panel-toggle--collapsed' : 'side-panel-toggle side-panel-toggle--left'}
+                className={leftPanelCollapsed ? 'w6-side-panel-toggle w6-side-panel-toggle--left w6-side-panel-toggle--collapsed' : 'w6-side-panel-toggle w6-side-panel-toggle--left'}
                 onClick={() => setLeftPanelCollapsed((value) => !value)}
                 aria-label={leftPanelCollapsed ? '展开左侧面板' : '收起左侧面板'}
             >
                 {leftPanelCollapsed ? '▶' : '◀'}
             </button>
             <div
-                className={leftPanelCollapsed ? 'tank-data-column tank-data-column--left tank-data-column--collapsed-left' : 'tank-data-column tank-data-column--left'}>
-                <TankDataPanel
-                    data={scadaData}
-                    title="蒸汽流量聚合硫酸铁"
-                    subtitle="STEAM FLOW POLYMERIC FERRIC SULFATE"
-                    mode="flow"
-                    flowVariantOverride="acid"
-                    flowValues={{instant: 0, total: 93789}}
-                    hideFlowName
-                    embedded
-                />
-                <TankDataPanel
-                    data={scadaData}
-                    position="left"
-                    title="罐区液位面板"
-                    subtitle="TANK LEVEL PANEL"
-                    mode="level"
-                    levelLabels={noLabels}
-                    levelValues={zeroLevels}
-                    embedded
-                />
-                <TankDataPanel
-                    data={scadaData}
-                    position="left"
-                    title="装车可视化面板"
-                    subtitle="LOADING VISUALIZATION PANEL"
-                    mode="loading"
-                    embedded
-                />
+                className={leftPanelCollapsed ? 'w6-side-panel-column w6-side-panel-column--left w6-side-panel-column--collapsed-left' : 'w6-side-panel-column w6-side-panel-column--left'}>
+                <WorkshopSixLeftPanels data={scadaData}/>
             </div>
 
             <button
                 type="button"
-                className={rightPanelCollapsed ? 'side-panel-toggle side-panel-toggle--right side-panel-toggle--collapsed' : 'side-panel-toggle side-panel-toggle--right'}
+                className={rightPanelCollapsed ? 'w6-side-panel-toggle w6-side-panel-toggle--right w6-side-panel-toggle--collapsed' : 'w6-side-panel-toggle w6-side-panel-toggle--right'}
                 onClick={() => setRightPanelCollapsed((value) => !value)}
                 aria-label={rightPanelCollapsed ? '展开右侧面板' : '收起右侧面板'}
             >
                 {rightPanelCollapsed ? '◀' : '▶'}
             </button>
             <div
-                className={rightPanelCollapsed ? 'tank-data-column tank-data-column--right tank-data-column--collapsed-right' : 'tank-data-column tank-data-column--right'}>
-                <TankDataPanel
-                    data={scadaData}
-                    position="right"
-                    title="主画面可视化面板"
-                    subtitle="MAIN SCREEN VISUALIZATION"
-                    mode="temperature"
-                    temperatureLabels={noTemperatureLabels}
-                    temperatureValues={noTemperatures}
-                    embedded
-                />
-                <TankDataPanel
-                    data={scadaData}
-                    position="right"
-                    title="外部设备可视化面板"
-                    subtitle="EXTERNAL EQUIPMENT PANEL"
-                    mode="external"
-                    externalLabels={noLabels}
-                    externalValues={zeroLevels}
-                    externalMeta={['无', '无']}
-                    disableExternalCarousel
-                    embedded
-                />
-                <TankDataPanel
-                    data={scadaData}
-                    position="right"
-                    title="装车可视化面板"
-                    subtitle="LOADING VISUALIZATION PANEL"
-                    mode="loading"
-                    embedded
-                />
+                className={rightPanelCollapsed ? 'w6-side-panel-column w6-side-panel-column--right w6-side-panel-column--collapsed-right' : 'w6-side-panel-column w6-side-panel-column--right'}>
+                <WorkshopSixRightPanels data={scadaData}/>
             </div>
 
             <main className="relative z-10 flex-1 overflow-hidden bg-transparent">

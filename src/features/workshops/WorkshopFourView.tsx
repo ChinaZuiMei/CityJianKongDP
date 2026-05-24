@@ -1,13 +1,10 @@
 import React from 'react';
 import {AnimatePresence} from 'motion/react';
 import {AlarmPanel, ScrollDashboard} from '../dashboard';
-import {TankDataPanel} from '../dashboard/components/TankDataPanel';
+import {WorkshopFourLeftPanels, WorkshopFourRightPanels} from './workshop-four';
 import type {WorkshopRuntimeData} from './types';
 import tankImage from '../../mingfanImg/罐子.png';
 import shipImage from '../../mingfanImg/chaungjian.png';
-
-const zeroLevels = [0, 0, 0, 0];
-const noLabels = ['无', '无', '无', '无'];
 
 const regionHeaders = [
     {id: 'main-1', title: '主画面-区域1', subtitle: 'MAIN SCREEN - AREA 1', alarmRegionId: 'main' as const},
@@ -174,85 +171,28 @@ export function WorkshopFourView({
 
             <button
                 type="button"
-                className={leftPanelCollapsed ? 'side-panel-toggle side-panel-toggle--left side-panel-toggle--collapsed' : 'side-panel-toggle side-panel-toggle--left'}
+                className={leftPanelCollapsed ? 'w4-side-panel-toggle w4-side-panel-toggle--left w4-side-panel-toggle--collapsed' : 'w4-side-panel-toggle w4-side-panel-toggle--left'}
                 onClick={() => setLeftPanelCollapsed((value) => !value)}
                 aria-label={leftPanelCollapsed ? '展开左侧面板' : '收起左侧面板'}
             >
                 {leftPanelCollapsed ? '▶' : '◀'}
             </button>
             <div
-                className={leftPanelCollapsed ? 'tank-data-column tank-data-column--left tank-data-column--collapsed-left' : 'tank-data-column tank-data-column--left'}>
-                <TankDataPanel
-                    data={scadaData}
-                    title="福邦硫酸氢钾流量面板"
-                    subtitle="FUBANG POTASSIUM BISULFATE FLOW PANEL"
-                    mode="flow"
-                    flowVariantOverride="acid"
-                    flowValues={{instant: 0, total: 27377.6}}
-                    hideFlowName
-                    embedded
-                />
-                <TankDataPanel
-                    data={scadaData}
-                    position="left"
-                    title="罐区液位面板"
-                    subtitle="TANK LEVEL PANEL"
-                    mode="level"
-                    levelLabels={noLabels}
-                    levelValues={zeroLevels}
-                    embedded
-                />
-                <TankDataPanel
-                    data={scadaData}
-                    position="left"
-                    title="装车可视化面板"
-                    subtitle="LOADING VISUALIZATION PANEL"
-                    mode="loading"
-                    embedded
-                />
+                className={leftPanelCollapsed ? 'w4-side-panel-column w4-side-panel-column--left w4-side-panel-column--collapsed-left' : 'w4-side-panel-column w4-side-panel-column--left'}>
+                <WorkshopFourLeftPanels data={scadaData}/>
             </div>
 
             <button
                 type="button"
-                className={rightPanelCollapsed ? 'side-panel-toggle side-panel-toggle--right side-panel-toggle--collapsed' : 'side-panel-toggle side-panel-toggle--right'}
+                className={rightPanelCollapsed ? 'w4-side-panel-toggle w4-side-panel-toggle--right w4-side-panel-toggle--collapsed' : 'w4-side-panel-toggle w4-side-panel-toggle--right'}
                 onClick={() => setRightPanelCollapsed((value) => !value)}
                 aria-label={rightPanelCollapsed ? '展开右侧面板' : '收起右侧面板'}
             >
                 {rightPanelCollapsed ? '◀' : '▶'}
             </button>
             <div
-                className={rightPanelCollapsed ? 'tank-data-column tank-data-column--right tank-data-column--collapsed-right' : 'tank-data-column tank-data-column--right'}>
-                <TankDataPanel
-                    data={scadaData}
-                    position="right"
-                    title="福邦盐酸流量面板"
-                    subtitle="FUBANG HYDROCHLORIC ACID FLOW PANEL"
-                    mode="flow"
-                    flowVariantOverride="acid"
-                    flowValues={{instant: 0, total: 5501.2}}
-                    hideFlowName
-                    embedded
-                />
-                <TankDataPanel
-                    data={scadaData}
-                    position="right"
-                    title="外部设备可视化面板"
-                    subtitle="EXTERNAL EQUIPMENT PANEL"
-                    mode="external"
-                    externalLabels={noLabels}
-                    externalValues={zeroLevels}
-                    externalMeta={['无', '无']}
-                    disableExternalCarousel
-                    embedded
-                />
-                <TankDataPanel
-                    data={scadaData}
-                    position="right"
-                    title="装车可视化面板"
-                    subtitle="LOADING VISUALIZATION PANEL"
-                    mode="loading"
-                    embedded
-                />
+                className={rightPanelCollapsed ? 'w4-side-panel-column w4-side-panel-column--right w4-side-panel-column--collapsed-right' : 'w4-side-panel-column w4-side-panel-column--right'}>
+                <WorkshopFourRightPanels data={scadaData}/>
             </div>
 
             <main className="relative z-10 flex-1 overflow-hidden bg-transparent">

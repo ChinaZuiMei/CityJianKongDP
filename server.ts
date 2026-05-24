@@ -7,14 +7,17 @@ import mqtt from "mqtt";
 import fs from "fs";
 import dotenv from "dotenv";
 import os from "os";
-import { 
-  initDatabase, 
-  saveSensorData, 
-  saveAlarmRecords, 
-  getLatestSensorData, 
+import {
+  initDatabase,
+  saveSensorData,
+  saveAlarmRecords,
+  getLatestSensorData,
   getActiveAlarms,
-  getHistoryData 
+  getHistoryData
 } from "./db.config.js";
+import {findWorkshopByTopic, resolveMqttTopics, WORKSHOP_MQTT_TOPICS} from "./mqttTopics.config.js";
+
+const mqttCacheDir = path.join(process.cwd(), "mqtt_cache");
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -33,14 +36,29 @@ for (const envFile of envFiles) {
   });
 }
 
+function payloadMatchesWorkshop(
+    payload: { workshopId?: string; workshopName?: string },
+    workshopEntry: { topicCode: string; workshopName: string },
+) {
+    const payloadId = payload.workshopId?.trim();
+    const payloadName = payload.workshopName?.trim();
+
+    if (payloadId === workshopEntry.topicCode) return true;
+    if (payloadName === workshopEntry.workshopName) return true;
+    if (workshopEntry.topicCode === 'JL_OLD' && (payloadId === 'JH_JL_OLD' || payloadName === '聚铝老厂')) {
+        return true;
+    }
+    return false;
+}
+
 async function startServer() {
   const app = express();
   const PORT = Number(process.env.APP_PORT || 3000);
   const HOST = process.env.APP_HOST || "0.0.0.0";
-  const mqttUrl = process.env.MQTT_URL || "ws://106.12.13.32:8083/mqtt";
+    const mqttUrl = process.env.MQTT_URL || "ws://47.115.212.129:8083/mqtt";
   const mqttUsername = process.env.MQTT_USERNAME || "zdzn";
   const mqttPassword = process.env.MQTT_PASSWORD || "zdzn@1234";
-  const mqttTopic = process.env.MQTT_TOPIC || "/sensor/jl_old/pub";
+    const mqttTopics = resolveMqttTopics();
 
   // 中间件
   app.use(cors());
@@ -64,8 +82,9 @@ async function startServer() {
     console.log('✅ 服务器 MQTT 已连接');
     console.log(`🌍 当前环境: ${appEnv}`);
     console.log(`🔗 MQTT 地址: ${mqttUrl}`);
-    console.log(`📡 MQTT 主题: ${mqttTopic}`);
-    mqttClient.subscribe(mqttTopic, (err) => {
+      console.log(`📡 MQTT 主题 (${mqttTopics.length}):`);
+      WORKSHOP_MQTT_TOPICS.forEach((item) => console.log(`   - ${item.workshopName}: ${item.topic}`));
+      mqttClient.subscribe(mqttTopics, (err) => {
       if (!err) {
         console.log('✅ 服务器已订阅 MQTT 主题');
       }
@@ -75,29 +94,39 @@ async function startServer() {
   mqttClient.on('message', async (topic, message) => {
     try {
       const payload = JSON.parse(message.toString());
-      
+
       // 打印接收到的数据
       console.log('\n📨 MQTT 数据接收:', new Date().toLocaleString());
       console.log('车间:', payload.workshopName);
       console.log('时间戳:', payload.timestamp);
-      
+
       // 将数据写入文件（覆盖模式）
       const dataFilePath = path.join(process.cwd(), 'mqtt_latest_data.json');
       const formattedData = JSON.stringify(payload, null, 2);
       fs.writeFileSync(dataFilePath, formattedData, 'utf8');
       console.log('💾 数据已写入文件: mqtt_latest_data.json');
-      
+
+        const workshopEntry = findWorkshopByTopic(topic);
+        if (workshopEntry) {
+            if (!fs.existsSync(mqttCacheDir)) {
+                fs.mkdirSync(mqttCacheDir, {recursive: true});
+            }
+            const cacheFilePath = path.join(mqttCacheDir, `${workshopEntry.topicCode}.json`);
+            fs.writeFileSync(cacheFilePath, formattedData, 'utf8');
+            console.log(`💾 车间缓存: mqtt_cache/${workshopEntry.topicCode}.json`);
+        }
+
       // 保存传感器数据到数据库
       await saveSensorData(payload);
       console.log('✅ 传感器数据已保存到数据库');
-      
+
       // 保存报警记录到数据库
       const alarmCount = await saveAlarmRecords(payload);
-      
+
       if (alarmCount > 0) {
         console.log(`⚠️  检测到 ${alarmCount} 个活动报警`);
       }
-      
+
       console.log('-----------------------------------');
     } catch (error) {
       console.error('❌ 处理 MQTT 消息失败:', error.message);
@@ -141,9 +170,41 @@ async function startServer() {
     }
   });
 
-  // 获取最新 MQTT 数据文件
+    // 获取最新 MQTT 数据（?workshopId=workshop-02 按车间读取独立缓存）
   app.get("/api/mqtt/latest", (req, res) => {
+      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+      res.setHeader('Pragma', 'no-cache');
     try {
+        const workshopId = typeof req.query.workshopId === 'string' ? req.query.workshopId : undefined;
+        if (workshopId) {
+            const workshopEntry = WORKSHOP_MQTT_TOPICS.find((item) => item.workshopId === workshopId);
+            if (!workshopEntry) {
+                res.json({success: false, message: `未知车间: ${workshopId}`});
+                return;
+            }
+            const cacheFilePath = path.join(mqttCacheDir, `${workshopEntry.topicCode}.json`);
+            if (fs.existsSync(cacheFilePath)) {
+                const data = JSON.parse(fs.readFileSync(cacheFilePath, 'utf8'));
+                res.json({success: true, data});
+                return;
+            }
+
+            const dataFilePath = path.join(process.cwd(), 'mqtt_latest_data.json');
+            if (fs.existsSync(dataFilePath)) {
+                const data = JSON.parse(fs.readFileSync(dataFilePath, 'utf8'));
+                if (payloadMatchesWorkshop(data, workshopEntry)) {
+                    res.json({success: true, data});
+                    return;
+                }
+            }
+
+            res.json({
+                success: false,
+                message: `暂无 ${workshopEntry.workshopName} 的 MQTT 缓存`,
+            });
+            return;
+        }
+
       const dataFilePath = path.join(process.cwd(), 'mqtt_latest_data.json');
       if (fs.existsSync(dataFilePath)) {
         const data = JSON.parse(fs.readFileSync(dataFilePath, 'utf8'));

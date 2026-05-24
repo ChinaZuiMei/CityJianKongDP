@@ -1,4 +1,6 @@
 import type {ScadaData} from '../model/types';
+import {DEFAULT_DATA} from '../model/types';
+import {getWorkshopBinding} from './workshopPayloadBindings';
 
 type PayloadRecord = Record<string, { value?: number | boolean }>;
 
@@ -30,10 +32,13 @@ export const scadaMetricBindings: MetricBindingSchema[] = [
     {field: 'hcl_tank1_level', sources: ['1#盐酸罐液位值']},
     {field: 'hcl_tank2_level', sources: ['2#盐酸罐液位值']},
     {field: 'hcl_tank3_level', sources: ['3#盐酸罐液位值']},
+    {field: 'hcl_tank4_level', sources: ['4#盐酸罐液位值']},
+    {field: 'hcl_tank5_level', sources: ['5#盐酸罐液位值']},
     {field: 'h2so4_tank1_level', sources: ['1#硫酸罐液位值']},
     {field: 'leak1', sources: ['1#泄漏检测值']},
     {field: 'leak2', sources: ['2#泄漏检测值']},
     {field: 'leak3', sources: ['3#泄漏检测值']},
+    {field: 'leak4', sources: ['4#泄漏检测值']},
     {field: 'loading_instant', sources: ['装车流量-瞬时']},
     {
         field: 'loading_total',
@@ -51,23 +56,56 @@ export const scadaMetricBindings: MetricBindingSchema[] = [
 ];
 
 export function mapPayloadToScadaData(payload: PayloadRecord, previous: ScadaData): ScadaData {
-    const nextState = {...previous};
+    return applyMetricBindings(scadaMetricBindings, payload, previous);
+}
 
-    for (const binding of scadaMetricBindings) {
-        const currentValue = previous[binding.field];
+/** 按车间仅更新该车间绑定的字段，避免跨车间污染 */
+export function mapWorkshopPayloadToScadaData(
+    workshopId: string,
+    payload: PayloadRecord,
+    previous: ScadaData,
+): ScadaData {
+    const config = getWorkshopBinding(workshopId);
+    if (!config) {
+        return applyMetricBindings(scadaMetricBindings, payload, previous);
+    }
+    return applyMetricBindings(config.metricBindings, payload, previous);
+}
+
+function applyMetricBindings(
+    bindings: MetricBindingSchema[],
+    payload: PayloadRecord,
+    previous: ScadaData,
+): ScadaData {
+    const nextState: ScadaData = {...DEFAULT_DATA, ...previous};
+
+    for (const binding of bindings) {
+        const currentValue = nextState[binding.field];
         const nextValue = binding.transform
             ? binding.transform(payload, currentValue)
             : readNumber(payload, binding.sources[0], currentValue);
         nextState[binding.field] = nextValue;
     }
 
-    return nextState;
+    return {...nextState};
 }
 
 export function extractAlarmData(payload: PayloadRecord) {
     return Object.fromEntries(
         Object.entries(payload)
             .filter(([key]) => key.includes('报警') && !key.includes('设定值'))
+            .map(([key, value]) => [key, Boolean(value?.value)]),
+    );
+}
+
+/** 仅提取本车间 MQTT 报文中的报警字段 */
+export function extractWorkshopAlarmData(workshopId: string, payload: PayloadRecord) {
+    const config = getWorkshopBinding(workshopId);
+    if (!config) return {};
+
+    return Object.fromEntries(
+        Object.entries(payload)
+            .filter(([key]) => config.alarmKeyMatcher(key))
             .map(([key, value]) => [key, Boolean(value?.value)]),
     );
 }

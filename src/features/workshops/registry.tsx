@@ -26,6 +26,9 @@ export const workshopRegistry: WorkshopDefinition[] = [
         name: '新聚铝液位',
         enabled: true,
         hasContent: true,
+        dataWorkshopIds: ['workshop-02', 'XJLYW', 'JH_XJLYW'],
+        dataWorkshopNames: ['新聚铝液位'],
+        alarmNamePrefixes: ['盐酸罐', '泄漏检测'],
         render: (runtime) => <WorkshopTwoView {...runtime} />,
     },
     {
@@ -33,6 +36,9 @@ export const workshopRegistry: WorkshopDefinition[] = [
         name: '新聚铝反应',
         enabled: true,
         hasContent: true,
+        dataWorkshopIds: ['workshop-03', 'XJLFY', 'JH_XJLFY'],
+        dataWorkshopNames: ['新聚铝反应'],
+        alarmNamePrefixes: ['地下反应槽', '铁锅反应釜', '玻璃钢反应釜', '搪瓷反应釜', '聚铝尾气', '低铁尾气', '新聚铝反应蒸汽', '低铁无铁蒸汽'],
         render: (runtime) => <WorkshopThreeView {...runtime} />,
     },
     {

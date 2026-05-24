@@ -1,0 +1,204 @@
+{
+  "workshopId": "MFCJ",
+  "workshopName": "明矾车间",
+  "timestamp": "2026-05-24 08:46:21",
+  "timestampMs": 1779583581792,
+  "data": {
+    "反应釜1压力低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜1压力高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜2压力低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜2压力高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜3压力低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜3压力高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜4压力低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜4压力高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜1电流值": {
+      "value": 6.488,
+      "unit": "A"
+    },
+    "反应釜2电流值": {
+      "value": 8.194,
+      "unit": "A"
+    },
+    "反应釜3电流值": {
+      "value": 8.419,
+      "unit": "A"
+    },
+    "反应釜4电流值": {
+      "value": 0,
+      "unit": "A"
+    },
+    "反应釜1电流低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜1电流高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜2电流低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜2电流高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜3电流低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜3电流高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜4电流低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜4电流高报警": {
+      "value": false,
+      "unit": null
+    },
+    "明矾蒸汽流量低报警": {
+      "value": false,
+      "unit": null
+    },
+    "聚铝老厂蒸汽流量低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜1压力值": {
+      "value": 0.186,
+      "unit": "Mpa"
+    },
+    "反应釜2压力值": {
+      "value": 0.162,
+      "unit": "Mpa"
+    },
+    "反应釜3压力值": {
+      "value": -0.001,
+      "unit": "Mpa"
+    },
+    "反应釜4压力值": {
+      "value": 0,
+      "unit": "Mpa"
+    },
+    "明矾蒸汽流量-瞬时": {
+      "value": 0.419,
+      "unit": "m³/h"
+    },
+    "明矾蒸汽流量-累计": {
+      "value": 11789.01,
+      "unit": "m³"
+    },
+    "聚铝老厂蒸汽流量-瞬时": {
+      "value": 0.077,
+      "unit": "m³/h"
+    },
+    "聚铝老厂蒸汽流量-累计": {
+      "value": 150477.875,
+      "unit": "m³"
+    },
+    "包装产量统计": {
+      "value": 155,
+      "unit": "P"
+    },
+    "反应釜1压力低报警设定值": {
+      "value": -0.1,
+      "unit": "Mpa"
+    },
+    "反应釜1压力高报警设定值": {
+      "value": 0.5,
+      "unit": "Mpa"
+    },
+    "反应釜2压力低报警设定值": {
+      "value": -0.1,
+      "unit": "Mpa"
+    },
+    "反应釜2压力高报警设定值": {
+      "value": 0.5,
+      "unit": "Mpa"
+    },
+    "反应釜3压力低报警设定值": {
+      "value": -0.1,
+      "unit": "Mpa"
+    },
+    "反应釜3压力高报警设定值": {
+      "value": 0.5,
+      "unit": "Mpa"
+    },
+    "反应釜4压力低报警设定值": {
+      "value": -0.1,
+      "unit": "Mpa"
+    },
+    "反应釜4压力高报警设定值": {
+      "value": 0.5,
+      "unit": "Mpa"
+    },
+    "反应釜1电流低报警设定值": {
+      "value": -1,
+      "unit": "A"
+    },
+    "反应釜1电流高报警设定值": {
+      "value": 15,
+      "unit": "A"
+    },
+    "反应釜2电流低报警设定值": {
+      "value": -1,
+      "unit": "A"
+    },
+    "反应釜2电流高报警设定值": {
+      "value": 15,
+      "unit": "A"
+    },
+    "反应釜3电流低报警设定值": {
+      "value": -1,
+      "unit": "A"
+    },
+    "反应釜3电流高报警设定值": {
+      "value": 15,
+      "unit": "A"
+    },
+    "反应釜4电流低报警设定值": {
+      "value": -1,
+      "unit": "A"
+    },
+    "反应釜4电流高报警设定值": {
+      "value": 15,
+      "unit": "A"
+    },
+    "明矾蒸汽流量低报警设定值": {
+      "value": -0.1,
+      "unit": "m³/h"
+    },
+    "聚铝老厂蒸汽流量低报警设定值": {
+      "value": null,
+      "unit": "m³/h"
+    }
+  }
+}

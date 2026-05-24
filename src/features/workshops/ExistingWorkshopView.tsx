@@ -6,7 +6,7 @@ import {
     SidePanelPreview,
     shouldEnableSidePanelPreview,
 } from '../dashboard';
-import {TankDataPanel} from '../dashboard/components/TankDataPanel';
+import {WorkshopOneLeftPanels, WorkshopOneRightPanels} from './workshop-one';
 import type {WorkshopRuntimeData} from './types';
 
 export function ExistingWorkshopView({
@@ -34,67 +34,28 @@ export function ExistingWorkshopView({
 
             <button
                 type="button"
-                className={leftPanelCollapsed ? 'side-panel-toggle side-panel-toggle--left side-panel-toggle--collapsed' : 'side-panel-toggle side-panel-toggle--left'}
+                className={leftPanelCollapsed ? 'w1-side-panel-toggle w1-side-panel-toggle--left w1-side-panel-toggle--collapsed' : 'w1-side-panel-toggle w1-side-panel-toggle--left'}
                 onClick={() => setLeftPanelCollapsed((value) => !value)}
                 aria-label={leftPanelCollapsed ? '展开左侧面板' : '收起左侧面板'}
             >
                 {leftPanelCollapsed ? '▶' : '◀'}
             </button>
             <div
-                className={leftPanelCollapsed ? 'tank-data-column tank-data-column--left tank-data-column--collapsed-left' : 'tank-data-column tank-data-column--left'}>
-                <TankDataPanel data={scadaData} embedded/>
-                <TankDataPanel
-                    data={scadaData}
-                    position="left"
-                    title="主画面流量面板"
-                    subtitle="TANK FLOW PANEL"
-                    mode="flow"
-                    embedded
-                />
-                <TankDataPanel
-                    data={scadaData}
-                    position="left"
-                    title="装车可视化面板"
-                    subtitle="LOADING VISUALIZATION PANEL"
-                    mode="loading"
-                    embedded
-                />
+                className={leftPanelCollapsed ? 'w1-side-panel-column w1-side-panel-column--left w1-side-panel-column--collapsed-left' : 'w1-side-panel-column w1-side-panel-column--left'}>
+                <WorkshopOneLeftPanels data={scadaData}/>
             </div>
 
             <button
                 type="button"
-                className={rightPanelCollapsed ? 'side-panel-toggle side-panel-toggle--right side-panel-toggle--collapsed' : 'side-panel-toggle side-panel-toggle--right'}
+                className={rightPanelCollapsed ? 'w1-side-panel-toggle w1-side-panel-toggle--right w1-side-panel-toggle--collapsed' : 'w1-side-panel-toggle w1-side-panel-toggle--right'}
                 onClick={() => setRightPanelCollapsed((value) => !value)}
                 aria-label={rightPanelCollapsed ? '展开右侧面板' : '收起右侧面板'}
             >
                 {rightPanelCollapsed ? '◀' : '▶'}
             </button>
             <div
-                className={rightPanelCollapsed ? 'tank-data-column tank-data-column--right tank-data-column--collapsed-right' : 'tank-data-column tank-data-column--right'}>
-                <TankDataPanel
-                    data={scadaData}
-                    position="right"
-                    title="主画面可视化面板"
-                    subtitle="MAIN SCREEN VISUALIZATION"
-                    mode="temperature"
-                    embedded
-                />
-                <TankDataPanel
-                    data={scadaData}
-                    position="right"
-                    title="外部设备可视化面板"
-                    subtitle="EXTERNAL EQUIPMENT PANEL"
-                    mode="external"
-                    embedded
-                />
-                <TankDataPanel
-                    data={scadaData}
-                    position="right"
-                    title="盐酸泄漏数据面板"
-                    subtitle="HCL LEAK DATA PANEL"
-                    mode="leak"
-                    embedded
-                />
+                className={rightPanelCollapsed ? 'w1-side-panel-column w1-side-panel-column--right w1-side-panel-column--collapsed-right' : 'w1-side-panel-column w1-side-panel-column--right'}>
+                <WorkshopOneRightPanels data={scadaData}/>
             </div>
 
             <main className="relative z-10 flex-1 overflow-hidden bg-transparent">

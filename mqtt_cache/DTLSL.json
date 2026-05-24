@@ -1,0 +1,376 @@
+{
+  "workshopId": "DTLSL",
+  "workshopName": "低铁硫酸铝",
+  "timestamp": "2026-05-24 08:46:21",
+  "timestampMs": 1779583581855,
+  "data": {
+    "反应釜1温度低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜1温度高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜2温度低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜2温度高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜3温度低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜3温度高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜4温度低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜4温度高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜5温度低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜5温度高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜6温度低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜6温度高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜1压力低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜1压力高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜2压力低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜2压力高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜3压力低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜3压力高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜4压力低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜4压力高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜5压力低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜5压力高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜6压力低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜6压力高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜1电流低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜1电流高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜2电流低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜2电流高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜3电流低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜3电流高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜4电流低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜4电流高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜5电流低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜5电流高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜6电流低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜6电流高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜1温度值": {
+      "value": 93.093,
+      "unit": "℃"
+    },
+    "反应釜2温度值": {
+      "value": 114.036,
+      "unit": "℃"
+    },
+    "反应釜3温度值": {
+      "value": 93.067,
+      "unit": "℃"
+    },
+    "反应釜4温度值": {
+      "value": 112.576,
+      "unit": "℃"
+    },
+    "反应釜5温度值": {
+      "value": 100.807,
+      "unit": "℃"
+    },
+    "反应釜6温度值": {
+      "value": 84.803,
+      "unit": "℃"
+    },
+    "反应釜1压力值": {
+      "value": 0,
+      "unit": "Mpa"
+    },
+    "反应釜2压力值": {
+      "value": 0.06,
+      "unit": "Mpa"
+    },
+    "反应釜3压力值": {
+      "value": 0,
+      "unit": "Mpa"
+    },
+    "反应釜4压力值": {
+      "value": 0.035,
+      "unit": "Mpa"
+    },
+    "反应釜5压力值": {
+      "value": 0.001,
+      "unit": "Mpa"
+    },
+    "反应釜6压力值": {
+      "value": -0.001,
+      "unit": "Mpa"
+    },
+    "反应釜1电流值": {
+      "value": 14.031,
+      "unit": "A"
+    },
+    "反应釜2电流值": {
+      "value": 13.344,
+      "unit": "A"
+    },
+    "反应釜3电流值": {
+      "value": 16.344,
+      "unit": "A"
+    },
+    "反应釜4电流值": {
+      "value": 16.125,
+      "unit": "A"
+    },
+    "反应釜5电流值": {
+      "value": 15.594,
+      "unit": "A"
+    },
+    "反应釜6电流值": {
+      "value": 13.625,
+      "unit": "A"
+    },
+    "包装1产量统计": {
+      "value": 2031,
+      "unit": "P"
+    },
+    "包装2产量统计": {
+      "value": 73,
+      "unit": "P"
+    },
+    "反应釜1温度低报警设定值": {
+      "value": -10,
+      "unit": "℃"
+    },
+    "反应釜1温度高报警设定值": {
+      "value": 150,
+      "unit": "℃"
+    },
+    "反应釜2温度低报警设定值": {
+      "value": -10,
+      "unit": "℃"
+    },
+    "反应釜2温度高报警设定值": {
+      "value": 150,
+      "unit": "℃"
+    },
+    "反应釜3温度低报警设定值": {
+      "value": -10,
+      "unit": "℃"
+    },
+    "反应釜3温度高报警设定值": {
+      "value": 150,
+      "unit": "℃"
+    },
+    "反应釜4温度低报警设定值": {
+      "value": -10,
+      "unit": "℃"
+    },
+    "反应釜4温度高报警设定值": {
+      "value": 150,
+      "unit": "℃"
+    },
+    "反应釜5温度低报警设定值": {
+      "value": -10,
+      "unit": "℃"
+    },
+    "反应釜5温度高报警设定值": {
+      "value": 150,
+      "unit": "℃"
+    },
+    "反应釜6温度低报警设定值": {
+      "value": -10,
+      "unit": "℃"
+    },
+    "反应釜6温度高报警设定值": {
+      "value": 150,
+      "unit": "℃"
+    },
+    "反应釜1压力低报警设定值": {
+      "value": -0.1,
+      "unit": "Mpa"
+    },
+    "反应釜1压力高报警设定值": {
+      "value": 0.3,
+      "unit": "Mpa"
+    },
+    "反应釜2压力低报警设定值": {
+      "value": -0.1,
+      "unit": "Mpa"
+    },
+    "反应釜2压力高报警设定值": {
+      "value": 0.3,
+      "unit": "Mpa"
+    },
+    "反应釜3压力低报警设定值": {
+      "value": -0.1,
+      "unit": "Mpa"
+    },
+    "反应釜3压力高报警设定值": {
+      "value": 0.3,
+      "unit": "Mpa"
+    },
+    "反应釜4压力低报警设定值": {
+      "value": -0.1,
+      "unit": "Mpa"
+    },
+    "反应釜4压力高报警设定值": {
+      "value": 0.3,
+      "unit": "Mpa"
+    },
+    "反应釜5压力低报警设定值": {
+      "value": -0.1,
+      "unit": "Mpa"
+    },
+    "反应釜5压力高报警设定值": {
+      "value": 0.3,
+      "unit": "Mpa"
+    },
+    "反应釜6压力低报警设定值": {
+      "value": -0.1,
+      "unit": "Mpa"
+    },
+    "反应釜6压力高报警设定值": {
+      "value": 0.3,
+      "unit": "Mpa"
+    },
+    "反应釜1电流低报警设定值": {
+      "value": -3,
+      "unit": "A"
+    },
+    "反应釜1电流高报警设定值": {
+      "value": 40,
+      "unit": "A"
+    },
+    "反应釜2电流低报警设定值": {
+      "value": -3,
+      "unit": "A"
+    },
+    "反应釜2电流高报警设定值": {
+      "value": 40,
+      "unit": "A"
+    },
+    "反应釜3电流低报警设定值": {
+      "value": -3,
+      "unit": "A"
+    },
+    "反应釜3电流高报警设定值": {
+      "value": 40,
+      "unit": "A"
+    },
+    "反应釜4电流低报警设定值": {
+      "value": -3,
+      "unit": "A"
+    },
+    "反应釜4电流高报警设定值": {
+      "value": 40,
+      "unit": "A"
+    },
+    "反应釜5电流低报警设定值": {
+      "value": -3,
+      "unit": "A"
+    },
+    "反应釜5电流高报警设定值": {
+      "value": 40,
+      "unit": "A"
+    },
+    "反应釜6电流低报警设定值": {
+      "value": -3,
+      "unit": "A"
+    },
+    "反应釜6电流高报警设定值": {
+      "value": 40,
+      "unit": "A"
+    }
+  }
+}

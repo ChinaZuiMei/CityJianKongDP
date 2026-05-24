@@ -1,0 +1,194 @@
+{
+  "workshopId": "XJLYW",
+  "workshopName": "新聚铝液位",
+  "timestamp": "2026-05-23 10:36:01",
+  "timestampMs": 1779503761004,
+  "data": {
+    "1#盐酸罐液位低报警": {
+      "value": false,
+      "unit": null
+    },
+    "1#盐酸罐液位高报警": {
+      "value": false,
+      "unit": null
+    },
+    "2#盐酸罐液位低报警": {
+      "value": false,
+      "unit": null
+    },
+    "2#盐酸罐液位高报警": {
+      "value": false,
+      "unit": null
+    },
+    "3#盐酸罐液位低报警": {
+      "value": false,
+      "unit": null
+    },
+    "3#盐酸罐液位高报警": {
+      "value": false,
+      "unit": null
+    },
+    "4#盐酸罐液位低报警": {
+      "value": false,
+      "unit": null
+    },
+    "4#盐酸罐液位高报警": {
+      "value": false,
+      "unit": null
+    },
+    "5#盐酸罐液位低报警": {
+      "value": false,
+      "unit": null
+    },
+    "5#盐酸罐液位高报警": {
+      "value": false,
+      "unit": null
+    },
+    "1#泄漏检测值低报警": {
+      "value": false,
+      "unit": null
+    },
+    "1#泄漏检测值高报警": {
+      "value": false,
+      "unit": null
+    },
+    "2#泄漏检测值低报警": {
+      "value": false,
+      "unit": null
+    },
+    "2#泄漏检测值高报警": {
+      "value": false,
+      "unit": null
+    },
+    "3#泄漏检测值低报警": {
+      "value": false,
+      "unit": null
+    },
+    "3#泄漏检测值高报警": {
+      "value": false,
+      "unit": null
+    },
+    "4#泄漏检测值低报警": {
+      "value": false,
+      "unit": null
+    },
+    "4#泄漏检测值高报警": {
+      "value": false,
+      "unit": null
+    },
+    "1#盐酸罐液位值": {
+      "value": 5.792,
+      "unit": "M"
+    },
+    "2#盐酸罐液位值": {
+      "value": 6.178,
+      "unit": "M"
+    },
+    "3#盐酸罐液位值": {
+      "value": 3.698,
+      "unit": "M"
+    },
+    "4#盐酸罐液位值": {
+      "value": 7.327,
+      "unit": "M"
+    },
+    "5#盐酸罐液位值": {
+      "value": 6.204,
+      "unit": "M"
+    },
+    "1#泄漏检测值": {
+      "value": -0.052,
+      "unit": "ppm"
+    },
+    "2#泄漏检测值": {
+      "value": -0.022,
+      "unit": "ppm"
+    },
+    "3#泄漏检测值": {
+      "value": 0.019,
+      "unit": "ppm"
+    },
+    "4#泄漏检测值": {
+      "value": -0.026,
+      "unit": "ppm"
+    },
+    "1#盐酸罐液位低报警设定值": {
+      "value": 0.5,
+      "unit": "M"
+    },
+    "1#盐酸罐液位高报警设定值": {
+      "value": 8.5,
+      "unit": "M"
+    },
+    "2#盐酸罐液位低报警设定值": {
+      "value": -10,
+      "unit": "M"
+    },
+    "2#盐酸罐液位高报警设定值": {
+      "value": 8.5,
+      "unit": "M"
+    },
+    "3#盐酸罐液位低报警设定值": {
+      "value": 0.5,
+      "unit": "M"
+    },
+    "3#盐酸罐液位高报警设定值": {
+      "value": 8.5,
+      "unit": "M"
+    },
+    "4#盐酸罐液位低报警设定值": {
+      "value": 0.5,
+      "unit": "M"
+    },
+    "4#盐酸罐液位高报警设定值": {
+      "value": 8.5,
+      "unit": "M"
+    },
+    "5#盐酸罐液位低报警设定值": {
+      "value": 0.5,
+      "unit": "M"
+    },
+    "5#盐酸罐液位高报警设定值": {
+      "value": 8.5,
+      "unit": "M"
+    },
+    "1#泄漏检测值低报警设定值": {
+      "value": -1,
+      "unit": "ppm"
+    },
+    "1#泄漏检测值高报警设定值": {
+      "value": 2,
+      "unit": "ppm"
+    },
+    "2#泄漏检测值低报警设定值": {
+      "value": -1,
+      "unit": "ppm"
+    },
+    "2#泄漏检测值高报警设定值": {
+      "value": 2,
+      "unit": "ppm"
+    },
+    "3#泄漏检测值低报警设定值": {
+      "value": -1,
+      "unit": "ppm"
+    },
+    "3#泄漏检测值高报警设定值": {
+      "value": 2,
+      "unit": "ppm"
+    },
+    "4#泄漏检测值低报警设定值": {
+      "value": -1,
+      "unit": "ppm"
+    },
+    "4#泄漏检测值高报警设定值": {
+      "value": 2,
+      "unit": "ppm"
+    }
+  },
+  "_captureMeta": {
+    "topic": "/JH/sensor/XJLYW/pub",
+    "topicCode": "XJLYW",
+    "messageCount": 24,
+    "capturedAt": "2026-05-23T02:36:05.670Z"
+  }
+}

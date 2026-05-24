@@ -10,10 +10,13 @@ export interface ScadaData {
     hcl_tank1_level: number;
     hcl_tank2_level: number;
     hcl_tank3_level: number;
+    hcl_tank4_level: number;
+    hcl_tank5_level: number;
     h2so4_tank1_level: number;
     leak1: number;
     leak2: number;
     leak3: number;
+    leak4: number;
     loading_instant: number;
     loading_total: number;
     old_fan_v: number;
@@ -24,6 +27,61 @@ export interface ScadaData {
     drum_pump1_v: number;
     drum_pump2_v: number;
     drum_centrifuge_v: number;
+    w3_underground1_temp: number;
+    w3_underground2_temp: number;
+    w3_underground3_temp: number;
+    w3_iron1_temp: number;
+    w3_iron2_temp: number;
+    w3_iron1_pressure: number;
+    w3_iron2_pressure: number;
+    w3_iron1_current: number;
+    w3_iron2_current: number;
+    w3_glass1_temp: number;
+    w3_glass2_temp: number;
+    w3_glass3_temp: number;
+    w3_glass4_temp: number;
+    w3_glass5_temp: number;
+    w3_glass1_current: number;
+    w3_glass2_current: number;
+    w3_glass3_current: number;
+    w3_glass4_current: number;
+    w3_glass5_current: number;
+    w3_enamel1_temp: number;
+    w3_enamel2_temp: number;
+    w3_enamel3_temp: number;
+    w3_enamel4_temp: number;
+    w3_enamel5_temp: number;
+    w3_enamel6_temp: number;
+    w3_enamel1_pressure: number;
+    w3_enamel2_pressure: number;
+    w3_enamel3_pressure: number;
+    w3_enamel4_pressure: number;
+    w3_enamel5_pressure: number;
+    w3_enamel6_pressure: number;
+    w3_enamel1_current: number;
+    w3_enamel2_current: number;
+    w3_enamel3_current: number;
+    w3_enamel4_current: number;
+    w3_enamel5_current: number;
+    w3_enamel6_current: number;
+    w3_poly_tail_fan_v: number;
+    w3_poly_tail_pump1_v: number;
+    w3_poly_tail_pump2_v: number;
+    w3_lowiron_tail_fan_v: number;
+    w3_lowiron_tail_pump1_v: number;
+    w3_lowiron_tail_pump2_v: number;
+    w3_steam_instant: number;
+    w3_steam_total: number;
+    w3_lowiron_steam_instant: number;
+    w3_lowiron_steam_total: number;
+    w3_loading_instant: number;
+    w3_loading_total: number;
+    w3_alkali_instant: number;
+    w3_alkali_total: number;
+    w3_iron_flow_instant: number;
+    w3_iron_flow_total: number;
+    w3_hcl_flow_instant: number;
+    w3_hcl_flow_total: number;
 }
 
 export interface AlarmData {
@@ -50,10 +108,13 @@ export const DEFAULT_DATA: ScadaData = {
     hcl_tank1_level: 0,
     hcl_tank2_level: 0,
     hcl_tank3_level: 0,
+    hcl_tank4_level: 0,
+    hcl_tank5_level: 0,
     h2so4_tank1_level: 0,
     leak1: 0,
     leak2: 0,
     leak3: 0,
+    leak4: 0,
     loading_instant: 0.0,
     loading_total: 0,
     old_fan_v: 0,
@@ -64,4 +125,59 @@ export const DEFAULT_DATA: ScadaData = {
     drum_pump1_v: 0.0,
     drum_pump2_v: 0.0,
     drum_centrifuge_v: 0,
+    w3_underground1_temp: 0,
+    w3_underground2_temp: 0,
+    w3_underground3_temp: 0,
+    w3_iron1_temp: 0,
+    w3_iron2_temp: 0,
+    w3_iron1_pressure: 0,
+    w3_iron2_pressure: 0,
+    w3_iron1_current: 0,
+    w3_iron2_current: 0,
+    w3_glass1_temp: 0,
+    w3_glass2_temp: 0,
+    w3_glass3_temp: 0,
+    w3_glass4_temp: 0,
+    w3_glass5_temp: 0,
+    w3_glass1_current: 0,
+    w3_glass2_current: 0,
+    w3_glass3_current: 0,
+    w3_glass4_current: 0,
+    w3_glass5_current: 0,
+    w3_enamel1_temp: 0,
+    w3_enamel2_temp: 0,
+    w3_enamel3_temp: 0,
+    w3_enamel4_temp: 0,
+    w3_enamel5_temp: 0,
+    w3_enamel6_temp: 0,
+    w3_enamel1_pressure: 0,
+    w3_enamel2_pressure: 0,
+    w3_enamel3_pressure: 0,
+    w3_enamel4_pressure: 0,
+    w3_enamel5_pressure: 0,
+    w3_enamel6_pressure: 0,
+    w3_enamel1_current: 0,
+    w3_enamel2_current: 0,
+    w3_enamel3_current: 0,
+    w3_enamel4_current: 0,
+    w3_enamel5_current: 0,
+    w3_enamel6_current: 0,
+    w3_poly_tail_fan_v: 0,
+    w3_poly_tail_pump1_v: 0,
+    w3_poly_tail_pump2_v: 0,
+    w3_lowiron_tail_fan_v: 0,
+    w3_lowiron_tail_pump1_v: 0,
+    w3_lowiron_tail_pump2_v: 0,
+    w3_steam_instant: 0,
+    w3_steam_total: 0,
+    w3_lowiron_steam_instant: 0,
+    w3_lowiron_steam_total: 0,
+    w3_loading_instant: 0,
+    w3_loading_total: 0,
+    w3_alkali_instant: 0,
+    w3_alkali_total: 0,
+    w3_iron_flow_instant: 0,
+    w3_iron_flow_total: 0,
+    w3_hcl_flow_instant: 0,
+    w3_hcl_flow_total: 0,
 };

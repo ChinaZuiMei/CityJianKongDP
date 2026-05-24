@@ -1,0 +1,402 @@
+{
+  "workshopId": "JLXCGZ",
+  "workshopName": "聚铝新厂干燥",
+  "timestamp": "2026-05-23 10:36:00",
+  "timestampMs": 1779503760956,
+  "data": {
+    "反应釜1温度低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜1温度高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜2温度低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜2温度高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜3温度低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜3温度高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜4温度低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜4温度高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜5温度低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜5温度高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜6温度低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜6温度高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜1压力低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜1压力高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜2压力低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜2压力高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜3压力低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜3压力高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜4压力低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜4压力高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜5压力低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜5压力高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜6压力低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜6压力高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜1电流低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜1电流高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜2电流低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜2电流高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜3电流低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜3电流高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜4电流低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜4电流高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜5电流低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜5电流高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜6电流低报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜6电流高报警": {
+      "value": false,
+      "unit": null
+    },
+    "反应釜1温度值": {
+      "value": 98.535,
+      "unit": "℃"
+    },
+    "反应釜2温度值": {
+      "value": 110.363,
+      "unit": "℃"
+    },
+    "反应釜3温度值": {
+      "value": 98.924,
+      "unit": "℃"
+    },
+    "反应釜4温度值": {
+      "value": 108.78,
+      "unit": "℃"
+    },
+    "反应釜5温度值": {
+      "value": 127.145,
+      "unit": "℃"
+    },
+    "反应釜6温度值": {
+      "value": 93.67,
+      "unit": "℃"
+    },
+    "反应釜1压力值": {
+      "value": 0,
+      "unit": "MPa"
+    },
+    "反应釜2压力值": {
+      "value": 0.001,
+      "unit": "MPa"
+    },
+    "反应釜3压力值": {
+      "value": 0,
+      "unit": "MPa"
+    },
+    "反应釜4压力值": {
+      "value": 0.001,
+      "unit": "MPa"
+    },
+    "反应釜5压力值": {
+      "value": 0.046,
+      "unit": "MPa"
+    },
+    "反应釜6压力值": {
+      "value": -0.001,
+      "unit": "MPa"
+    },
+    "反应釜1电流值": {
+      "value": 11.625,
+      "unit": "A"
+    },
+    "反应釜2电流值": {
+      "value": 10.344,
+      "unit": "A"
+    },
+    "反应釜3电流值": {
+      "value": 10.688,
+      "unit": "A"
+    },
+    "反应釜4电流值": {
+      "value": 10.656,
+      "unit": "A"
+    },
+    "反应釜5电流值": {
+      "value": 10.469,
+      "unit": "A"
+    },
+    "反应釜6电流值": {
+      "value": 10.656,
+      "unit": "A"
+    },
+    "福邦硫酸氢钾流量-瞬时": {
+      "value": 18.71,
+      "unit": "m³/h"
+    },
+    "福邦硫酸氢钾流量-累计整数": {
+      "value": 0,
+      "unit": "m³"
+    },
+    "福邦硫酸氢钾流量-累计小数": {
+      "value": 0.71,
+      "unit": "m³"
+    },
+    "福邦盐酸流量-瞬时": {
+      "value": 0,
+      "unit": "m³/h"
+    },
+    "福邦盐酸流量-累计整数": {
+      "value": 0,
+      "unit": "m³"
+    },
+    "福邦盐酸流量-累计小数": {
+      "value": 0.23,
+      "unit": "m³"
+    },
+    "包装产量统计": {
+      "value": 154,
+      "unit": null
+    },
+    "反应釜1温度低报警设定值": {
+      "value": 0,
+      "unit": "℃"
+    },
+    "反应釜1温度高报警设定值": {
+      "value": 135,
+      "unit": "℃"
+    },
+    "反应釜2温度低报警设定值": {
+      "value": 0,
+      "unit": "℃"
+    },
+    "反应釜2温度高报警设定值": {
+      "value": 135,
+      "unit": "℃"
+    },
+    "反应釜3温度低报警设定值": {
+      "value": 0,
+      "unit": "℃"
+    },
+    "反应釜3温度高报警设定值": {
+      "value": 135,
+      "unit": "℃"
+    },
+    "反应釜4温度低报警设定值": {
+      "value": 0,
+      "unit": "℃"
+    },
+    "反应釜4温度高报警设定值": {
+      "value": 135,
+      "unit": "℃"
+    },
+    "反应釜5温度低报警设定值": {
+      "value": 0,
+      "unit": "℃"
+    },
+    "反应釜5温度高报警设定值": {
+      "value": 135,
+      "unit": "℃"
+    },
+    "反应釜6温度低报警设定值": {
+      "value": 0,
+      "unit": "℃"
+    },
+    "反应釜6温度高报警设定值": {
+      "value": 135,
+      "unit": "℃"
+    },
+    "反应釜1压力低报警设定值": {
+      "value": -0.1,
+      "unit": "Mpa"
+    },
+    "反应釜1压力高报警设定值": {
+      "value": 0.2,
+      "unit": "Mpa"
+    },
+    "反应釜2压力低报警设定值": {
+      "value": -0.1,
+      "unit": "Mpa"
+    },
+    "反应釜2压力高报警设定值": {
+      "value": 0.2,
+      "unit": "Mpa"
+    },
+    "反应釜3压力低报警设定值": {
+      "value": -0.1,
+      "unit": "Mpa"
+    },
+    "反应釜3压力高报警设定值": {
+      "value": 0.2,
+      "unit": "Mpa"
+    },
+    "反应釜4压力低报警设定值": {
+      "value": -0.1,
+      "unit": "Mpa"
+    },
+    "反应釜4压力高报警设定值": {
+      "value": 0.2,
+      "unit": "Mpa"
+    },
+    "反应釜5压力低报警设定值": {
+      "value": -0.1,
+      "unit": "Mpa"
+    },
+    "反应釜5压力高报警设定值": {
+      "value": 0.2,
+      "unit": "Mpa"
+    },
+    "反应釜6压力低报警设定值": {
+      "value": -0.1,
+      "unit": "Mpa"
+    },
+    "反应釜6压力高报警设定值": {
+      "value": 0.2,
+      "unit": "Mpa"
+    },
+    "反应釜1电流低报警设定值": {
+      "value": -3,
+      "unit": "A"
+    },
+    "反应釜1电流高报警设定值": {
+      "value": 40,
+      "unit": "A"
+    },
+    "反应釜2电流低报警设定值": {
+      "value": -3,
+      "unit": "A"
+    },
+    "反应釜2电流高报警设定值": {
+      "value": 40,
+      "unit": "A"
+    },
+    "反应釜3电流低报警设定值": {
+      "value": -3,
+      "unit": "A"
+    },
+    "反应釜3电流高报警设定值": {
+      "value": 40,
+      "unit": "A"
+    },
+    "反应釜4电流低报警设定值": {
+      "value": -3,
+      "unit": "A"
+    },
+    "反应釜4电流高报警设定值": {
+      "value": 40,
+      "unit": "A"
+    },
+    "反应釜5电流低报警设定值": {
+      "value": -3,
+      "unit": "A"
+    },
+    "反应釜5电流高报警设定值": {
+      "value": 40,
+      "unit": "A"
+    },
+    "反应釜6电流低报警设定值": {
+      "value": -3,
+      "unit": "A"
+    },
+    "反应釜6电流高报警设定值": {
+      "value": 40,
+      "unit": "A"
+    }
+  },
+  "_captureMeta": {
+    "topic": "/JH/sensor/JLXCGZ/pub",
+    "topicCode": "JLXCGZ",
+    "messageCount": 24,
+    "capturedAt": "2026-05-23T02:36:05.672Z"
+  }
+}

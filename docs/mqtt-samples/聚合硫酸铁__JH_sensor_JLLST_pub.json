@@ -1,0 +1,698 @@
+{
+  "workshopId": "JH_JLLST",
+  "workshopName": "聚铝硫酸铁",
+  "timestamp": "2026-05-23 10:36:04",
+  "timestampMs": 1779503764639,
+  "data": {
+    "釜1连锁料阀开到位": {
+      "value": true,
+      "unit": null
+    },
+    "釜1连锁料阀关到位": {
+      "value": false,
+      "unit": null
+    },
+    "釜2连锁料阀开到位": {
+      "value": false,
+      "unit": null
+    },
+    "釜2连锁料阀关到位": {
+      "value": false,
+      "unit": null
+    },
+    "釜3连锁料阀开到位": {
+      "value": false,
+      "unit": null
+    },
+    "釜3连锁料阀关到位": {
+      "value": false,
+      "unit": null
+    },
+    "釜4连锁料阀开到位": {
+      "value": false,
+      "unit": null
+    },
+    "釜4连锁料阀关到位": {
+      "value": false,
+      "unit": null
+    },
+    "釜1进料阀开到位": {
+      "value": false,
+      "unit": null
+    },
+    "釜1进料阀关到位": {
+      "value": true,
+      "unit": null
+    },
+    "釜2进料阀开到位": {
+      "value": false,
+      "unit": null
+    },
+    "釜2进料阀关到位": {
+      "value": true,
+      "unit": null
+    },
+    "釜3进料阀开到位": {
+      "value": true,
+      "unit": null
+    },
+    "釜3进料阀关到位": {
+      "value": false,
+      "unit": null
+    },
+    "釜4进料阀开到位": {
+      "value": true,
+      "unit": null
+    },
+    "釜4进料阀关到位": {
+      "value": false,
+      "unit": null
+    },
+    "釜1放料阀开到位": {
+      "value": false,
+      "unit": null
+    },
+    "釜1放料阀关到位": {
+      "value": false,
+      "unit": null
+    },
+    "釜2放料阀开到位": {
+      "value": false,
+      "unit": null
+    },
+    "釜2放料阀关到位": {
+      "value": true,
+      "unit": null
+    },
+    "釜3放料阀开到位": {
+      "value": false,
+      "unit": null
+    },
+    "釜3放料阀关到位": {
+      "value": true,
+      "unit": null
+    },
+    "釜4放料阀开到位": {
+      "value": false,
+      "unit": null
+    },
+    "釜4放料阀关到位": {
+      "value": true,
+      "unit": null
+    },
+    "釜1进催化剂阀开到位": {
+      "value": false,
+      "unit": null
+    },
+    "釜1进催化剂阀关到位": {
+      "value": true,
+      "unit": null
+    },
+    "釜2进催化剂阀开到位": {
+      "value": false,
+      "unit": null
+    },
+    "釜2进催化剂阀关到位": {
+      "value": true,
+      "unit": null
+    },
+    "釜3进催化剂阀开到位": {
+      "value": false,
+      "unit": null
+    },
+    "釜3进催化剂阀关到位": {
+      "value": true,
+      "unit": null
+    },
+    "釜4进催化剂阀开到位": {
+      "value": false,
+      "unit": null
+    },
+    "釜4进催化剂阀关到位": {
+      "value": true,
+      "unit": null
+    },
+    "釜1进氧气阀开": {
+      "value": false,
+      "unit": null
+    },
+    "釜2进氧气阀开": {
+      "value": false,
+      "unit": null
+    },
+    "釜3进氧气阀开": {
+      "value": false,
+      "unit": null
+    },
+    "釜4进氧气阀开": {
+      "value": false,
+      "unit": null
+    },
+    "稀硫酸液位低报警": {
+      "value": false,
+      "unit": null
+    },
+    "稀硫酸液位高报警": {
+      "value": false,
+      "unit": null
+    },
+    "1#硫酸罐液位低报警": {
+      "value": false,
+      "unit": null
+    },
+    "1#硫酸罐液位高报警": {
+      "value": false,
+      "unit": null
+    },
+    "2#硫酸罐液位低报警": {
+      "value": false,
+      "unit": null
+    },
+    "2#硫酸罐液位高报警": {
+      "value": false,
+      "unit": null
+    },
+    "3#硫酸罐液位低报警": {
+      "value": false,
+      "unit": null
+    },
+    "3#硫酸罐液位高报警": {
+      "value": false,
+      "unit": null
+    },
+    "4#硫酸罐液位低报警": {
+      "value": false,
+      "unit": null
+    },
+    "4#硫酸罐液位高报警": {
+      "value": false,
+      "unit": null
+    },
+    "1#盐酸罐液位低报警": {
+      "value": false,
+      "unit": null
+    },
+    "1#盐酸罐液位高报警": {
+      "value": false,
+      "unit": null
+    },
+    "2#盐酸罐液位低报警": {
+      "value": false,
+      "unit": null
+    },
+    "2#盐酸罐液位高报警": {
+      "value": false,
+      "unit": null
+    },
+    "5#硫酸罐液位低报警": {
+      "value": false,
+      "unit": null
+    },
+    "5#硫酸罐液位高报警": {
+      "value": false,
+      "unit": null
+    },
+    "6#硫酸罐液位低报警": {
+      "value": false,
+      "unit": null
+    },
+    "6#硫酸罐液位高报警": {
+      "value": false,
+      "unit": null
+    },
+    "7#硫酸罐液位低报警": {
+      "value": false,
+      "unit": null
+    },
+    "7#硫酸罐液位高报警": {
+      "value": false,
+      "unit": null
+    },
+    "地下罐液位低报警": {
+      "value": false,
+      "unit": null
+    },
+    "地下罐液位高报警": {
+      "value": false,
+      "unit": null
+    },
+    "釜1压力高报警": {
+      "value": false,
+      "unit": null
+    },
+    "釜1压力低报警": {
+      "value": false,
+      "unit": null
+    },
+    "釜1进氧阀连锁开点": {
+      "value": true,
+      "unit": null
+    },
+    "釜1进氧阀连锁关点": {
+      "value": false,
+      "unit": null
+    },
+    "釜2压力高报警": {
+      "value": false,
+      "unit": null
+    },
+    "釜2压力低报警": {
+      "value": false,
+      "unit": null
+    },
+    "釜2进氧阀连锁开点": {
+      "value": true,
+      "unit": null
+    },
+    "釜2进氧阀连锁关点": {
+      "value": false,
+      "unit": null
+    },
+    "釜3压力高报警": {
+      "value": false,
+      "unit": null
+    },
+    "釜3压力低报警": {
+      "value": false,
+      "unit": null
+    },
+    "釜3进氧阀连锁开点": {
+      "value": true,
+      "unit": null
+    },
+    "釜3进氧阀连锁关点": {
+      "value": false,
+      "unit": null
+    },
+    "釜4压力高报警": {
+      "value": false,
+      "unit": null
+    },
+    "釜4压力低报警": {
+      "value": false,
+      "unit": null
+    },
+    "釜4进氧阀连锁开点": {
+      "value": true,
+      "unit": null
+    },
+    "釜4进氧阀连锁关点": {
+      "value": false,
+      "unit": null
+    },
+    "液氮温度低报警": {
+      "value": false,
+      "unit": null
+    },
+    "液氮温度高报警": {
+      "value": false,
+      "unit": null
+    },
+    "釜1连锁料阀故障": {
+      "value": false,
+      "unit": null
+    },
+    "釜2连锁料阀故障": {
+      "value": false,
+      "unit": null
+    },
+    "釜3连锁料阀故障": {
+      "value": true,
+      "unit": null
+    },
+    "釜4连锁料阀故障": {
+      "value": false,
+      "unit": null
+    },
+    "釜1进料阀故障": {
+      "value": false,
+      "unit": null
+    },
+    "釜2进料阀故障": {
+      "value": false,
+      "unit": null
+    },
+    "釜3进料阀故障": {
+      "value": false,
+      "unit": null
+    },
+    "釜4进料阀故障": {
+      "value": false,
+      "unit": null
+    },
+    "釜1放料阀故障": {
+      "value": false,
+      "unit": null
+    },
+    "釜2放料阀故障": {
+      "value": false,
+      "unit": null
+    },
+    "釜3放料阀故障": {
+      "value": false,
+      "unit": null
+    },
+    "釜4放料阀故障": {
+      "value": false,
+      "unit": null
+    },
+    "釜1进催化剂阀故障": {
+      "value": false,
+      "unit": null
+    },
+    "釜2进催化剂阀故障": {
+      "value": false,
+      "unit": null
+    },
+    "釜3进催化剂阀故障": {
+      "value": false,
+      "unit": null
+    },
+    "釜4进催化剂阀故障": {
+      "value": false,
+      "unit": null
+    },
+    "稀硫酸液位值": {
+      "value": 3.377,
+      "unit": "m"
+    },
+    "1#硫酸罐液位值": {
+      "value": 3.775,
+      "unit": "m"
+    },
+    "2#硫酸罐液位值": {
+      "value": 4.231,
+      "unit": "m"
+    },
+    "3#硫酸罐液位值": {
+      "value": 0.987,
+      "unit": "m"
+    },
+    "4#硫酸罐液位值": {
+      "value": 0.666,
+      "unit": "m"
+    },
+    "1#盐酸罐液位值": {
+      "value": 7.46,
+      "unit": "m"
+    },
+    "2#盐酸罐液位值": {
+      "value": 0.652,
+      "unit": "m"
+    },
+    "5#硫酸罐液位值": {
+      "value": 1.173,
+      "unit": "m"
+    },
+    "6#硫酸罐液位值": {
+      "value": 1.29,
+      "unit": "m"
+    },
+    "7#硫酸罐液位值": {
+      "value": 5.034,
+      "unit": "m"
+    },
+    "地下罐液位值": {
+      "value": 1.29,
+      "unit": "m"
+    },
+    "釜1压力值": {
+      "value": 0,
+      "unit": "MPa"
+    },
+    "釜2压力值": {
+      "value": 0,
+      "unit": "MPa"
+    },
+    "釜3压力值": {
+      "value": 0,
+      "unit": "MPa"
+    },
+    "釜4压力值": {
+      "value": 0,
+      "unit": "MPa"
+    },
+    "釜1温度值": {
+      "value": 0,
+      "unit": "℃"
+    },
+    "釜2温度值": {
+      "value": 0,
+      "unit": "℃"
+    },
+    "釜3温度值": {
+      "value": 0,
+      "unit": "℃"
+    },
+    "釜4温度值": {
+      "value": 0,
+      "unit": "℃"
+    },
+    "釜1氧气流量值": {
+      "value": 0,
+      "unit": "m³/h"
+    },
+    "釜2氧气流量值": {
+      "value": 0,
+      "unit": "m³/h"
+    },
+    "釜3氧气流量值": {
+      "value": 0,
+      "unit": "m³/h"
+    },
+    "釜4氧气流量值": {
+      "value": 0,
+      "unit": "m³/h"
+    },
+    "定量1-本次装入量": {
+      "value": 0,
+      "unit": "T"
+    },
+    "定量1流量-瞬时": {
+      "value": 0,
+      "unit": "m³/h"
+    },
+    "定量1流量-累计整数": {
+      "value": 0,
+      "unit": "m³"
+    },
+    "定量1流量-累计小数": {
+      "value": 0,
+      "unit": "m³"
+    },
+    "定量2-本次装入量": {
+      "value": 0,
+      "unit": "T"
+    },
+    "定量2流量-瞬时": {
+      "value": 0,
+      "unit": "m³/h"
+    },
+    "定量2流量-累计整数": {
+      "value": 0,
+      "unit": "m³"
+    },
+    "定量2流量-累计小数": {
+      "value": 0,
+      "unit": "m³"
+    },
+    "装车1-本次装入量": {
+      "value": 0,
+      "unit": "T"
+    },
+    "装车1流量-瞬时": {
+      "value": 0,
+      "unit": "m³/h"
+    },
+    "装车1流量-累计整数": {
+      "value": 8616,
+      "unit": "m³"
+    },
+    "装车1流量-累计小数": {
+      "value": 0.13,
+      "unit": "m³"
+    },
+    "装车2-本次装入量": {
+      "value": 30.96,
+      "unit": "T"
+    },
+    "装车2流量-瞬时": {
+      "value": 16.9,
+      "unit": "m³/h"
+    },
+    "装车2流量-累计整数": {
+      "value": 2159,
+      "unit": "m³"
+    },
+    "装车2流量-累计小数": {
+      "value": 0.68,
+      "unit": "m³"
+    },
+    "稀硫酸液位低报警设定值": {
+      "value": -5,
+      "unit": "m"
+    },
+    "稀硫酸液位高报警设定值": {
+      "value": 5,
+      "unit": "m"
+    },
+    "1#硫酸罐液位低报警设定值": {
+      "value": 0,
+      "unit": "m"
+    },
+    "1#硫酸罐液位高报警设定值": {
+      "value": 8,
+      "unit": "m"
+    },
+    "2#硫酸罐液位低报警设定值": {
+      "value": 0,
+      "unit": "m"
+    },
+    "2#硫酸罐液位高报警设定值": {
+      "value": 8,
+      "unit": "m"
+    },
+    "3#硫酸罐液位低报警设定值": {
+      "value": -1,
+      "unit": "m"
+    },
+    "3#硫酸罐液位高报警设定值": {
+      "value": 8,
+      "unit": "m"
+    },
+    "4#硫酸罐液位低报警设定值": {
+      "value": -1,
+      "unit": "m"
+    },
+    "4#硫酸罐液位高报警设定值": {
+      "value": 8,
+      "unit": "m"
+    },
+    "1#盐酸罐液位低报警设定值": {
+      "value": 0,
+      "unit": "m"
+    },
+    "1#盐酸罐液位高报警设定值": {
+      "value": 8,
+      "unit": "m"
+    },
+    "2#盐酸罐液位低报警设定值": {
+      "value": -10,
+      "unit": "m"
+    },
+    "2#盐酸罐液位高报警设定值": {
+      "value": 8,
+      "unit": "m"
+    },
+    "5#硫酸罐液位低报警设定值": {
+      "value": -1,
+      "unit": "m"
+    },
+    "5#硫酸罐液位高报警设定值": {
+      "value": 8,
+      "unit": "m"
+    },
+    "6#硫酸罐液位低报警设定值": {
+      "value": -1,
+      "unit": "m"
+    },
+    "6#硫酸罐液位高报警设定值": {
+      "value": 8,
+      "unit": "m"
+    },
+    "7#硫酸罐液位低报警设定值": {
+      "value": -1,
+      "unit": "m"
+    },
+    "7#硫酸罐液位高报警设定值": {
+      "value": 8,
+      "unit": "m"
+    },
+    "地下罐液位低报警设定值": {
+      "value": -1,
+      "unit": "m"
+    },
+    "地下罐液位高报警设定值": {
+      "value": 1.9,
+      "unit": "m"
+    },
+    "釜1压力高报警设定值": {
+      "value": -0.1,
+      "unit": "MPa"
+    },
+    "釜1压力低报警设定值": {
+      "value": 0.15,
+      "unit": "MPa"
+    },
+    "釜1进氧阀连锁开点设定值": {
+      "value": 0.05,
+      "unit": "MPa"
+    },
+    "釜1进氧阀连锁关点设定值": {
+      "value": 0.1,
+      "unit": "MPa"
+    },
+    "釜2压力高报警设定值": {
+      "value": -0.1,
+      "unit": "MPa"
+    },
+    "釜2压力低报警设定值": {
+      "value": 0.15,
+      "unit": "MPa"
+    },
+    "釜2进氧阀连锁开点设定值": {
+      "value": 0.05,
+      "unit": "MPa"
+    },
+    "釜2进氧阀连锁关点设定值": {
+      "value": 0.1,
+      "unit": "MPa"
+    },
+    "釜3压力高报警设定值": {
+      "value": -0.1,
+      "unit": "MPa"
+    },
+    "釜3压力低报警设定值": {
+      "value": 0.15,
+      "unit": "MPa"
+    },
+    "釜3进氧阀连锁开点设定值": {
+      "value": 0.05,
+      "unit": "MPa"
+    },
+    "釜3进氧阀连锁关点设定值": {
+      "value": 0.1,
+      "unit": "MPa"
+    },
+    "釜4压力高报警设定值": {
+      "value": -0.1,
+      "unit": "MPa"
+    },
+    "釜4压力低报警设定值": {
+      "value": 0.15,
+      "unit": "MPa"
+    },
+    "釜4进氧阀连锁开点设定值": {
+      "value": 0.05,
+      "unit": "MPa"
+    },
+    "釜4进氧阀连锁关点设定值": {
+      "value": 0.1,
+      "unit": "MPa"
+    },
+    "液氮温度低报警设定值": {
+      "value": -500,
+      "unit": "℃"
+    },
+    "液氮温度高报警设定值": {
+      "value": 500,
+      "unit": "℃"
+    }
+  },
+  "_captureMeta": {
+    "topic": "/JH/sensor/JLLST/pub",
+    "topicCode": "JLLST",
+    "messageCount": 24,
+    "capturedAt": "2026-05-23T02:36:05.673Z"
+  }
+}

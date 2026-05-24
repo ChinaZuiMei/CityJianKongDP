@@ -11,6 +11,7 @@ import type {
     StatusToggleListPanelSchema,
 } from '../model/panelSchema';
 import {sidePanelSchemas} from '../schema/sidePanelSchema';
+import {formatMetricValue as formatRawMetricValue} from '../../../utils/formatMetricValue';
 import {ChartPanel} from '../widgets/ChartPanel';
 import {PanelShell} from '../ui/PanelShell';
 
@@ -41,9 +42,9 @@ function getValue(state: PreviewState, field: string) {
     return state[field];
 }
 
-function formatMetricValue(value: PreviewValue, decimals = 1) {
+function formatPreviewMetricValue(value: PreviewValue) {
     if (typeof value === 'number') {
-        return value.toFixed(decimals);
+        return formatRawMetricValue(value);
     }
     if (typeof value === 'boolean') {
         return value ? '1' : '0';
@@ -155,7 +156,7 @@ function renderMetricList(schema: MetricListPanelSchema, state: PreviewState) {
                         <div className="text-sm font-bold text-slate-200">{item.label}</div>
                         <div
                             className="rounded-md border border-sky-300/18 bg-slate-950/20 px-3 py-1.5 font-mono text-sm font-black text-sky-100">
-                            {formatMetricValue(getValue(state, item.field), item.decimals)}
+                            {formatPreviewMetricValue(getValue(state, item.field))}
                             {item.unit ? <span className="ml-1 text-[11px] text-slate-400">{item.unit}</span> : null}
                         </div>
                     </div>

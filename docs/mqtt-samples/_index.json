@@ -1,0 +1,87 @@
+{
+  "broker": "ws://47.115.212.129:8083/mqtt",
+  "capturedAt": "2026-05-23T02:36:05.676Z",
+  "workshops": [
+    {
+      "workshopId": "workshop-01",
+      "workshopName": "聚铝老厂",
+      "topic": "/sensor/jl_old/pub",
+      "topicCode": "JL_OLD",
+      "file": "docs/mqtt-samples/聚铝老厂__sensor_jl_old_pub.json",
+      "hasData": true,
+      "messageCount": 0,
+      "timestamp": "2026-04-24 09:50:15",
+      "source": "historical_cache"
+    },
+    {
+      "workshopId": "workshop-02",
+      "workshopName": "新聚铝液位",
+      "topic": "/JH/sensor/XJLYW/pub",
+      "topicCode": "XJLYW",
+      "file": "docs/mqtt-samples/新聚铝液位__JH_sensor_XJLYW_pub.json",
+      "hasData": true,
+      "messageCount": 24,
+      "timestamp": "2026-05-23 10:36:01"
+    },
+    {
+      "workshopId": "workshop-03",
+      "workshopName": "新聚铝反应",
+      "topic": "/JH/sensor/XJLFY/pub",
+      "topicCode": "XJLFY",
+      "file": "docs/mqtt-samples/新聚铝反应__JH_sensor_XJLFY_pub.json",
+      "hasData": true,
+      "messageCount": 24,
+      "timestamp": "2026-05-23 10:36:00"
+    },
+    {
+      "workshopId": "workshop-04",
+      "workshopName": "聚铝新厂干燥",
+      "topic": "/JH/sensor/JLXCGZ/pub",
+      "topicCode": "JLXCGZ",
+      "file": "docs/mqtt-samples/聚铝新厂干燥__JH_sensor_JLXCGZ_pub.json",
+      "hasData": true,
+      "messageCount": 24,
+      "timestamp": "2026-05-23 10:36:00"
+    },
+    {
+      "workshopId": "workshop-05",
+      "workshopName": "低铁硫酸铝",
+      "topic": "/JH/sensor/DTLSL/pub",
+      "topicCode": "DTLSL",
+      "file": "docs/mqtt-samples/低铁硫酸铝__JH_sensor_DTLSL_pub.json",
+      "hasData": true,
+      "messageCount": 24,
+      "timestamp": "2026-05-23 10:36:00"
+    },
+    {
+      "workshopId": "workshop-06",
+      "workshopName": "聚合硫酸铁",
+      "topic": "/JH/sensor/JLLST/pub",
+      "topicCode": "JLLST",
+      "file": "docs/mqtt-samples/聚合硫酸铁__JH_sensor_JLLST_pub.json",
+      "hasData": true,
+      "messageCount": 24,
+      "timestamp": "2026-05-23 10:36:04"
+    },
+    {
+      "workshopId": "workshop-07",
+      "workshopName": "液体硫酸铝",
+      "topic": "/JH/sensor/YTLSL/pub",
+      "topicCode": "YTLSL",
+      "file": "docs/mqtt-samples/液体硫酸铝__JH_sensor_YTLSL_pub.json",
+      "hasData": true,
+      "messageCount": 24,
+      "timestamp": "2026-05-23 10:36:01"
+    },
+    {
+      "workshopId": "workshop-08",
+      "workshopName": "明矾车间",
+      "topic": "/JH/sensor/MFCJ/pub",
+      "topicCode": "MFCJ",
+      "file": "docs/mqtt-samples/明矾车间__JH_sensor_MFCJ_pub.json",
+      "hasData": true,
+      "messageCount": 24,
+      "timestamp": "2026-05-23 10:36:00"
+    }
+  ]
+}

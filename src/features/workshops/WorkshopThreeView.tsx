@@ -1,12 +1,16 @@
 import React from 'react';
 import {AnimatePresence} from 'motion/react';
 import {AlarmPanel, ScrollDashboard} from '../dashboard';
-import {TankDataPanel} from '../dashboard/components/TankDataPanel';
+import {WorkshopThreeLeftPanels, WorkshopThreeRightPanels} from './workshop-three';
 import type {WorkshopRuntimeData} from './types';
 import reactorTankImage from '../../images/反应槽.png';
 import tankImage from '../../mingfanImg/罐子.png';
-import scrubberTowerImage from '../../images/洗涤塔.png';
-import fanImage from '../../images/风机.png';
+import {
+    OldPlantExternalEquipment,
+    type OldPlantExternalTower,
+} from '../dashboard/components/OldPlantExternalEquipment';
+import type {AlarmData, ScadaData} from '../dashboard/model/types';
+import {formatMetricValue} from '../../utils/formatMetricValue';
 
 type UndergroundTankItem = {
     id: string;
@@ -28,13 +32,6 @@ type SteelTankItem = {
     pressure: string;
 };
 
-type FlowItem = {
-    id: string;
-    title: string;
-    instant: number;
-    total: number;
-};
-
 type WorkshopThreeVerticalReactorProps = React.Attributes & {
     label: string;
     temp: number;
@@ -52,83 +49,129 @@ const regionHeaders = [
     {id: 'external-2', title: '外部设备-区域2', subtitle: 'EXTERNAL EQUIPMENT - AREA 2'},
 ];
 
-const undergroundReactors: UndergroundTankItem[] = [
-    {id: 'UD3001A', label: '1#反应槽', temp: 53.4},
-    {id: 'UD3001B', label: '2#反应槽', temp: 83.4},
-    {id: 'UD3001C', label: '3#反应槽', temp: 0.0},
-];
+function buildOldPlantAreaOneConfig(data: ScadaData): {
+    fanValue: number;
+    towers: [OldPlantExternalTower, OldPlantExternalTower, OldPlantExternalTower];
+} {
+    return {
+        fanValue: data.w3_poly_tail_fan_v,
+        towers: [
+            {
+                towerLabel: '洗涤塔1',
+                pumpLabel: '循环泵1',
+                value: data.w3_poly_tail_pump1_v,
+                alarmKey: 'w3_poly_tail_pump1'
+            },
+            {
+                towerLabel: '洗涤塔2',
+                pumpLabel: '循环泵2',
+                value: data.w3_poly_tail_pump2_v,
+                alarmKey: 'w3_poly_tail_pump2'
+            },
+            {towerLabel: '洗涤塔3', pumpLabel: '备用泵', value: 0, alarmKey: undefined},
+        ],
+    };
+}
 
-const steelReactors: SteelTankItem[] = [
-    {id: 'F0201A', current: '9.6 A', temperature: '110.8°C', pressure: '0.19 Mpa'},
-    {id: 'F0201B', current: '0.0 A', temperature: '37.4°C', pressure: '-0.00 Mpa'},
-];
+function buildOldPlantAreaTwoConfig(data: ScadaData): {
+    fanValue: number;
+    towers: [OldPlantExternalTower, OldPlantExternalTower, OldPlantExternalTower];
+} {
+    return {
+        fanValue: data.w3_lowiron_tail_fan_v,
+        towers: [
+            {
+                towerLabel: '洗涤塔4',
+                pumpLabel: '循环泵4',
+                value: data.w3_lowiron_tail_pump1_v,
+                alarmKey: 'w3_lowiron_tail_pump1'
+            },
+            {
+                towerLabel: '洗涤塔5',
+                pumpLabel: '循环泵5',
+                value: data.w3_lowiron_tail_pump2_v,
+                alarmKey: 'w3_lowiron_tail_pump2'
+            },
+            {towerLabel: '洗涤塔6', pumpLabel: '备用泵', value: 0, alarmKey: undefined},
+        ],
+    };
+}
 
-const steelFlowGroups: FlowItem[] = [
-    {id: 'steam-new', title: '新聚铝反应蒸汽流量', instant: 3.3, total: 53931.1},
-    {id: 'steam-low', title: '低铁无铁蒸汽流量', instant: 0.0, total: 10011.9},
-    {id: 'alkali', title: '碱水流量', instant: 0.0, total: 34440.4},
-    {id: 'iron', title: '铁水流量', instant: 0.0, total: 11088.0},
-    {id: 'hcl', title: '盐酸流量', instant: 0.0, total: 17876.0},
-];
+function buildUndergroundReactors(data: ScadaData): UndergroundTankItem[] {
+    return [
+        {id: 'UD3001A', label: '1#反应槽', temp: data.w3_underground1_temp},
+        {id: 'UD3001B', label: '2#反应槽', temp: data.w3_underground2_temp},
+        {id: 'UD3001C', label: '3#反应槽', temp: data.w3_underground3_temp},
+    ];
+}
 
-const glassSteelReactors: GlassTankItem[] = [
-    {id: 'FR3001A', label: '1#反应槽', current: 7.5, temp: 82.3},
-    {id: 'FR3001B', label: '2#反应槽', current: 29.4, temp: 75.7},
-    {id: 'FR3001C', label: '3#反应槽', current: 24.6, temp: 0.0},
-    {id: 'FR3001D', label: '4#反应槽', current: 13.3, temp: 52.7},
-    {id: 'FR3001E', label: '5#反应槽', current: 0.0, temp: 0.0},
-];
+function buildSteelReactors(data: ScadaData): SteelTankItem[] {
+    return [
+        {
+            id: 'F0201A',
+            current: `${formatMetricValue(data.w3_iron1_current)} A`,
+            temperature: `${formatMetricValue(data.w3_iron1_temp)}°C`,
+            pressure: `${formatMetricValue(data.w3_iron1_pressure)} Mpa`,
+        },
+        {
+            id: 'F0201B',
+            current: `${formatMetricValue(data.w3_iron2_current)} A`,
+            temperature: `${formatMetricValue(data.w3_iron2_temp)}°C`,
+            pressure: `${formatMetricValue(data.w3_iron2_pressure)} Mpa`,
+        },
+    ];
+}
 
-const enamelReactors: SteelTankItem[] = [
-    {id: 'F0401A', current: '0.0 A', temperature: '82.0°C', pressure: '-0.00 Mpa'},
-    {id: 'F0401B', current: '0.0 A', temperature: '127.9°C', pressure: '0.09 Mpa'},
-    {id: 'F0401C', current: '0.0 A', temperature: '33.3°C', pressure: '-0.20 Mpa'},
-    {id: 'F0401D', current: '3.6 A', temperature: '36.6°C', pressure: '-0.20 Mpa'},
-    {id: 'F0401E', current: '0.0 A', temperature: '32.4°C', pressure: '0.06 Mpa'},
-    {id: 'F0401F', current: '4.8 A', temperature: '72.9°C', pressure: '-0.20 Mpa'},
-];
+function buildGlassSteelReactors(data: ScadaData): GlassTankItem[] {
+    return [
+        {id: 'FR3001A', label: '1#反应槽', current: data.w3_glass1_current, temp: data.w3_glass1_temp},
+        {id: 'FR3001B', label: '2#反应槽', current: data.w3_glass2_current, temp: data.w3_glass2_temp},
+        {id: 'FR3001C', label: '3#反应槽', current: data.w3_glass3_current, temp: data.w3_glass3_temp},
+        {id: 'FR3001D', label: '4#反应槽', current: data.w3_glass4_current, temp: data.w3_glass4_temp},
+        {id: 'FR3001E', label: '5#反应槽', current: data.w3_glass5_current, temp: data.w3_glass5_temp},
+    ];
+}
 
-const externalAreaOne = [
-    {
-        id: 'tower-1',
-        towerName: '洗涤塔1',
-        pumpName: '循环泵1',
-        pumpCurrent: '9.9 A',
-    },
-    {
-        id: 'tower-2',
-        towerName: '洗涤塔2',
-        pumpName: '循环泵2',
-        pumpCurrent: '13.5 A',
-    },
-    {
-        id: 'tower-3',
-        towerName: '洗涤塔3',
-        pumpName: '循环泵3',
-        pumpCurrent: '0.0 A',
-    },
-];
-
-const externalAreaTwo = [
-    {
-        id: 'tower-4',
-        towerName: '洗涤塔4',
-        pumpName: '循环泵4',
-        pumpCurrent: '11.4 A',
-    },
-    {
-        id: 'tower-5',
-        towerName: '洗涤塔5',
-        pumpName: '循环泵5',
-        pumpCurrent: '9.5 A',
-    },
-    {
-        id: 'tower-6',
-        towerName: '洗涤塔6',
-        pumpName: '循环泵6',
-        pumpCurrent: '0.0 A',
-    },
-];
+function buildEnamelReactors(data: ScadaData): SteelTankItem[] {
+    return [
+        {
+            id: 'F0401A',
+            current: `${formatMetricValue(data.w3_enamel1_current)} A`,
+            temperature: `${formatMetricValue(data.w3_enamel1_temp)}°C`,
+            pressure: `${formatMetricValue(data.w3_enamel1_pressure)} Mpa`
+        },
+        {
+            id: 'F0401B',
+            current: `${formatMetricValue(data.w3_enamel2_current)} A`,
+            temperature: `${formatMetricValue(data.w3_enamel2_temp)}°C`,
+            pressure: `${formatMetricValue(data.w3_enamel2_pressure)} Mpa`
+        },
+        {
+            id: 'F0401C',
+            current: `${formatMetricValue(data.w3_enamel3_current)} A`,
+            temperature: `${formatMetricValue(data.w3_enamel3_temp)}°C`,
+            pressure: `${formatMetricValue(data.w3_enamel3_pressure)} Mpa`
+        },
+        {
+            id: 'F0401D',
+            current: `${formatMetricValue(data.w3_enamel4_current)} A`,
+            temperature: `${formatMetricValue(data.w3_enamel4_temp)}°C`,
+            pressure: `${formatMetricValue(data.w3_enamel4_pressure)} Mpa`
+        },
+        {
+            id: 'F0401E',
+            current: `${formatMetricValue(data.w3_enamel5_current)} A`,
+            temperature: `${formatMetricValue(data.w3_enamel5_temp)}°C`,
+            pressure: `${formatMetricValue(data.w3_enamel5_pressure)} Mpa`
+        },
+        {
+            id: 'F0401F',
+            current: `${formatMetricValue(data.w3_enamel6_current)} A`,
+            temperature: `${formatMetricValue(data.w3_enamel6_temp)}°C`,
+            pressure: `${formatMetricValue(data.w3_enamel6_pressure)} Mpa`
+        },
+    ];
+}
 
 function WorkshopThreeVerticalReactor({
                                           label,
@@ -146,22 +189,22 @@ function WorkshopThreeVerticalReactor({
             <div className="workshop-three-vertical-reactor__metrics workshop-three-vertical-reactor__metrics--below">
                 {showCurrent && current !== undefined ? (
                     <div className="workshop-three-vertical-reactor__metric">
-                        {current.toFixed(1)} A
+                        {formatMetricValue(current)} A
                     </div>
                 ) : null}
                 <div className="workshop-three-vertical-reactor__metric">
-                    {temp.toFixed(1)}°C
+                    {formatMetricValue(temp)}°C
                 </div>
             </div>
         </article>
     );
 }
 
-function UndergroundSlide() {
+function UndergroundSlide({tanks}: { tanks: UndergroundTankItem[] }) {
     return (
         <section className="workshop-three-reactor-slide" aria-label="地下斧区域">
             <div className="workshop-three-reactor-column">
-                {undergroundReactors.map((tank) => (
+                {tanks.map((tank) => (
                     <WorkshopThreeVerticalReactor
                         key={tank.id}
                         label={tank.label}
@@ -174,11 +217,11 @@ function UndergroundSlide() {
     );
 }
 
-function GlassSlide() {
+function GlassSlide({tanks}: { tanks: GlassTankItem[] }) {
     return (
         <section className="workshop-three-reactor-slide" aria-label="玻璃钢斧区域">
             <div className="workshop-three-reactor-column workshop-three-reactor-column--five">
-                {glassSteelReactors.map((tank) => (
+                {tanks.map((tank) => (
                     <WorkshopThreeVerticalReactor
                         key={tank.id}
                         label={tank.label}
@@ -213,11 +256,11 @@ function WorkshopThreeSteelTankCard({
     );
 }
 
-function SteelSlide() {
+function SteelSlide({tanks}: { tanks: SteelTankItem[] }) {
     return (
         <section className="workshop-three-steel-slide" aria-label="钢锅斧区域">
             <div className="workshop-three-steel-slide__tank-row">
-                {steelReactors.map((tank) => (
+                {tanks.map((tank) => (
                     <div key={tank.id} className="workshop-three-steel-slide__tank-slot">
                         <WorkshopThreeSteelTankCard {...tank} />
                     </div>
@@ -241,31 +284,22 @@ function EnamelSlide({tanks}: { tanks: SteelTankItem[] }) {
     );
 }
 
-function ExternalSlide({
-                           fanCurrent,
-                           towers,
-                       }: {
-    fanCurrent: string;
-    towers: Array<{ id: string; towerName: string; pumpName: string; pumpCurrent: string }>;
+function ExternalOldPlantSlide({
+                                   fanValue,
+                                   towers,
+                                   alarmData,
+                                   fanAlarmKey,
+                               }: {
+    fanValue: number;
+    towers: [OldPlantExternalTower, OldPlantExternalTower, OldPlantExternalTower];
+    alarmData: AlarmData;
+    fanAlarmKey?: string;
 }) {
     return (
         <section className="workshop-three-external-slide" aria-label="外部设备区域">
-            <div className="workshop-three-external-strip">
-                <div className="workshop-three-external-strip__fan-block">
-                    <img src={fanImage} alt="风机" className="workshop-three-external-strip__fan" draggable="false"/>
-                    <div className="workshop-three-external-strip__device-name">风机</div>
-                    <div className="workshop-three-external-strip__device-value">{fanCurrent}</div>
-                </div>
-                {towers.map((tower) => (
-                    <div key={tower.id} className="workshop-three-external-strip__tower-block">
-                        <img src={scrubberTowerImage} alt={tower.towerName}
-                             className="workshop-three-external-strip__tower" draggable="false"/>
-                        <div className="workshop-three-external-strip__tower-name">{tower.towerName}</div>
-                        <div className="workshop-three-external-strip__pump-icon" aria-hidden="true">⚙</div>
-                        <div className="workshop-three-external-strip__pump-name">{tower.pumpName}</div>
-                        <div className="workshop-three-external-strip__device-value">{tower.pumpCurrent}</div>
-                    </div>
-                ))}
+            <div className="workshop-three-external-slide__content">
+                <OldPlantExternalEquipment fanValue={fanValue} fanAlarmKey={fanAlarmKey} towers={towers}
+                                           alarmData={alarmData}/>
             </div>
         </section>
     );
@@ -274,21 +308,49 @@ function ExternalSlide({
 function WorkshopThreeBody({
                                activeRegionIndex,
                                onActiveRegionIndexChange,
+                               scadaData,
+                               alarmData,
                            }: {
     activeRegionIndex: number;
     onActiveRegionIndexChange: (index: number) => void;
+    scadaData: ScadaData;
+    alarmData: AlarmData;
 }) {
+    const externalAreaOne = buildOldPlantAreaOneConfig(scadaData);
+    const externalAreaTwo = buildOldPlantAreaTwoConfig(scadaData);
+    const undergroundReactors = buildUndergroundReactors(scadaData);
+    const steelReactors = buildSteelReactors(scadaData);
+    const glassSteelReactors = buildGlassSteelReactors(scadaData);
+    const enamelReactors = buildEnamelReactors(scadaData);
     const slides = [
-        {id: 'underground', content: <UndergroundSlide/>},
-        {id: 'steel', content: <SteelSlide/>},
-        {id: 'glass', content: <GlassSlide/>},
+        {id: 'underground', content: <UndergroundSlide tanks={undergroundReactors}/>},
+        {id: 'steel', content: <SteelSlide tanks={steelReactors}/>},
+        {id: 'glass', content: <GlassSlide tanks={glassSteelReactors}/>},
         {id: 'enamel-1', content: <EnamelSlide tanks={enamelReactors.slice(0, 3)}/>},
         {id: 'enamel-2', content: <EnamelSlide tanks={enamelReactors.slice(3, 6)}/>},
-        {id: 'external-1', content: <ExternalSlide fanCurrent="17.4 A" towers={externalAreaOne}/>},
-        {id: 'external-2', content: <ExternalSlide fanCurrent="0.0 A" towers={externalAreaTwo}/>},
+        {
+            id: 'external-1',
+            content: (
+                <ExternalOldPlantSlide
+                    fanValue={externalAreaOne.fanValue}
+                    fanAlarmKey="w3_poly_tail_fan"
+                    towers={externalAreaOne.towers}
+                    alarmData={alarmData}
+                />
+            ),
+        },
+        {
+            id: 'external-2',
+            content: (
+                <ExternalOldPlantSlide
+                    fanValue={externalAreaTwo.fanValue}
+                    fanAlarmKey="w3_lowiron_tail_fan"
+                    towers={externalAreaTwo.towers}
+                    alarmData={alarmData}
+                />
+            ),
+        },
     ];
-    const lastIndex = slides.length - 1;
-
     const reversedSlides = [...slides].reverse();
     const bodyTrackIndex = Math.max(0, slides.length - 1 - activeRegionIndex);
 
@@ -341,69 +403,28 @@ export function WorkshopThreeView({
 
             <button
                 type="button"
-                className={leftPanelCollapsed ? 'side-panel-toggle side-panel-toggle--left side-panel-toggle--collapsed' : 'side-panel-toggle side-panel-toggle--left'}
+                className={leftPanelCollapsed ? 'w3-side-panel-toggle w3-side-panel-toggle--left w3-side-panel-toggle--collapsed' : 'w3-side-panel-toggle w3-side-panel-toggle--left'}
                 onClick={() => setLeftPanelCollapsed((value) => !value)}
                 aria-label={leftPanelCollapsed ? '展开左侧面板' : '收起左侧面板'}
             >
                 {leftPanelCollapsed ? '▶' : '◀'}
             </button>
             <div
-                className={leftPanelCollapsed ? 'tank-data-column tank-data-column--left tank-data-column--collapsed-left' : 'tank-data-column tank-data-column--left'}>
-                <TankDataPanel data={scadaData} embedded/>
-                <TankDataPanel
-                    data={scadaData}
-                    position="left"
-                    title="流量面板"
-                    subtitle="FLOW PANEL"
-                    mode="flow"
-                    flowItems={steelFlowGroups}
-                    hideFlowName
-                    embedded
-                />
-                <TankDataPanel
-                    data={scadaData}
-                    position="left"
-                    title="装车可视化面板"
-                    subtitle="LOADING VISUALIZATION PANEL"
-                    mode="loading"
-                    embedded
-                />
+                className={leftPanelCollapsed ? 'w3-side-panel-column w3-side-panel-column--left w3-side-panel-column--collapsed-left' : 'w3-side-panel-column w3-side-panel-column--left'}>
+                <WorkshopThreeLeftPanels data={scadaData}/>
             </div>
 
             <button
                 type="button"
-                className={rightPanelCollapsed ? 'side-panel-toggle side-panel-toggle--right side-panel-toggle--collapsed' : 'side-panel-toggle side-panel-toggle--right'}
+                className={rightPanelCollapsed ? 'w3-side-panel-toggle w3-side-panel-toggle--right w3-side-panel-toggle--collapsed' : 'w3-side-panel-toggle w3-side-panel-toggle--right'}
                 onClick={() => setRightPanelCollapsed((value) => !value)}
                 aria-label={rightPanelCollapsed ? '展开右侧面板' : '收起右侧面板'}
             >
                 {rightPanelCollapsed ? '◀' : '▶'}
             </button>
             <div
-                className={rightPanelCollapsed ? 'tank-data-column tank-data-column--right tank-data-column--collapsed-right' : 'tank-data-column tank-data-column--right'}>
-                <TankDataPanel
-                    data={scadaData}
-                    position="right"
-                    title="主画面可视化面板"
-                    subtitle="MAIN SCREEN VISUALIZATION"
-                    mode="temperature"
-                    embedded
-                />
-                <TankDataPanel
-                    data={scadaData}
-                    position="right"
-                    title="外部设备可视化面板"
-                    subtitle="EXTERNAL EQUIPMENT PANEL"
-                    mode="external"
-                    embedded
-                />
-                <TankDataPanel
-                    data={scadaData}
-                    position="right"
-                    title="盐酸泄漏数据面板"
-                    subtitle="HCL LEAK DATA PANEL"
-                    mode="leak"
-                    embedded
-                />
+                className={rightPanelCollapsed ? 'w3-side-panel-column w3-side-panel-column--right w3-side-panel-column--collapsed-right' : 'w3-side-panel-column w3-side-panel-column--right'}>
+                <WorkshopThreeRightPanels data={scadaData}/>
             </div>
 
             <main className="relative z-10 flex-1 overflow-hidden bg-transparent">
@@ -415,8 +436,12 @@ export function WorkshopThreeView({
                     activeRegionIndex={activeRegionIndex}
                     onActiveRegionIndexChange={setActiveRegionIndex}
                 />
-                <WorkshopThreeBody activeRegionIndex={activeRegionIndex}
-                                   onActiveRegionIndexChange={setActiveRegionIndex}/>
+                <WorkshopThreeBody
+                    activeRegionIndex={activeRegionIndex}
+                    onActiveRegionIndexChange={setActiveRegionIndex}
+                    scadaData={scadaData}
+                    alarmData={alarmData}
+                />
             </main>
         </>
     );

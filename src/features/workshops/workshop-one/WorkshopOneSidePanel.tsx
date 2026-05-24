@@ -2,14 +2,15 @@ import React, {Suspense} from 'react';
 import * as echarts from 'echarts';
 import type {EChartsOption} from 'echarts';
 import 'echarts-liquidfill';
-import {ScadaData} from '../model/types';
-import './TankDataPanel.css';
+import {ScadaData} from '../../dashboard/model/types';
+import {formatMetricValue} from '../../../utils/formatMetricValue';
+import './WorkshopOneSidePanels.css';
 import titleBg from '../../../images/小标题图片.png';
 import loadingTruckImage from '../../../images/油罐车.png';
 
 const ReactECharts = React.lazy(() => import('echarts-for-react'));
 
-interface TankDataPanelProps {
+interface WorkshopOneSidePanelProps {
     data: ScadaData;
     title?: string;
     subtitle?: string;
@@ -113,7 +114,7 @@ function createTankPanelOption(data: ScadaData, labelOverrides?: string[], value
                 return (
                     `${name}<br/>` +
                     "<span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:rgba(36,207,233,0.9)'></span>" +
-                    `液位 : ${row.rawValue.toFixed(2)} ${row.unit}<br/>`
+                    `液位 : ${formatMetricValue(row.rawValue)} ${row.unit}<br/>`
                 );
             },
         },
@@ -151,7 +152,7 @@ function createTankPanelOption(data: ScadaData, labelOverrides?: string[], value
                     fontSize: 12,
                     formatter: (_value: string, index: number) => {
                         const row = rows[index];
-                        return `${row.rawValue.toFixed(2)} ${row.unit}`;
+                        return `${formatMetricValue(row.rawValue)} ${row.unit}`;
                     },
                 },
                 data: values,
@@ -224,7 +225,7 @@ function createLoadingPanelOption(data: ScadaData): EChartsOption {
                 const point = list[0];
                 const idx = typeof point?.dataIndex === 'number' ? point.dataIndex : 0;
                 const row = rows[idx];
-                return `${row.label}<br/>数值 : ${row.value.toFixed(1)} ${row.unit}`;
+                return `${row.label}<br/>数值 : ${formatMetricValue(row.value)} ${row.unit}`;
             },
         },
         xAxis: {
@@ -262,7 +263,7 @@ function createLoadingPanelOption(data: ScadaData): EChartsOption {
                     fontSize: 12,
                     formatter: (_value: string, index: number) => {
                         const row = rows[index];
-                        return `${row.value.toFixed(1)} ${row.unit}`;
+                        return `${formatMetricValue(row.value)} ${row.unit}`;
                     },
                 },
                 data: values,
@@ -343,7 +344,7 @@ function createLeakPanelOption(data: ScadaData, labelOverrides?: string[], value
                 const point = list[0];
                 const idx = typeof point?.dataIndex === 'number' ? point.dataIndex : 0;
                 const row = rows[idx];
-                return `${row.label}<br/>数值 : ${row.rawValue.toFixed(3)} ${row.unit}`;
+                return `${row.label}<br/>数值 : ${formatMetricValue(row.rawValue)} ${row.unit}`;
             },
         },
         xAxis: {
@@ -380,7 +381,7 @@ function createLeakPanelOption(data: ScadaData, labelOverrides?: string[], value
                 axisLabel: {
                     color: '#ffffff',
                     fontSize: 12,
-                    formatter: (_value: string, index: number) => `${rows[index].rawValue.toFixed(3)} ppm`,
+                    formatter: (_value: string, index: number) => `${formatMetricValue(rows[index].rawValue)} ppm`,
                 },
                 data: values,
             },
@@ -429,7 +430,7 @@ function createFlowLiquidFillOptionByValues(title: string, instantRaw: number, t
     const totalPercent = Math.max(0, Math.min(totalValue / totalMax, 1));
 
     const buildLabel = (value: number, unit: string, fontSize: number) => ({
-        formatter: () => `{value|${value.toFixed(2)}}\n{unit|${unit}}`,
+        formatter: () => `{value|${formatMetricValue(value)}}\n{unit|${unit}}`,
         rich: {
             value: {
                 fontSize,
@@ -491,9 +492,9 @@ function createFlowLiquidFillOptionByValues(title: string, instantRaw: number, t
             formatter: (params: any) => {
                 const seriesIndex = typeof params?.seriesIndex === 'number' ? params.seriesIndex : 0;
                 if (seriesIndex === 0) {
-                    return `瞬时流量<br/>数值 : ${instantValue.toFixed(2)} m³/h`;
+                    return `瞬时流量<br/>数值 : ${formatMetricValue(instantValue)} m³/h`;
                 }
-                return `累计流量<br/>数值 : ${totalValue.toFixed(2)} m³`;
+                return `累计流量<br/>数值 : ${formatMetricValue(totalValue)} m³`;
             },
         },
         series: [
@@ -666,7 +667,7 @@ function createExternalEquipmentOption(
                 const point = Array.isArray(params) ? params.find((item) => item?.seriesName === '设备值') : params;
                 const name = point?.axisValueLabel ?? '';
                 const value = typeof point?.value === 'number' ? point.value : 0;
-                return `${name}<br/>数值 : ${value.toFixed(1)} A`;
+                return `${name}<br/>数值 : ${formatMetricValue(value)} A`;
             },
         },
         grid: {
@@ -783,7 +784,7 @@ function createExternalEquipmentOption(
                     color: '#ffffff',
                     fontSize: 11,
                     distance: 10,
-                    formatter: ({dataIndex}: { dataIndex: number }) => `${values[dataIndex].toFixed(1)}`,
+                    formatter: ({dataIndex}: { dataIndex: number }) => `${formatMetricValue(values[dataIndex])}`,
                 },
                 data: barValues,
                 z: 9,
@@ -804,7 +805,7 @@ function createTemperatureGaugeOption(value: number, name: string): EChartsOptio
     return {
         backgroundColor: 'transparent',
         title: {
-            text: `{num|${safeValue.toFixed(1)}}`,
+            text: `{num|${formatMetricValue(safeValue)}}`,
             left: '50%',
             top: '58%',
             textAlign: 'center',
@@ -973,32 +974,32 @@ function createTemperatureGaugeOption(value: number, name: string): EChartsOptio
     };
 }
 
-export const TankDataPanel: React.FC<TankDataPanelProps> = ({
-                                                                data,
-                                                                title = '罐区可视化面板',
-                                                                subtitle = 'TANK AREA PARAMETERS',
-                                                                position = 'left',
-                                                                mode = 'level',
-                                                                levelLabels,
-                                                                levelValues,
-                                                                temperatureLabels,
-                                                                temperatureValues,
-                                                                externalLabels,
-                                                                externalValues,
-                                                                externalMeta,
-                                                                disableExternalCarousel = false,
-                                                                flowVariantOverride,
-                                                                flowValues,
-                                                                flowItems,
-                                                                hideFlowName = false,
-                                                                leakLabels,
-                                                                leakValues,
-                                                                leakMeta,
-                                                                top,
-                                                                bottom,
-                                                                embedded = false,
-                                                                style,
-                                                            }) => {
+export const WorkshopOneSidePanel: React.FC<WorkshopOneSidePanelProps> = ({
+                                                                              data,
+                                                                              title = '罐区可视化面板',
+                                                                              subtitle = 'TANK AREA PARAMETERS',
+                                                                              position = 'left',
+                                                                              mode = 'level',
+                                                                              levelLabels,
+                                                                              levelValues,
+                                                                              temperatureLabels,
+                                                                              temperatureValues,
+                                                                              externalLabels,
+                                                                              externalValues,
+                                                                              externalMeta,
+                                                                              disableExternalCarousel = false,
+                                                                              flowVariantOverride,
+                                                                              flowValues,
+                                                                              flowItems,
+                                                                              hideFlowName = false,
+                                                                              leakLabels,
+                                                                              leakValues,
+                                                                              leakMeta,
+                                                                              top,
+                                                                              bottom,
+                                                                              embedded = false,
+                                                                              style,
+                                                                          }) => {
     const [leakLiquidVariant, setLeakLiquidVariant] = React.useState<0 | 1>(0);
     const [externalVariant, setExternalVariant] = React.useState<ExternalPanelVariant>('old');
     const [externalVisible, setExternalVisible] = React.useState(true);

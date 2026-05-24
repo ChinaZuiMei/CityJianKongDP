@@ -21,7 +21,7 @@ export const ChartPanel = ({
         <PanelShell title={title} subtitle={subtitle} accent={accent} className={className}>
             <Suspense
                 fallback={<div className="h-full min-h-[140px] rounded-lg border border-sky-300/10 bg-slate-950/16"/>}>
-                <ReactECharts option={option} notMerge lazyUpdate style={{width: '100%', height: '100%'}}/>
+                <ReactECharts option={option} notMerge lazyUpdate={false} style={{width: '100%', height: '100%'}}/>
             </Suspense>
         </PanelShell>
     );

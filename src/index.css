@@ -1504,8 +1504,14 @@ body {
     display: flex;
     min-height: 500px;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     padding: 58px 28px 64px;
+}
+
+.workshop-three-external-slide__content {
+    width: 100%;
+    max-width: 1040px;
+    min-height: 380px;
 }
 
 .workshop-three-enamel-grid {
@@ -1518,61 +1524,6 @@ body {
 .workshop-three-enamel-grid__cell {
     display: flex;
     justify-content: center;
-}
-
-.workshop-three-external-strip {
-    display: grid;
-    width: 100%;
-    grid-template-columns: 180px repeat(3, minmax(0, 1fr));
-    gap: 24px;
-    align-items: end;
-}
-
-.workshop-three-external-strip__fan-block,
-.workshop-three-external-strip__tower-block {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.workshop-three-external-strip__fan {
-    width: 120px;
-    height: auto;
-    object-fit: contain;
-    margin-bottom: 8px;
-}
-
-.workshop-three-external-strip__tower {
-    width: 110px;
-    height: auto;
-    object-fit: contain;
-    margin-bottom: 6px;
-}
-
-.workshop-three-external-strip__device-name,
-.workshop-three-external-strip__tower-name,
-.workshop-three-external-strip__pump-name {
-    color: rgba(255, 255, 255, 0.96);
-    font-size: 18px;
-    font-weight: 900;
-    line-height: 1.15;
-    text-align: center;
-}
-
-.workshop-three-external-strip__pump-icon {
-    margin-top: 8px;
-    color: #ef4444;
-    font-size: 22px;
-    line-height: 1;
-}
-
-.workshop-three-external-strip__device-value {
-    margin-top: 8px;
-    color: rgba(255, 255, 255, 0.98);
-    font-size: 18px;
-    font-weight: 900;
-    line-height: 1;
-    text-align: center;
 }
 
 .workshop-two-body {
@@ -1589,11 +1540,14 @@ body {
 }
 
 .workshop-two-screen {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     min-height: 430px;
     padding: 28px 24px 16px;
 }
 
-.workshop-two-screen__grid {
+.workshop-two-screen__tanks {
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 12px;
@@ -1601,42 +1555,103 @@ body {
 }
 
 .workshop-two-screen__tank-card {
-    display: grid;
-    justify-items: center;
-    align-content: start;
-    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
     min-width: 0;
 }
 
-.workshop-two-screen__leak {
-    min-height: 72px;
-    width: min(100%, 126px);
-    border: 1px solid rgba(168, 210, 255, 0.68);
-    border-radius: 8px;
-    padding: 8px 10px;
-    background: rgba(255, 255, 255, 0.03);
-    color: rgba(255, 255, 255, 0.98);
-    text-align: center;
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
-}
-
-.workshop-two-screen__leak--empty {
-    opacity: 0;
-}
-
-.workshop-two-screen__leak-label {
-    font-size: 14px;
-    font-weight: 900;
-    line-height: 1.2;
-    text-shadow: 0 0 8px rgba(15, 23, 42, 0.3);
-}
-
-.workshop-two-screen__leak-value {
+.workshop-two-screen__leaks {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: flex-start;
     margin-top: 8px;
+    padding: 4px 0 8px;
+}
+
+.workshop-two-screen__leaks-inner {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(128px, 168px));
+    gap: clamp(20px, 3.5vw, 48px);
+    justify-content: center;
+    width: min(100%, 760px);
+    margin: 0 auto;
+}
+
+.workshop-two-screen__leak-item {
+    display: flex;
+    min-height: 112px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
+    padding: 6px 4px;
+}
+
+.workshop-two-screen__leak-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    color: rgba(241, 245, 249, 0.98);
+    text-transform: uppercase;
+}
+
+.workshop-two-screen__leak-header--alarm {
+    color: rgb(254, 202, 202);
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.workshop-two-screen__leak-value-box {
+    border: 1px solid rgba(125, 211, 252, 0.7);
+    border-radius: 8px;
+    background: transparent;
+    padding: 4px 12px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     font-size: 16px;
     font-weight: 900;
-    line-height: 1;
-    text-shadow: 0 0 8px rgba(15, 23, 42, 0.3);
+    line-height: 1.2;
+    color: rgba(255, 255, 255, 0.98);
+    text-align: center;
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.12);
+}
+
+.workshop-two-screen__leak-value-box--alarm {
+    border-color: rgba(248, 113, 113, 0.95);
+    color: rgb(254, 226, 226);
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.35);
+}
+
+.workshop-two-screen__leak-unit {
+    font-size: 10px;
+    font-weight: 700;
+    color: rgba(203, 213, 225, 0.92);
+}
+
+.workshop-two-screen__leak-alarms {
+    display: flex;
+    min-height: 32px;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.workshop-two-screen__leak-alarm-name {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 2px 8px;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: rgb(254, 226, 226);
+    text-align: center;
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 .workshop-five-body {
@@ -1829,25 +1844,27 @@ body {
         font-size: 15px;
     }
 
-    .workshop-three-external-strip {
-        grid-template-columns: 150px repeat(3, minmax(0, 1fr));
-        gap: 16px;
-    }
-
     .workshop-two-body {
         width: min(1040px, calc(100vw - 640px));
     }
 
-    .workshop-two-screen__grid {
+    .workshop-two-screen__tanks {
         gap: 8px;
     }
 
-    .workshop-two-screen__leak-label {
+    .workshop-two-screen__leaks-inner {
+        grid-template-columns: repeat(4, minmax(108px, 140px));
+        gap: 16px;
+        width: min(100%, 620px);
+    }
+
+    .workshop-two-screen__leak-header {
         font-size: 12px;
     }
 
-    .workshop-two-screen__leak-value {
+    .workshop-two-screen__leak-value-box {
         font-size: 14px;
+        padding: 4px 10px;
     }
 
     .workshop-six-body {
