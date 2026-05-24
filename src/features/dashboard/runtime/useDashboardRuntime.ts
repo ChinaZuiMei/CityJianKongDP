@@ -1,9 +1,12 @@
-import {useCallback, useEffect, useMemo, useState} from 'react';
+import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {dashboardPageSchema} from '../schema/dashboardSchema';
 import {extractWorkshopAlarmData, mapWorkshopPayloadToScadaData} from '../schema/dataBindings';
 import {type Alarm, type AlarmData, DEFAULT_DATA, type ScadaData} from '../model/types';
 import {defaultWorkshopId, workshopRegistry} from '../../workshops/registry';
 import type {WorkshopDefinition} from '../../workshops/types';
+import {useDashboardSettings} from '../settings/useDashboardSettings';
+import {useWorkshopCarousel, type WorkshopSelectSource} from '../settings/useWorkshopCarousel';
+import type {PauseDurationChoice} from '../settings/types';
 
 interface MqttApiResponse {
     success?: boolean;
@@ -59,12 +62,45 @@ function applyMqttPayload(
 export function useDashboardRuntime() {
     const dataMode = getDataMode();
     const workshops = workshopRegistry;
+    const {settings, setSettings, restoreDefaults} = useDashboardSettings();
 
     const [currentTime, setCurrentTime] = useState(() => new Date());
     const [workshopSnapshots, setWorkshopSnapshots] = useState<Record<string, WorkshopSnapshot>>({});
     const [activeAlarms, setActiveAlarms] = useState<Alarm[]>([]);
     const [isAlarmPanelOpen, setIsAlarmPanelOpen] = useState(false);
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [selectedWorkshop, setSelectedWorkshop] = useState(defaultWorkshopId);
+    const [selectedPauseChoice, setSelectedPauseChoice] = useState<PauseDurationChoice>(settings.lastPauseChoice);
+
+    const workshopIds = useMemo(
+        () => workshops.filter((workshop) => workshop.enabled).map((workshop) => workshop.id),
+        [workshops],
+    );
+    const workshopNamesById = useMemo(
+        () => Object.fromEntries(workshops.map((workshop) => [workshop.id, workshop.name])),
+        [workshops],
+    );
+
+    const onManualSwitchRef = useRef<() => void>(() => {
+    });
+
+    const onSelectWorkshop = useCallback((workshopId: string, source: WorkshopSelectSource) => {
+        setSelectedWorkshop(workshopId);
+        if (source === 'manual') {
+            onManualSwitchRef.current();
+        }
+    }, []);
+
+    const carousel = useWorkshopCarousel({
+        workshopIds,
+        workshopNamesById,
+        settings,
+        selectedWorkshop,
+        onSelectWorkshop,
+        freeze: isSettingsOpen || isAlarmPanelOpen,
+    });
+
+    onManualSwitchRef.current = carousel.onManualSwitch;
 
     const selectedWorkshopDefinition = useMemo(
         () => workshops.find((workshop) => workshop.id === selectedWorkshop) ?? workshops[0],
@@ -72,6 +108,25 @@ export function useDashboardRuntime() {
     );
 
     const currentSnapshot = workshopSnapshots[selectedWorkshop] ?? EMPTY_SNAPSHOT;
+
+    const workshopConnectionStatuses = useMemo(
+        () => workshops
+            .filter((workshop) => workshop.enabled)
+            .map((workshop) => {
+                const snapshot = workshopSnapshots[workshop.id] ?? EMPTY_SNAPSHOT;
+                return {
+                    id: workshop.id,
+                    name: workshop.name,
+                    connected: snapshot.connected,
+                    lastUpdatedAt: snapshot.lastUpdatedAt,
+                };
+            }),
+        [workshopSnapshots, workshops],
+    );
+
+    useEffect(() => {
+        setSelectedPauseChoice(settings.lastPauseChoice);
+    }, [settings.lastPauseChoice]);
 
     useEffect(() => {
         const timer = window.setInterval(() => setCurrentTime(new Date()), 1000);
@@ -121,11 +176,11 @@ export function useDashboardRuntime() {
         if (!mqttPolicy) return;
 
         let active = true;
-        const workshopIds = workshops.filter((workshop) => workshop.enabled).map((workshop) => workshop.id);
+        const enabledWorkshopIds = workshops.filter((workshop) => workshop.enabled).map((workshop) => workshop.id);
 
         const fetchAllWorkshops = async () => {
             if (!active) return;
-            await Promise.all(workshopIds.map((workshopId) => fetchWorkshopMqtt(workshopId, mqttPolicy.endpoint)));
+            await Promise.all(enabledWorkshopIds.map((workshopId) => fetchWorkshopMqtt(workshopId, mqttPolicy.endpoint)));
         };
 
         void fetchAllWorkshops();
@@ -186,6 +241,19 @@ export function useDashboardRuntime() {
         [currentSnapshot.alarms],
     );
 
+    const handleWorkshopChange = useCallback((workshopId: string) => {
+        onSelectWorkshop(workshopId, 'manual');
+    }, [onSelectWorkshop]);
+
+    const handlePauseChoiceChange = useCallback((choice: PauseDurationChoice) => {
+        setSelectedPauseChoice(choice);
+        setSettings((current) => ({...current, lastPauseChoice: choice}));
+    }, [setSettings]);
+
+    const handlePauseCarousel = useCallback(() => {
+        carousel.pauseCarousel(selectedPauseChoice);
+    }, [carousel, selectedPauseChoice]);
+
     return {
         currentTime,
         workshops,
@@ -196,9 +264,20 @@ export function useDashboardRuntime() {
         activeAlarms: scopedActiveAlarms,
         alarmCount,
         isAlarmPanelOpen,
+        isSettingsOpen,
         selectedWorkshop,
+        settings,
+        setSettings,
+        restoreDefaults,
         setIsAlarmPanelOpen,
-        setSelectedWorkshop,
+        setIsSettingsOpen,
+        handleWorkshopChange,
+        workshopConnectionStatuses,
+        carousel,
+        selectedPauseChoice,
+        handlePauseChoiceChange,
+        handlePauseCarousel,
+        handleResumeCarousel: carousel.resumeCarousel,
     };
 }
 

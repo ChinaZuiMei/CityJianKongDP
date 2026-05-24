@@ -12,7 +12,9 @@ export interface MetricBindingSchema {
 
 const readNumber = (payload: PayloadRecord, key: string, fallback: number) => {
     const rawValue = payload[key]?.value;
-    return typeof rawValue === 'number' ? rawValue : fallback;
+    if (typeof rawValue === 'number') return rawValue;
+    if (typeof rawValue === 'boolean') return rawValue ? 1 : 0;
+    return fallback;
 };
 
 const sumValues = (keys: string[]) => (payload: PayloadRecord, previous: number) =>

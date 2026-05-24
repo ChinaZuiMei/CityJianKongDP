@@ -1,23 +1,25 @@
 import React from 'react';
-import {Clock, ChevronDown, AlertTriangle} from 'lucide-react';
+import {Clock, ChevronDown, AlertTriangle, Settings} from 'lucide-react';
 import {cn} from '../../../utils/cn';
 
 export const Header = ({
                            currentTime,
-                           connected,
                            alarmCount,
                            onAlarmClick,
                            workshops,
                            selectedWorkshop,
                            onWorkshopChange,
+                           onOpenSettings,
+                           carouselHint,
                        }: {
-    connected: boolean,
     alarmCount: number,
     currentTime: Date,
     onAlarmClick: () => void,
     workshops: Array<{ id: string; name: string; enabled: boolean }>,
     selectedWorkshop: string,
     onWorkshopChange: (workshopId: string) => void,
+    onOpenSettings: () => void,
+    carouselHint?: string | null,
 }) => {
     const [isWorkshopOpen, setIsWorkshopOpen] = React.useState(false);
     const workshopMenuRef = React.useRef<HTMLDivElement | null>(null);
@@ -37,16 +39,27 @@ export const Header = ({
         <div
             className="panel-frame fixed inset-x-0 top-0 z-50 box-border min-h-[56px] bg-transparent px-0 py-2 font-mono text-slate-100">
             <div
-                className="absolute left-5 top-1/2 flex -translate-y-1/2 items-center gap-6 text-[17px] font-semibold tracking-[0.04em]">
+                className="absolute left-5 top-1/2 flex -translate-y-1/2 items-center gap-4 text-[17px] font-semibold tracking-[0.04em]">
                 <div className="flex items-center gap-2.5">
                     <Clock size={20} className="text-sky-300"/>
                     {currentTime.toLocaleDateString()} {currentTime.toLocaleTimeString()}
                 </div>
-                <span className={cn("flex items-center gap-2", connected ? "text-emerald-300" : "text-amber-300")}>
-          <span
-              className={cn("h-2.5 w-2.5 rounded-full", connected ? "bg-emerald-500 animate-pulse" : "bg-amber-500")}/>
-                    {connected ? 'MQTT 已连接' : 'MQTT 连接中...'}
-        </span>
+                <button
+                    type="button"
+                    onClick={onOpenSettings}
+                    className="panel-frame data-glow flex items-center gap-2 rounded-md border bg-transparent px-4 py-1.5 text-[17px] font-bold transition-colors hover:border-sky-300/50"
+                >
+                    <Settings size={18} className="text-sky-300"/>
+                    设置
+                    {carouselHint ? (
+                        <span className={cn(
+                            'text-sm font-semibold',
+                            carouselHint.startsWith('已暂停') ? 'text-amber-300' : 'text-emerald-300',
+                        )}>
+                            {carouselHint}
+                        </span>
+                    ) : null}
+                </button>
             </div>
             <div ref={workshopMenuRef} className="absolute right-5 top-1/2 flex -translate-y-1/2 items-center gap-4">
                 <button

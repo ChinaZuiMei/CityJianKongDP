@@ -20,18 +20,29 @@ export const Tank = ({
                          hasAlarm = false,
                          variant = 'default',
                          labelOffsetClassName,
+                         reactorSizeClassName,
+                         reactorBaselineClassName,
+                         showLevel = true,
+                         current,
+                         reactorFooterLayout = 'inline',
                      }: {
     label: string,
-    level: number,
+    level?: number,
     temp?: number,
+    current?: number,
     unit?: string,
     color?: string,
     max?: number,
     hasAlarm?: boolean,
     variant?: 'default' | 'storage' | 'cone' | 'reactor',
     labelOffsetClassName?: string,
+    reactorSizeClassName?: string,
+    reactorBaselineClassName?: string,
+    showLevel?: boolean,
+    reactorFooterLayout?: 'inline' | 'stacked',
 }) => {
-    const fillPercent = Math.min((level / max) * 100, 100);
+    const safeLevel = level ?? 0;
+    const fillPercent = Math.min((safeLevel / max) * 100, 100);
     const isImageTank = variant === 'storage' || variant === 'cone' || variant === 'reactor';
     const tankImage =
         variant === 'cone' ? coneTankImage : variant === 'reactor' ? reactorTankImage : storageTankImage;
@@ -45,13 +56,13 @@ export const Tank = ({
      */
     const imageTankSizeClass =
         variant === 'reactor'
-            ? 'h-[13.5rem]'
+            ? (reactorSizeClassName ?? 'h-[13.5rem]')
             : variant === 'cone'
                 ? 'h-[13rem]'
                 : 'h-[13rem]';
     const imageBaselineAdjustClass =
         variant === 'reactor'
-            ? '-translate-y-[58px]'
+            ? (reactorBaselineClassName ?? '-translate-y-[58px]')
             : variant === 'cone'
                 ? '-translate-y-[5px]'
                 : '-translate-y-[1px]';
@@ -75,20 +86,20 @@ export const Tank = ({
                     />
                     {hasAlarm ? <div
                         className="absolute inset-0 z-10 bg-red-500/10 mix-blend-screen pointer-events-none animate-pulse"/> : null}
-                    {variant === 'reactor' && (
+                    {variant === 'reactor' && showLevel && (
                         <div className="absolute inset-x-0 bottom-[1.8rem] z-20 flex justify-center">
                             <div
                                 className={cn("rounded border px-2.5 py-1 text-sm font-bold shadow-[0_0_12px_rgba(15,23,42,0.35)]", hasAlarm ? "border-red-400 bg-slate-950/50 text-red-100" : "panel-frame bg-slate-950/40 data-glow")}>
-                                {formatMetricValue(level)} {unit}
+                                {formatMetricValue(safeLevel)} {unit}
                             </div>
                         </div>
                     )}
-                    {variant !== 'reactor' && (
+                    {variant !== 'reactor' && showLevel && (
                         // 液位数据会再往下，落在图片和名称之间更靠下的位置，因此需要将bottom-3改为-bottom-6
                         <div className="absolute inset-x-0 -bottom-8 z-20 flex justify-center">
                             <div
                                 className={cn("rounded border px-2.5 py-1 text-sm font-bold shadow-[0_0_12px_rgba(15,23,42,0.35)]", hasAlarm ? "border-red-400 bg-slate-950/50 text-red-100" : "panel-frame bg-slate-950/40 data-glow")}>
-                                {formatMetricValue(level)} {unit}
+                                {formatMetricValue(safeLevel)} {unit}
                             </div>
                         </div>
                     )}
@@ -105,7 +116,7 @@ export const Tank = ({
                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
                         <div
                             className={cn("rounded border px-2 py-1 text-sm font-bold", hasAlarm ? "border-red-400 bg-transparent text-red-100" : "panel-frame data-glow bg-transparent")}>
-                            {formatMetricValue(level)} {unit}
+                            {formatMetricValue(safeLevel)} {unit}
                         </div>
                     </div>
                     <div
@@ -114,6 +125,27 @@ export const Tank = ({
                     </div>
                 </div>
             )}
+            {variant === 'reactor' && reactorFooterLayout === 'stacked' ? (
+                <div
+                    className={cn("mt-1 flex flex-col items-center gap-2 text-center -translate-y-6", labelOffsetClassName)}>
+                    {current !== undefined && (
+                        <div
+                            className={cn("min-w-[108px] rounded-md border px-3 py-1.5 text-sm font-black leading-none", hasAlarm ? "border-red-400 text-red-100" : "panel-frame data-glow")}>
+                            {formatMetricValue(current)} A
+                        </div>
+                    )}
+                    {temp !== undefined && (
+                        <div
+                            className={cn("min-w-[108px] rounded-md border px-3 py-1.5 text-sm font-black leading-none", hasAlarm ? "border-red-400 text-red-100" : "panel-frame data-glow")}>
+                            {formatMetricValue(temp)} °C
+                        </div>
+                    )}
+                    <div
+                        className={cn("text-base font-bold tracking-wide", hasAlarm ? "font-extrabold text-red-200" : "panel-title-glow")}>
+                        {label}
+                    </div>
+                </div>
+            ) : (
             <div
                 className={cn("mt-1 flex h-[3.8rem] flex-col items-center text-center", variant === 'reactor' && "-translate-y-6", labelOffsetClassName)}>
                 <div className="flex items-center justify-center gap-2">
@@ -135,21 +167,41 @@ export const Tank = ({
                     </div>
                 )}
             </div>
+            )}
         </div>
     );
 };
 
-export const FlowBox = ({title, instant, total, unit = 'm³/h', hasAlarm = false}: {
+export const FlowBox = ({title, instant, total, unit = 'm³/h', hasAlarm = false, thickBorder = false}: {
     title: string,
     instant: number,
     total: number,
     unit?: string,
-    hasAlarm?: boolean
+    hasAlarm?: boolean,
+    thickBorder?: boolean,
 }) => (
     <div
-        className={cn("group w-68 rounded-xl border bg-transparent p-3.5 transition-all", hasAlarm ? "border-red-500 animate-pulse-border" : "panel-frame hover:border-sky-300/50")}>
+        className={cn(
+            "group w-68 rounded-xl border bg-transparent p-3.5 transition-all",
+            thickBorder
+                ? hasAlarm
+                    ? "border-2 border-red-500 animate-pulse-border"
+                    : "border-2 border-sky-300/60 hover:border-sky-200/80"
+                : hasAlarm
+                    ? "border-red-500 animate-pulse-border"
+                    : "panel-frame hover:border-sky-300/50",
+        )}>
         <div
-            className={cn("mb-2 flex items-center justify-between border-b pb-2 text-sm font-black", hasAlarm ? "border-red-400/60 text-red-200" : "panel-frame panel-title-glow")}>
+            className={cn(
+                "mb-2 flex items-center justify-between border-b pb-2 text-sm font-black",
+                thickBorder
+                    ? hasAlarm
+                        ? "border-b-2 border-red-400/70 text-red-200"
+                        : "border-b-2 border-sky-300/45 text-sky-50 panel-title-glow"
+                    : hasAlarm
+                        ? "border-red-400/60 text-red-200"
+                        : "panel-frame panel-title-glow",
+            )}>
             {title}
             <Activity size={14} className={hasAlarm ? "text-red-600" : "text-sky-500"}/>
         </div>
@@ -157,14 +209,32 @@ export const FlowBox = ({title, instant, total, unit = 'm³/h', hasAlarm = false
             <div className="flex justify-between items-center">
                 <span className="text-sm font-medium text-slate-200">瞬时流量:</span>
                 <div
-                    className={cn("min-w-[118px] rounded border bg-transparent px-3 py-1.5 text-right font-mono text-base font-bold", hasAlarm ? "border-red-400 text-red-100" : "panel-frame data-glow")}>
+                    className={cn(
+                        "min-w-[118px] rounded border bg-transparent px-3 py-1.5 text-right font-mono text-base font-bold",
+                        thickBorder
+                            ? hasAlarm
+                                ? "border-2 border-red-400 text-red-100"
+                                : "border-2 border-sky-300/55 data-glow"
+                            : hasAlarm
+                                ? "border-red-400 text-red-100"
+                                : "panel-frame data-glow",
+                    )}>
                     {formatMetricValue(instant)} <span className="text-xs text-slate-300">{unit}</span>
                 </div>
             </div>
             <div className="flex justify-between items-center">
                 <span className="text-sm font-medium text-slate-200">累计流量:</span>
                 <div
-                    className={cn("min-w-[118px] rounded border bg-transparent px-3 py-1.5 text-right font-mono text-base font-bold", hasAlarm ? "border-red-400 text-red-100" : "border-emerald-200/45 data-glow-emerald")}>
+                    className={cn(
+                        "min-w-[118px] rounded border bg-transparent px-3 py-1.5 text-right font-mono text-base font-bold",
+                        thickBorder
+                            ? hasAlarm
+                                ? "border-2 border-red-400 text-red-100"
+                                : "border-2 border-emerald-300/55 data-glow-emerald"
+                            : hasAlarm
+                                ? "border-red-400 text-red-100"
+                                : "border-emerald-200/45 data-glow-emerald",
+                    )}>
                     {formatMetricValue(total)} <span className="text-xs text-slate-300">m³</span>
                 </div>
             </div>

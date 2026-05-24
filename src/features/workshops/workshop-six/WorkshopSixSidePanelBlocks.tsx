@@ -3,18 +3,19 @@ import type {ScadaData} from '../../dashboard/model/types';
 import loadingTruckImage from '../../../images/油罐车.png';
 import {
     getWorkshopSixExternalValues,
-    getWorkshopSixFlowValues,
     getWorkshopSixLevelValues,
+    getWorkshopSixMainDisplayValues,
     WORKSHOP_SIX_LEFT_PANEL_CONFIG,
     WORKSHOP_SIX_RIGHT_PANEL_CONFIG,
     getWorkshopSixLoadingValues,
+    type WorkshopSixLoadingLane,
     getWorkshopSixTemperatureValues,
 } from './workshopSixSidePanelBindings';
 import {
     createWorkshopSixExternalBarOption,
-    createWorkshopSixFlowLiquidFillOption,
     createWorkshopSixLeakBarOption,
     createWorkshopSixLoadingBarOption,
+    createWorkshopSixMainDisplayLiquidFillOption,
     createWorkshopSixTemperatureGaugeOption,
 } from './workshopSixPanelCharts';
 import {WorkshopSixChart, WorkshopSixSidePanelShell} from './WorkshopSixSidePanelShell';
@@ -23,13 +24,17 @@ function staticLevelRows(labels: string[], values: number[]) {
     return labels.map((label, index) => ({label, value: values[index] ?? 0}));
 }
 
-export function WorkshopSixFixedFlowSidePanel({instant, total, title, subtitle}: {
-    instant: number;
-    total: number;
+export function WorkshopSixMainDisplaySidePanel({title, subtitle, liquidNitrogenTemp, diluteSulfuricLevel}: {
     title: string;
     subtitle: string;
+    liquidNitrogenTemp: number | null;
+    diluteSulfuricLevel: number;
 }) {
-    const option = React.useMemo(() => createWorkshopSixFlowLiquidFillOption(instant, total), [instant, total]);
+    const option = React.useMemo(
+        () => createWorkshopSixMainDisplayLiquidFillOption(liquidNitrogenTemp, diluteSulfuricLevel),
+        [liquidNitrogenTemp, diluteSulfuricLevel],
+    );
+
     return (
         <WorkshopSixSidePanelShell title={title} subtitle={subtitle}>
             <WorkshopSixChart option={option} className="w6-side-panel__chart w6-side-panel__chart--flow"/>
@@ -54,13 +59,16 @@ export function WorkshopSixStaticLevelSidePanel({labels, values, title, subtitle
     );
 }
 
-export function WorkshopSixLoadingSidePanel({data, panelConfig, mode = 'loading'}: {
+export function WorkshopSixLoadingSidePanel({data, panelConfig, lane}: {
     data: ScadaData;
     panelConfig: { title: string; subtitle: string; meta: readonly [string, string] };
-    mode?: 'loading' | 'batch';
+    lane: WorkshopSixLoadingLane;
 }) {
-    const loading = React.useMemo(() => getWorkshopSixLoadingValues(data, mode), [data, mode]);
-    const option = React.useMemo(() => createWorkshopSixLoadingBarOption(loading.instant, loading.total), [loading.instant, loading.total]);
+    const loading = React.useMemo(() => getWorkshopSixLoadingValues(data, lane), [data, lane]);
+    const option = React.useMemo(
+        () => createWorkshopSixLoadingBarOption(loading.once, loading.instant, loading.total),
+        [loading.once, loading.instant, loading.total],
+    );
     return (
         <WorkshopSixSidePanelShell title={panelConfig.title} subtitle={panelConfig.subtitle} variant="loading">
             <div className="w6-side-panel__meta"><span>{panelConfig.meta[0]}</span><span>{panelConfig.meta[1]}</span>
@@ -132,10 +140,16 @@ export function WorkshopSixStaticTemperatureSidePanel({
 const left = WORKSHOP_SIX_LEFT_PANEL_CONFIG;
 const right = WORKSHOP_SIX_RIGHT_PANEL_CONFIG;
 
-export function WorkshopSixLeftFlowPanel({data}: { data: ScadaData }) {
-    const flow = React.useMemo(() => getWorkshopSixFlowValues(data), [data]);
-    return <WorkshopSixFixedFlowSidePanel title={left.flow.title} subtitle={left.flow.subtitle}
-                                          instant={flow.instant} total={flow.total}/>;
+export function WorkshopSixLeftMainDisplayPanel({data}: { data: ScadaData }) {
+    const values = React.useMemo(() => getWorkshopSixMainDisplayValues(data), [data]);
+    return (
+        <WorkshopSixMainDisplaySidePanel
+            title={left.display.title}
+            subtitle={left.display.subtitle}
+            liquidNitrogenTemp={values.liquidNitrogenTemp}
+            diluteSulfuricLevel={values.diluteSulfuricLevel}
+        />
+    );
 }
 
 export function WorkshopSixLeftLevelPanel({data}: { data: ScadaData }) {
@@ -152,7 +166,7 @@ export function WorkshopSixLeftLevelPanel({data}: { data: ScadaData }) {
 }
 
 export function WorkshopSixLeftLoadingPanel({data}: { data: ScadaData }) {
-    return <WorkshopSixLoadingSidePanel data={data} panelConfig={left.loading}/>;
+    return <WorkshopSixLoadingSidePanel data={data} panelConfig={left.loading} lane="loading1"/>;
 }
 
 export function WorkshopSixRightTemperaturePanel({data}: { data: ScadaData }) {
@@ -175,5 +189,5 @@ export function WorkshopSixRightExternalPanel({data}: { data: ScadaData }) {
 }
 
 export function WorkshopSixRightLoadingPanel({data}: { data: ScadaData }) {
-    return <WorkshopSixLoadingSidePanel data={data} panelConfig={right.loading} mode="batch"/>;
+    return <WorkshopSixLoadingSidePanel data={data} panelConfig={right.loading} lane="loading2"/>;
 }

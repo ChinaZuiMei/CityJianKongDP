@@ -3,7 +3,6 @@ import {AnimatePresence} from 'motion/react';
 import {AlarmPanel, ScrollDashboard} from '../dashboard';
 import {WorkshopThreeLeftPanels, WorkshopThreeRightPanels} from './workshop-three';
 import type {WorkshopRuntimeData} from './types';
-import reactorTankImage from '../../images/反应槽.png';
 import tankImage from '../../mingfanImg/罐子.png';
 import {
     OldPlantExternalEquipment,
@@ -11,11 +10,14 @@ import {
 } from '../dashboard/components/OldPlantExternalEquipment';
 import type {AlarmData, ScadaData} from '../dashboard/model/types';
 import {formatMetricValue} from '../../utils/formatMetricValue';
+import {Tank} from '../dashboard/ui/SharedComponents';
+import {hasAlarm} from '../dashboard/lib/alarmUtils';
 
 type UndergroundTankItem = {
     id: string;
     label: string;
     temp: number;
+    alarmKey: string;
 };
 
 type GlassTankItem = {
@@ -23,6 +25,7 @@ type GlassTankItem = {
     label: string;
     temp: number;
     current: number;
+    alarmKey: string;
 };
 
 type SteelTankItem = {
@@ -30,13 +33,6 @@ type SteelTankItem = {
     current: string;
     temperature: string;
     pressure: string;
-};
-
-type WorkshopThreeVerticalReactorProps = React.Attributes & {
-    label: string;
-    temp: number;
-    current?: number;
-    showCurrent?: boolean;
 };
 
 const regionHeaders = [
@@ -99,9 +95,9 @@ function buildOldPlantAreaTwoConfig(data: ScadaData): {
 
 function buildUndergroundReactors(data: ScadaData): UndergroundTankItem[] {
     return [
-        {id: 'UD3001A', label: '1#反应槽', temp: data.w3_underground1_temp},
-        {id: 'UD3001B', label: '2#反应槽', temp: data.w3_underground2_temp},
-        {id: 'UD3001C', label: '3#反应槽', temp: data.w3_underground3_temp},
+        {id: 'UD3001A', label: '1# 反应槽', temp: data.w3_underground1_temp, alarmKey: 'w3_underground1'},
+        {id: 'UD3001B', label: '2# 反应槽', temp: data.w3_underground2_temp, alarmKey: 'w3_underground2'},
+        {id: 'UD3001C', label: '3# 反应槽', temp: data.w3_underground3_temp, alarmKey: 'w3_underground3'},
     ];
 }
 
@@ -124,11 +120,41 @@ function buildSteelReactors(data: ScadaData): SteelTankItem[] {
 
 function buildGlassSteelReactors(data: ScadaData): GlassTankItem[] {
     return [
-        {id: 'FR3001A', label: '1#反应槽', current: data.w3_glass1_current, temp: data.w3_glass1_temp},
-        {id: 'FR3001B', label: '2#反应槽', current: data.w3_glass2_current, temp: data.w3_glass2_temp},
-        {id: 'FR3001C', label: '3#反应槽', current: data.w3_glass3_current, temp: data.w3_glass3_temp},
-        {id: 'FR3001D', label: '4#反应槽', current: data.w3_glass4_current, temp: data.w3_glass4_temp},
-        {id: 'FR3001E', label: '5#反应槽', current: data.w3_glass5_current, temp: data.w3_glass5_temp},
+        {
+            id: 'FR3001A',
+            label: '1# 反应槽',
+            current: data.w3_glass1_current,
+            temp: data.w3_glass1_temp,
+            alarmKey: 'w3_glass1'
+        },
+        {
+            id: 'FR3001B',
+            label: '2# 反应槽',
+            current: data.w3_glass2_current,
+            temp: data.w3_glass2_temp,
+            alarmKey: 'w3_glass2'
+        },
+        {
+            id: 'FR3001C',
+            label: '3# 反应槽',
+            current: data.w3_glass3_current,
+            temp: data.w3_glass3_temp,
+            alarmKey: 'w3_glass3'
+        },
+        {
+            id: 'FR3001D',
+            label: '4# 反应槽',
+            current: data.w3_glass4_current,
+            temp: data.w3_glass4_temp,
+            alarmKey: 'w3_glass4'
+        },
+        {
+            id: 'FR3001E',
+            label: '5# 反应槽',
+            current: data.w3_glass5_current,
+            temp: data.w3_glass5_temp,
+            alarmKey: 'w3_glass5'
+        },
     ];
 }
 
@@ -173,62 +199,47 @@ function buildEnamelReactors(data: ScadaData): SteelTankItem[] {
     ];
 }
 
-function WorkshopThreeVerticalReactor({
-                                          label,
-                                          temp,
-                                          current,
-                                          showCurrent = false,
-                                      }: WorkshopThreeVerticalReactorProps) {
+function UndergroundSlide({tanks, alarmData}: { tanks: UndergroundTankItem[]; alarmData: AlarmData }) {
     return (
-        <article className="workshop-three-vertical-reactor">
-            <div className="workshop-three-vertical-reactor__label">{label}</div>
-            <div className="workshop-three-vertical-reactor__visual">
-                <img src={reactorTankImage} alt={label} className="workshop-three-vertical-reactor__image"
-                     draggable="false"/>
-            </div>
-            <div className="workshop-three-vertical-reactor__metrics workshop-three-vertical-reactor__metrics--below">
-                {showCurrent && current !== undefined ? (
-                    <div className="workshop-three-vertical-reactor__metric">
-                        {formatMetricValue(current)} A
-                    </div>
-                ) : null}
-                <div className="workshop-three-vertical-reactor__metric">
-                    {formatMetricValue(temp)}°C
-                </div>
-            </div>
-        </article>
-    );
-}
-
-function UndergroundSlide({tanks}: { tanks: UndergroundTankItem[] }) {
-    return (
-        <section className="workshop-three-reactor-slide" aria-label="地下斧区域">
-            <div className="workshop-three-reactor-column">
+        <section className="workshop-three-reactor-slide workshop-three-reactor-slide--underground"
+                 aria-label="地下斧区域">
+            <div className="workshop-three-reactor-column workshop-three-reactor-column--underground">
                 {tanks.map((tank) => (
-                    <WorkshopThreeVerticalReactor
-                        key={tank.id}
-                        label={tank.label}
-                        temp={tank.temp}
-                        showCurrent={false}
-                    />
+                    <div key={tank.id} className="workshop-three-underground-reactor-slot">
+                        <Tank
+                            label={tank.label}
+                            temp={tank.temp}
+                            variant="reactor"
+                            showLevel={false}
+                            hasAlarm={hasAlarm(tank.alarmKey, alarmData)}
+                            reactorSizeClassName="h-[15rem]"
+                            reactorBaselineClassName="-translate-y-[64px]"
+                        />
+                    </div>
                 ))}
             </div>
         </section>
     );
 }
 
-function GlassSlide({tanks}: { tanks: GlassTankItem[] }) {
+function GlassSlide({tanks, alarmData}: { tanks: GlassTankItem[]; alarmData: AlarmData }) {
     return (
-        <section className="workshop-three-reactor-slide" aria-label="玻璃钢斧区域">
-            <div className="workshop-three-reactor-column workshop-three-reactor-column--five">
+        <section className="workshop-three-reactor-slide workshop-three-reactor-slide--glass" aria-label="玻璃钢斧区域">
+            <div className="workshop-three-reactor-column workshop-three-reactor-column--glass">
                 {tanks.map((tank) => (
-                    <WorkshopThreeVerticalReactor
-                        key={tank.id}
-                        label={tank.label}
-                        temp={tank.temp}
-                        current={tank.current}
-                        showCurrent
-                    />
+                    <div key={tank.id} className="workshop-three-glass-reactor-slot">
+                        <Tank
+                            label={tank.label}
+                            temp={tank.temp}
+                            current={tank.current}
+                            variant="reactor"
+                            showLevel={false}
+                            reactorFooterLayout="stacked"
+                            hasAlarm={hasAlarm(tank.alarmKey, alarmData)}
+                            reactorSizeClassName="h-[12.5rem]"
+                            reactorBaselineClassName="-translate-y-[52px]"
+                        />
+                    </div>
                 ))}
             </div>
         </section>
@@ -323,9 +334,9 @@ function WorkshopThreeBody({
     const glassSteelReactors = buildGlassSteelReactors(scadaData);
     const enamelReactors = buildEnamelReactors(scadaData);
     const slides = [
-        {id: 'underground', content: <UndergroundSlide tanks={undergroundReactors}/>},
+        {id: 'underground', content: <UndergroundSlide tanks={undergroundReactors} alarmData={alarmData}/>},
         {id: 'steel', content: <SteelSlide tanks={steelReactors}/>},
-        {id: 'glass', content: <GlassSlide tanks={glassSteelReactors}/>},
+        {id: 'glass', content: <GlassSlide tanks={glassSteelReactors} alarmData={alarmData}/>},
         {id: 'enamel-1', content: <EnamelSlide tanks={enamelReactors.slice(0, 3)}/>},
         {id: 'enamel-2', content: <EnamelSlide tanks={enamelReactors.slice(3, 6)}/>},
         {

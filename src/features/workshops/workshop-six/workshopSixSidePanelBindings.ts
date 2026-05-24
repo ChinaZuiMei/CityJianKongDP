@@ -1,7 +1,10 @@
 import type {ScadaData} from '../../dashboard/model/types';
 
 export const WORKSHOP_SIX_LEFT_PANEL_CONFIG = {
-    flow: {title: '装车1流量面板', subtitle: 'LOADING 1 FLOW PANEL'},
+    display: {
+        title: '主画面数显面板',
+        subtitle: 'MAIN SCREEN DIGITAL PANEL',
+    },
     level: {
         title: '罐区液位面板',
         subtitle: 'TANK LEVEL PANEL',
@@ -10,7 +13,7 @@ export const WORKSHOP_SIX_LEFT_PANEL_CONFIG = {
     loading: {
         title: '装车流量面板',
         subtitle: 'LOADING FLOW PANEL',
-        meta: ['聚合硫酸铁装车', '装车1+2'] as const,
+        meta: ['装车1', '瞬时/累计/装入量'] as const,
     },
 } as const;
 
@@ -27,19 +30,19 @@ export const WORKSHOP_SIX_RIGHT_PANEL_CONFIG = {
         meta: ['氧气流量', '单位 / m3'] as const,
     },
     loading: {
-        title: '定量流量面板',
-        subtitle: 'BATCH FLOW PANEL',
-        meta: ['聚合硫酸铁定量', '定量1+2'] as const,
+        title: '装车流量面板',
+        subtitle: 'LOADING FLOW PANEL',
+        meta: ['装车2', '瞬时/累计/装入量'] as const,
     },
 } as const;
 
 export type WorkshopSixExternalRow = { label: string; value: number };
 export type WorkshopSixLeakRow = { label: string; value: number };
 
-export function getWorkshopSixFlowValues(data: ScadaData) {
+export function getWorkshopSixMainDisplayValues(data: ScadaData) {
     return {
-        instant: Number.isFinite(data.w6_loading1_instant) ? data.w6_loading1_instant : 0,
-        total: Number.isFinite(data.w6_loading1_total) ? data.w6_loading1_total : 0,
+        liquidNitrogenTemp: null as number | null,
+        diluteSulfuricLevel: Number.isFinite(data.w6_dilute_sulfuric_level) ? data.w6_dilute_sulfuric_level : 0,
     };
 }
 
@@ -68,12 +71,17 @@ export function getWorkshopSixExternalValues(data: ScadaData) {
     ];
 }
 
-export function getWorkshopSixLoadingValues(data: ScadaData, mode: 'loading' | 'batch' = 'loading') {
-    const instant = mode === 'loading'
-        ? (Number.isFinite(data.w6_loading1_instant) ? data.w6_loading1_instant : 0) + (Number.isFinite(data.w6_loading2_instant) ? data.w6_loading2_instant : 0)
-        : (Number.isFinite(data.w6_batch1_instant) ? data.w6_batch1_instant : 0) + (Number.isFinite(data.w6_batch2_instant) ? data.w6_batch2_instant : 0);
-    const total = mode === 'loading'
-        ? (Number.isFinite(data.w6_loading1_total) ? data.w6_loading1_total : 0) + (Number.isFinite(data.w6_loading2_total) ? data.w6_loading2_total : 0)
-        : (Number.isFinite(data.w6_batch1_total) ? data.w6_batch1_total : 0) + (Number.isFinite(data.w6_batch2_total) ? data.w6_batch2_total : 0);
-    return {instant, total, isActive: instant > 0};
+export type WorkshopSixLoadingLane = 'loading1' | 'loading2';
+
+export function getWorkshopSixLoadingValues(data: ScadaData, lane: WorkshopSixLoadingLane) {
+    if (lane === 'loading1') {
+        const once = Number.isFinite(data.w6_loading1_once) ? data.w6_loading1_once : 0;
+        const instant = Number.isFinite(data.w6_loading1_instant) ? data.w6_loading1_instant : 0;
+        const total = Number.isFinite(data.w6_loading1_total) ? data.w6_loading1_total : 0;
+        return {once, instant, total, isActive: instant > 0};
+    }
+    const once = Number.isFinite(data.w6_loading2_once) ? data.w6_loading2_once : 0;
+    const instant = Number.isFinite(data.w6_loading2_instant) ? data.w6_loading2_instant : 0;
+    const total = Number.isFinite(data.w6_loading2_total) ? data.w6_loading2_total : 0;
+    return {once, instant, total, isActive: instant > 0};
 }

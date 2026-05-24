@@ -1,5 +1,5 @@
 import React from 'react';
-import {Header, useDashboardRuntime} from './features/dashboard';
+import {DashboardSettingsModal, Header, useDashboardRuntime} from './features/dashboard';
 import topDecorImage from './images/网站顶部图片.png';
 import bottomDecorImage from './images/网站底部图.png';
 import sideDecorImage from './images/网站侧边图.png';
@@ -15,10 +15,23 @@ export default function App() {
         activeAlarms,
         alarmCount,
         isAlarmPanelOpen,
+        isSettingsOpen,
         selectedWorkshop,
+        settings,
+        setSettings,
+        restoreDefaults,
         setIsAlarmPanelOpen,
-        setSelectedWorkshop,
+        setIsSettingsOpen,
+        handleWorkshopChange,
+        workshopConnectionStatuses,
+        carousel,
+        selectedPauseChoice,
+        handlePauseChoiceChange,
+        handlePauseCarousel,
+        handleResumeCarousel,
     } = useDashboardRuntime();
+
+    const currentWorkshopName = selectedWorkshopDefinition?.name ?? '';
 
     return (
         <div
@@ -37,12 +50,36 @@ export default function App() {
             </div>
             <Header
                 currentTime={currentTime}
-                connected={mqttConnected}
                 alarmCount={alarmCount}
                 onAlarmClick={() => setIsAlarmPanelOpen(!isAlarmPanelOpen)}
                 workshops={workshops}
                 selectedWorkshop={selectedWorkshop}
-                onWorkshopChange={setSelectedWorkshop}
+                onWorkshopChange={handleWorkshopChange}
+                onOpenSettings={() => setIsSettingsOpen(true)}
+                carouselHint={carousel.headerHint}
+            />
+            <DashboardSettingsModal
+                open={isSettingsOpen}
+                onClose={() => setIsSettingsOpen(false)}
+                settings={settings}
+                onSettingsChange={setSettings}
+                onRestoreDefaults={restoreDefaults}
+                workshopStatuses={workshopConnectionStatuses}
+                carouselStatus={carousel.runtimeStatus}
+                statusLabel={carousel.statusLabel}
+                currentIndex={carousel.currentIndex}
+                totalWorkshops={workshops.filter((workshop) => workshop.enabled).length}
+                currentWorkshopName={currentWorkshopName}
+                nextWorkshopName={carousel.nextWorkshopName}
+                rotateRemainingSec={carousel.rotateRemainingSec}
+                cooldownRemainingSec={carousel.cooldownRemainingSec}
+                pauseRemainingSec={carousel.pauseRemainingSec}
+                pauseForever={carousel.pauseForever}
+                isPaused={carousel.isPaused}
+                selectedPauseChoice={selectedPauseChoice}
+                onPauseChoiceChange={handlePauseChoiceChange}
+                onPauseCarousel={handlePauseCarousel}
+                onResumeCarousel={handleResumeCarousel}
             />
             <div className="contents" key={selectedWorkshop}>
                 {selectedWorkshopDefinition?.render({

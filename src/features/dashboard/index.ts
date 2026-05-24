@@ -1,4 +1,5 @@
 export {AlarmPanel} from './components/AlarmPanel';
+export {DashboardSettingsModal} from './components/DashboardSettingsModal';
 export {Header} from './components/Header';
 export {ScrollDashboard} from './rendering/ScrollDashboard';
 export {SidePanelPreview, shouldEnableSidePanelPreview} from './rendering/SidePanelPreview';

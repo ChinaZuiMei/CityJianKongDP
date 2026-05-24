@@ -80,6 +80,102 @@ export function createWorkshopSixLeakBarOption(rows: WorkshopSixLeakRow[]): ECha
     };
 }
 
+export function createWorkshopSixMainDisplayLiquidFillOption(
+    liquidNitrogenTempRaw: number | null,
+    diluteSulfuricLevelRaw: number,
+): EChartsOption {
+    const diluteSulfuricLevel = Number.isFinite(diluteSulfuricLevelRaw) ? diluteSulfuricLevelRaw : 0;
+    const hasLiquidNitrogenTemp = liquidNitrogenTempRaw !== null && Number.isFinite(liquidNitrogenTempRaw);
+    const liquidNitrogenTemp = hasLiquidNitrogenTemp ? liquidNitrogenTempRaw : 0;
+    const liquidNitrogenMax = 100;
+    const diluteSulfuricMax = 8;
+    const liquidNitrogenPercent = hasLiquidNitrogenTemp
+        ? Math.max(0, Math.min(liquidNitrogenTemp / liquidNitrogenMax, 1))
+        : 0;
+    const diluteSulfuricPercent = Math.max(0, Math.min(diluteSulfuricLevel / diluteSulfuricMax, 1));
+
+    const buildLabel = (valueText: string, unit: string, fontSize: number) => ({
+        formatter: () => `{value|${valueText}}\n{unit|${unit}}`,
+        rich: {
+            value: {fontSize, fontWeight: 700, color: '#ffffff', lineHeight: fontSize + 6},
+            unit: {fontSize: 10, fontWeight: 500, color: '#9fdcff', lineHeight: 14},
+        },
+    });
+
+    return {
+        backgroundColor: 'transparent',
+        title: [
+            {
+                text: '液氮温度',
+                left: '22%',
+                top: '74%',
+                textAlign: 'center',
+                textStyle: {fontSize: 14, fontWeight: 400, color: '#5dc3ea'},
+            },
+            {
+                text: '稀硫酸液位',
+                left: '73%',
+                top: '74%',
+                textAlign: 'center',
+                textStyle: {fontSize: 14, fontWeight: 400, color: '#5dc3ea'},
+            },
+        ],
+        tooltip: {
+            trigger: 'item',
+            formatter: (params: any) => {
+                if (params?.seriesIndex === 0) {
+                    return hasLiquidNitrogenTemp
+                        ? `液氮温度<br/>数值 : ${formatMetricValue(liquidNitrogenTemp)} °C`
+                        : '液氮温度<br/>数值 : —';
+                }
+                return `稀硫酸液位<br/>数值 : ${formatMetricValue(diluteSulfuricLevel)} m`;
+            },
+        },
+        series: [
+            {
+                type: 'liquidFill',
+                radius: '47%',
+                center: ['25%', '45%'],
+                color: [{
+                    type: 'linear',
+                    x: 0,
+                    y: 0,
+                    x2: 0,
+                    y2: 1,
+                    colorStops: [{offset: 0, color: '#446bf5'}, {offset: 1, color: '#2ca3e2'}],
+                    globalCoord: false,
+                }],
+                data: [liquidNitrogenPercent, liquidNitrogenPercent],
+                backgroundStyle: {borderWidth: 1, color: 'rgba(51, 66, 127, 0.7)'},
+                label: buildLabel(
+                    hasLiquidNitrogenTemp ? formatMetricValue(liquidNitrogenTemp) : '—',
+                    '°C',
+                    22,
+                ),
+                outline: {borderDistance: 0, itemStyle: {borderWidth: 2, borderColor: '#112165'}},
+            } as any,
+            {
+                type: 'liquidFill',
+                radius: '47%',
+                center: ['75%', '45%'],
+                color: [{
+                    type: 'linear',
+                    x: 0,
+                    y: 0,
+                    x2: 0,
+                    y2: 1,
+                    colorStops: [{offset: 0, color: '#2aa1e3'}, {offset: 1, color: '#08bbc9'}],
+                    globalCoord: false,
+                }],
+                data: [diluteSulfuricPercent, diluteSulfuricPercent],
+                backgroundStyle: {borderWidth: 1, color: 'rgba(51, 66, 127, 0.7)'},
+                label: buildLabel(formatMetricValue(diluteSulfuricLevel), 'm', 18),
+                outline: {borderDistance: 0, itemStyle: {borderWidth: 2, borderColor: '#112165'}},
+            } as any,
+        ],
+    };
+}
+
 export function createWorkshopSixFlowLiquidFillOption(instantRaw: number, totalRaw: number): EChartsOption {
     const instantValue = Number.isFinite(instantRaw) ? instantRaw : 0;
     const totalValue = Number.isFinite(totalRaw) ? totalRaw : 0;
@@ -164,8 +260,9 @@ export function createWorkshopSixFlowLiquidFillOption(instantRaw: number, totalR
     };
 }
 
-export function createWorkshopSixLoadingBarOption(instant: number, total: number): EChartsOption {
+export function createWorkshopSixLoadingBarOption(once: number, instant: number, total: number): EChartsOption {
     const rows = [
+        {label: '本次装入量', value: once, unit: 'T'},
         {label: '瞬时流量', value: instant, unit: 'm³/h'},
         {label: '累计流量', value: total, unit: 'm³'},
     ];

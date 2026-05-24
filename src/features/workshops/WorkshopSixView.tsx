@@ -5,6 +5,7 @@ import {WorkshopSixLeftPanels, WorkshopSixRightPanels} from './workshop-six';
 import {Tank} from '../dashboard/ui/SharedComponents';
 import type {WorkshopRuntimeData} from './types';
 import {formatMetricValue} from '../../utils/formatMetricValue';
+import {cn} from '../../utils/cn';
 import undergroundTankImage from '../../mingfanImg/地下罐子.png';
 import reactorTankImage from '../../images/反应槽.png';
 
@@ -30,8 +31,8 @@ const regionHeaders = [
 ];
 
 function toValveStatus(open: number, closed: number): '开' | '关' | '空' {
-    if (open > 0) return '开';
-    if (closed > 0) return '关';
+    if (open > 0 && closed <= 0) return '开';
+    if (closed > 0 && open <= 0) return '关';
     return '空';
 }
 
@@ -70,6 +71,92 @@ function WorkshopSixLevelGroup({tanks}: { tanks: LevelTank[] }) {
     );
 }
 
+function toOxygenValveStatus(open: number): '开' | '关' {
+    return open > 0 ? '开' : '关';
+}
+
+type WorkshopSixKettleIndex = 1 | 2 | 3 | 4;
+
+function buildWorkshopSixKettleValves(
+    scadaData: WorkshopRuntimeData['scadaData'],
+    kettle: WorkshopSixKettleIndex,
+): ValveStatus[] {
+    const fields = {
+        1: {
+            oxygen: scadaData.w6_kettle1_oxygen_open,
+            feedOpen: scadaData.w6_kettle1_feed_open,
+            feedClosed: scadaData.w6_kettle1_feed_closed,
+            catalystOpen: scadaData.w6_kettle1_catalyst_open,
+            catalystClosed: scadaData.w6_kettle1_catalyst_closed,
+            linkOpen: scadaData.w6_kettle1_link_feed_open,
+            linkClosed: scadaData.w6_kettle1_link_feed_closed,
+            dischargeOpen: scadaData.w6_kettle1_discharge_open,
+            dischargeClosed: scadaData.w6_kettle1_discharge_closed,
+        },
+        2: {
+            oxygen: scadaData.w6_kettle2_oxygen_open,
+            feedOpen: scadaData.w6_kettle2_feed_open,
+            feedClosed: scadaData.w6_kettle2_feed_closed,
+            catalystOpen: scadaData.w6_kettle2_catalyst_open,
+            catalystClosed: scadaData.w6_kettle2_catalyst_closed,
+            linkOpen: scadaData.w6_kettle2_link_feed_open,
+            linkClosed: scadaData.w6_kettle2_link_feed_closed,
+            dischargeOpen: scadaData.w6_kettle2_discharge_open,
+            dischargeClosed: scadaData.w6_kettle2_discharge_closed,
+        },
+        3: {
+            oxygen: scadaData.w6_kettle3_oxygen_open,
+            feedOpen: scadaData.w6_kettle3_feed_open,
+            feedClosed: scadaData.w6_kettle3_feed_closed,
+            catalystOpen: scadaData.w6_kettle3_catalyst_open,
+            catalystClosed: scadaData.w6_kettle3_catalyst_closed,
+            linkOpen: scadaData.w6_kettle3_link_feed_open,
+            linkClosed: scadaData.w6_kettle3_link_feed_closed,
+            dischargeOpen: scadaData.w6_kettle3_discharge_open,
+            dischargeClosed: scadaData.w6_kettle3_discharge_closed,
+        },
+        4: {
+            oxygen: scadaData.w6_kettle4_oxygen_open,
+            feedOpen: scadaData.w6_kettle4_feed_open,
+            feedClosed: scadaData.w6_kettle4_feed_closed,
+            catalystOpen: scadaData.w6_kettle4_catalyst_open,
+            catalystClosed: scadaData.w6_kettle4_catalyst_closed,
+            linkOpen: scadaData.w6_kettle4_link_feed_open,
+            linkClosed: scadaData.w6_kettle4_link_feed_closed,
+            dischargeOpen: scadaData.w6_kettle4_discharge_open,
+            dischargeClosed: scadaData.w6_kettle4_discharge_closed,
+        },
+    }[kettle];
+
+    return [
+        {name: '进氧阀', status: toOxygenValveStatus(fields.oxygen)},
+        {name: '进料阀', status: toValveStatus(fields.feedOpen, fields.feedClosed)},
+        {name: '进催化剂阀', status: toValveStatus(fields.catalystOpen, fields.catalystClosed)},
+        {name: '循环阀', status: toValveStatus(fields.linkOpen, fields.linkClosed)},
+        {name: '出料阀', status: toValveStatus(fields.dischargeOpen, fields.dischargeClosed)},
+    ];
+}
+
+function WorkshopSixMainValveRow({name, status}: { name: string; status: ValveStatus['status'] }) {
+    const statusLabel = status === '空' ? '—' : status;
+
+    return (
+        <div className="workshop-six-main-valve">
+            <span className="workshop-six-main-valve__name">{name}</span>
+            <span
+                className={cn(
+                    'workshop-six-main-valve__status',
+                    status === '开' && 'workshop-six-main-valve__status--open',
+                    status === '关' && 'workshop-six-main-valve__status--closed',
+                    status === '空' && 'workshop-six-main-valve__status--empty',
+                )}
+            >
+                {statusLabel}
+            </span>
+        </div>
+    );
+}
+
 function WorkshopSixMainTank({id, pressure, valves}: { id: string; pressure: number; valves: ValveStatus[] }) {
     return (
         <article className="workshop-six-main-tank">
@@ -81,19 +168,8 @@ function WorkshopSixMainTank({id, pressure, valves}: { id: string; pressure: num
                 <div className="workshop-six-main-tank__pressure">{formatMetricValue(pressure)} Mpa</div>
                 <div className="workshop-six-main-tank__valves">
                     {valves.map((row, index) => (
-                        <div key={`${id}-${row.name}-${index}`} className="workshop-six-main-valve">
-                            <span className="workshop-six-main-valve__name">{row.name}</span>
-                            <span
-                                className={
-                                    row.status === '开'
-                                        ? 'workshop-six-main-valve__status workshop-six-main-valve__status--open'
-                                        : row.status === '关'
-                                            ? 'workshop-six-main-valve__status workshop-six-main-valve__status--closed'
-                                            : 'workshop-six-main-valve__status workshop-six-main-valve__status--empty'
-                                }
-                            >
-                                {row.status}
-                            </span>
+                        <div key={`${id}-${row.name}-${index}`} className="workshop-six-main-valve-slot">
+                            <WorkshopSixMainValveRow name={row.name} status={row.status}/>
                         </div>
                     ))}
                 </div>
@@ -107,105 +183,27 @@ function WorkshopSixMainScreen({scadaData}: { scadaData: WorkshopRuntimeData['sc
         {
             id: 'F0101A',
             pressure: scadaData.w6_kettle1_pressure,
-            valves: [
-                {
-                    name: '连锁料阀',
-                    status: toValveStatus(scadaData.w6_kettle1_link_feed_open, scadaData.w6_kettle1_link_feed_closed)
-                },
-                {
-                    name: '进料阀',
-                    status: toValveStatus(scadaData.w6_kettle1_feed_open, scadaData.w6_kettle1_feed_closed)
-                },
-                {name: '进氧阀', status: scadaData.w6_kettle1_oxygen_open > 0 ? '开' : '关'},
-                {
-                    name: '催化剂阀',
-                    status: toValveStatus(scadaData.w6_kettle1_catalyst_open, scadaData.w6_kettle1_catalyst_closed)
-                },
-                {
-                    name: '放料阀',
-                    status: toValveStatus(scadaData.w6_kettle1_discharge_open, scadaData.w6_kettle1_discharge_closed)
-                },
-            ] satisfies ValveStatus[],
+            valves: buildWorkshopSixKettleValves(scadaData, 1),
         },
         {
             id: 'F0101B',
             pressure: scadaData.w6_kettle2_pressure,
-            valves: [
-                {
-                    name: '连锁料阀',
-                    status: toValveStatus(scadaData.w6_kettle2_link_feed_open, scadaData.w6_kettle2_link_feed_closed)
-                },
-                {
-                    name: '进料阀',
-                    status: toValveStatus(scadaData.w6_kettle2_feed_open, scadaData.w6_kettle2_feed_closed)
-                },
-                {name: '进氧阀', status: scadaData.w6_kettle2_oxygen_open > 0 ? '开' : '关'},
-                {
-                    name: '催化剂阀',
-                    status: toValveStatus(scadaData.w6_kettle2_catalyst_open, scadaData.w6_kettle2_catalyst_closed)
-                },
-                {
-                    name: '放料阀',
-                    status: toValveStatus(scadaData.w6_kettle2_discharge_open, scadaData.w6_kettle2_discharge_closed)
-                },
-            ] satisfies ValveStatus[],
+            valves: buildWorkshopSixKettleValves(scadaData, 2),
         },
         {
             id: 'F0101C',
             pressure: scadaData.w6_kettle3_pressure,
-            valves: [
-                {
-                    name: '连锁料阀',
-                    status: toValveStatus(scadaData.w6_kettle3_link_feed_open, scadaData.w6_kettle3_link_feed_closed)
-                },
-                {
-                    name: '进料阀',
-                    status: toValveStatus(scadaData.w6_kettle3_feed_open, scadaData.w6_kettle3_feed_closed)
-                },
-                {name: '进氧阀', status: scadaData.w6_kettle3_oxygen_open > 0 ? '开' : '关'},
-                {
-                    name: '催化剂阀',
-                    status: toValveStatus(scadaData.w6_kettle3_catalyst_open, scadaData.w6_kettle3_catalyst_closed)
-                },
-                {
-                    name: '放料阀',
-                    status: toValveStatus(scadaData.w6_kettle3_discharge_open, scadaData.w6_kettle3_discharge_closed)
-                },
-            ] satisfies ValveStatus[],
+            valves: buildWorkshopSixKettleValves(scadaData, 3),
         },
         {
             id: 'F0101D',
             pressure: scadaData.w6_kettle4_pressure,
-            valves: [
-                {
-                    name: '连锁料阀',
-                    status: toValveStatus(scadaData.w6_kettle4_link_feed_open, scadaData.w6_kettle4_link_feed_closed)
-                },
-                {
-                    name: '进料阀',
-                    status: toValveStatus(scadaData.w6_kettle4_feed_open, scadaData.w6_kettle4_feed_closed)
-                },
-                {name: '进氧阀', status: scadaData.w6_kettle4_oxygen_open > 0 ? '开' : '关'},
-                {
-                    name: '催化剂阀',
-                    status: toValveStatus(scadaData.w6_kettle4_catalyst_open, scadaData.w6_kettle4_catalyst_closed)
-                },
-                {
-                    name: '放料阀',
-                    status: toValveStatus(scadaData.w6_kettle4_discharge_open, scadaData.w6_kettle4_discharge_closed)
-                },
-            ] satisfies ValveStatus[],
+            valves: buildWorkshopSixKettleValves(scadaData, 4),
         },
     ]), [scadaData]);
 
     return (
         <section className="workshop-six-main-screen" aria-label="聚合硫酸铁主画面">
-            <div className="workshop-six-main-pipes" aria-hidden="true">
-                <span className="workshop-six-main-pipes__line workshop-six-main-pipes__line--oxygen"/>
-                <span className="workshop-six-main-pipes__line workshop-six-main-pipes__line--catalyst"/>
-                <span className="workshop-six-main-pipes__line workshop-six-main-pipes__line--feed"/>
-                <span className="workshop-six-main-pipes__line workshop-six-main-pipes__line--return"/>
-            </div>
             <div className="workshop-six-main-screen__tanks">
                 {mainTanks.map((tank) => (
                     <div key={tank.id} className="workshop-six-main-screen__tank-slot">
@@ -213,18 +211,6 @@ function WorkshopSixMainScreen({scadaData}: { scadaData: WorkshopRuntimeData['sc
                     </div>
                 ))}
             </div>
-            <aside className="workshop-six-main-screen__metrics">
-                <div className="workshop-six-main-metric">
-                    <span className="workshop-six-main-metric__label">釜1氧气流量</span>
-                    <span
-                        className="workshop-six-main-metric__value">{formatMetricValue(scadaData.w6_kettle1_oxygen_flow)} m3</span>
-                </div>
-                <div className="workshop-six-main-metric">
-                    <span className="workshop-six-main-metric__label">稀硫酸液位</span>
-                    <span
-                        className="workshop-six-main-metric__value">{formatMetricValue(scadaData.w6_dilute_sulfuric_level)} m</span>
-                </div>
-            </aside>
         </section>
     );
 }

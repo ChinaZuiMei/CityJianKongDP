@@ -196,6 +196,14 @@ export interface ScadaData {
     w6_kettle2_oxygen_open: number;
     w6_kettle3_oxygen_open: number;
     w6_kettle4_oxygen_open: number;
+    w6_kettle1_oxygen_link_open: number;
+    w6_kettle1_oxygen_link_closed: number;
+    w6_kettle2_oxygen_link_open: number;
+    w6_kettle2_oxygen_link_closed: number;
+    w6_kettle3_oxygen_link_open: number;
+    w6_kettle3_oxygen_link_closed: number;
+    w6_kettle4_oxygen_link_open: number;
+    w6_kettle4_oxygen_link_closed: number;
     w7_reactor1_temp: number;
     w7_reactor2_temp: number;
     w7_reactor3_temp: number;
@@ -455,6 +463,14 @@ export const DEFAULT_DATA: ScadaData = {
     w6_kettle2_oxygen_open: 0,
     w6_kettle3_oxygen_open: 0,
     w6_kettle4_oxygen_open: 0,
+    w6_kettle1_oxygen_link_open: 0,
+    w6_kettle1_oxygen_link_closed: 0,
+    w6_kettle2_oxygen_link_open: 0,
+    w6_kettle2_oxygen_link_closed: 0,
+    w6_kettle3_oxygen_link_open: 0,
+    w6_kettle3_oxygen_link_closed: 0,
+    w6_kettle4_oxygen_link_open: 0,
+    w6_kettle4_oxygen_link_closed: 0,
     w7_reactor1_temp: 0,
     w7_reactor2_temp: 0,
     w7_reactor3_temp: 0,

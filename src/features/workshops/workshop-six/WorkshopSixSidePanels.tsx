@@ -1,6 +1,6 @@
 import type {ScadaData} from '../../dashboard/model/types';
 import {
-    WorkshopSixLeftFlowPanel,
+    WorkshopSixLeftMainDisplayPanel,
     WorkshopSixLeftLevelPanel,
     WorkshopSixLeftLoadingPanel,
     WorkshopSixRightExternalPanel,
@@ -12,7 +12,7 @@ import './WorkshopSixSidePanels.css';
 export function WorkshopSixLeftPanels({data}: { data: ScadaData }) {
     return (
         <>
-            <WorkshopSixLeftFlowPanel data={data}/>
+            <WorkshopSixLeftMainDisplayPanel data={data}/>
             <WorkshopSixLeftLevelPanel data={data}/>
             <WorkshopSixLeftLoadingPanel data={data}/>
         </>

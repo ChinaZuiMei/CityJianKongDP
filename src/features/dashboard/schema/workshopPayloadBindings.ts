@@ -277,6 +277,14 @@ export const WORKSHOP_06_METRIC_BINDINGS: MetricBindingSchema[] = [
     {field: 'w6_kettle2_oxygen_open', sources: ['釜2进氧气阀开']},
     {field: 'w6_kettle3_oxygen_open', sources: ['釜3进氧气阀开']},
     {field: 'w6_kettle4_oxygen_open', sources: ['釜4进氧气阀开']},
+    {field: 'w6_kettle1_oxygen_link_open', sources: ['釜1进氧阀连锁开点']},
+    {field: 'w6_kettle1_oxygen_link_closed', sources: ['釜1进氧阀连锁关点']},
+    {field: 'w6_kettle2_oxygen_link_open', sources: ['釜2进氧阀连锁开点']},
+    {field: 'w6_kettle2_oxygen_link_closed', sources: ['釜2进氧阀连锁关点']},
+    {field: 'w6_kettle3_oxygen_link_open', sources: ['釜3进氧阀连锁开点']},
+    {field: 'w6_kettle3_oxygen_link_closed', sources: ['釜3进氧阀连锁关点']},
+    {field: 'w6_kettle4_oxygen_link_open', sources: ['釜4进氧阀连锁开点']},
+    {field: 'w6_kettle4_oxygen_link_closed', sources: ['釜4进氧阀连锁关点']},
 ];
 
 /** 液体硫酸铝 workshop-07 */
@@ -388,7 +396,7 @@ export const WORKSHOP_BINDING_REGISTRY: WorkshopBindingConfig[] = [
         metricBindings: WORKSHOP_06_METRIC_BINDINGS,
         alarmKeyMatcher: (key) =>
             !key.includes('设定值')
-            && (key.includes('报警') || key.includes('故障') || key.includes('连锁')),
+            && (key.includes('报警') || key.includes('故障')),
     },
     {
         workshopId: 'workshop-07',
