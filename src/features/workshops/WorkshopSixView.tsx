@@ -16,21 +16,10 @@ type LevelTank = {
     variant: 'cone' | 'storage' | 'underground';
 };
 
-const mainTanks = [
-    {id: 'F0101A', pressure: '0.00 Mpa'},
-    {id: 'F0101B', pressure: '-0.00 Mpa'},
-    {id: 'F0101C', pressure: '-0.00 Mpa'},
-    {id: 'F0101D', pressure: '-0.00 Mpa'},
-];
-
-const mainValveRows = [
-    {name: '催化剂阀', status: '关'},
-    {name: '催化剂阀', status: '关'},
-    {name: '进氧阀', status: '关'},
-    {name: '进料阀', status: '关'},
-    {name: '循环阀', status: '开'},
-    {name: '出料阀', status: '空'},
-];
+type ValveStatus = {
+    name: string;
+    status: '开' | '关' | '空';
+};
 
 const regionHeaders = [
     {id: 'main', title: '主画面', subtitle: 'MAIN SCREEN', alarmRegionId: 'main' as const},
@@ -40,31 +29,11 @@ const regionHeaders = [
     {id: 'level-2-b', title: '液位2-区域2', subtitle: 'LEVEL 2 - AREA 2'},
 ];
 
-const levelOneGroups: LevelTank[][] = [
-    [
-        {id: 'sulfuric-1', label: '1# 硫酸罐', level: 4.61, max: 8, variant: 'cone'},
-        {id: 'sulfuric-2', label: '2# 硫酸罐', level: 5.01, max: 8, variant: 'cone'},
-        {id: 'sulfuric-3', label: '3# 硫酸罐', level: 2.47, max: 8, variant: 'cone'},
-    ],
-    [
-        {id: 'sulfuric-4', label: '4# 硫酸罐', level: 3.30, max: 8, variant: 'cone'},
-        {id: 'hcl-1', label: '1# 盐酸罐', level: 7.86, max: 8, variant: 'storage'},
-        {id: 'hcl-2', label: '2# 盐酸罐', level: 2.26, max: 8, variant: 'storage'},
-    ],
-];
-
-const levelTwoGroups: LevelTank[][] = [
-    [
-        {id: 'sulfuric-3-level-2', label: '3# 硫酸罐', level: 1.13, max: 8, variant: 'cone'},
-        {id: 'sulfuric-4-level-2', label: '4# 硫酸罐', level: 0.66, max: 8, variant: 'cone'},
-        {id: 'sulfuric-5-level-2', label: '5# 硫酸罐', level: 1.50, max: 8, variant: 'cone'},
-    ],
-    [
-        {id: 'sulfuric-6-level-2', label: '6# 硫酸罐', level: 2.11, max: 8, variant: 'cone'},
-        {id: 'sulfuric-7-level-2', label: '7# 硫酸罐', level: 5.03, max: 8, variant: 'cone'},
-        {id: 'underground-level-2', label: '地下罐', level: 1.38, max: 8, variant: 'underground'},
-    ],
-];
+function toValveStatus(open: number, closed: number): '开' | '关' | '空' {
+    if (open > 0) return '开';
+    if (closed > 0) return '关';
+    return '空';
+}
 
 function UndergroundTank({label, level}: { label: string; level: number }) {
     return (
@@ -101,7 +70,7 @@ function WorkshopSixLevelGroup({tanks}: { tanks: LevelTank[] }) {
     );
 }
 
-function WorkshopSixMainTank({id, pressure}: { id: string; pressure: string }) {
+function WorkshopSixMainTank({id, pressure, valves}: { id: string; pressure: number; valves: ValveStatus[] }) {
     return (
         <article className="workshop-six-main-tank">
             <div className="workshop-six-main-tank__id">{id}</div>
@@ -109,9 +78,9 @@ function WorkshopSixMainTank({id, pressure}: { id: string; pressure: string }) {
                 <img src={reactorTankImage} alt={id} className="workshop-six-main-tank__image" draggable="false"/>
             </div>
             <div className="workshop-six-main-tank__details">
-                <div className="workshop-six-main-tank__pressure">{pressure}</div>
+                <div className="workshop-six-main-tank__pressure">{formatMetricValue(pressure)} Mpa</div>
                 <div className="workshop-six-main-tank__valves">
-                    {mainValveRows.map((row, index) => (
+                    {valves.map((row, index) => (
                         <div key={`${id}-${row.name}-${index}`} className="workshop-six-main-valve">
                             <span className="workshop-six-main-valve__name">{row.name}</span>
                             <span
@@ -123,8 +92,8 @@ function WorkshopSixMainTank({id, pressure}: { id: string; pressure: string }) {
                                             : 'workshop-six-main-valve__status workshop-six-main-valve__status--empty'
                                 }
                             >
-              {row.status}
-            </span>
+                                {row.status}
+                            </span>
                         </div>
                     ))}
                 </div>
@@ -133,7 +102,102 @@ function WorkshopSixMainTank({id, pressure}: { id: string; pressure: string }) {
     );
 }
 
-function WorkshopSixMainScreen() {
+function WorkshopSixMainScreen({scadaData}: { scadaData: WorkshopRuntimeData['scadaData'] }) {
+    const mainTanks = React.useMemo(() => ([
+        {
+            id: 'F0101A',
+            pressure: scadaData.w6_kettle1_pressure,
+            valves: [
+                {
+                    name: '连锁料阀',
+                    status: toValveStatus(scadaData.w6_kettle1_link_feed_open, scadaData.w6_kettle1_link_feed_closed)
+                },
+                {
+                    name: '进料阀',
+                    status: toValveStatus(scadaData.w6_kettle1_feed_open, scadaData.w6_kettle1_feed_closed)
+                },
+                {name: '进氧阀', status: scadaData.w6_kettle1_oxygen_open > 0 ? '开' : '关'},
+                {
+                    name: '催化剂阀',
+                    status: toValveStatus(scadaData.w6_kettle1_catalyst_open, scadaData.w6_kettle1_catalyst_closed)
+                },
+                {
+                    name: '放料阀',
+                    status: toValveStatus(scadaData.w6_kettle1_discharge_open, scadaData.w6_kettle1_discharge_closed)
+                },
+            ] satisfies ValveStatus[],
+        },
+        {
+            id: 'F0101B',
+            pressure: scadaData.w6_kettle2_pressure,
+            valves: [
+                {
+                    name: '连锁料阀',
+                    status: toValveStatus(scadaData.w6_kettle2_link_feed_open, scadaData.w6_kettle2_link_feed_closed)
+                },
+                {
+                    name: '进料阀',
+                    status: toValveStatus(scadaData.w6_kettle2_feed_open, scadaData.w6_kettle2_feed_closed)
+                },
+                {name: '进氧阀', status: scadaData.w6_kettle2_oxygen_open > 0 ? '开' : '关'},
+                {
+                    name: '催化剂阀',
+                    status: toValveStatus(scadaData.w6_kettle2_catalyst_open, scadaData.w6_kettle2_catalyst_closed)
+                },
+                {
+                    name: '放料阀',
+                    status: toValveStatus(scadaData.w6_kettle2_discharge_open, scadaData.w6_kettle2_discharge_closed)
+                },
+            ] satisfies ValveStatus[],
+        },
+        {
+            id: 'F0101C',
+            pressure: scadaData.w6_kettle3_pressure,
+            valves: [
+                {
+                    name: '连锁料阀',
+                    status: toValveStatus(scadaData.w6_kettle3_link_feed_open, scadaData.w6_kettle3_link_feed_closed)
+                },
+                {
+                    name: '进料阀',
+                    status: toValveStatus(scadaData.w6_kettle3_feed_open, scadaData.w6_kettle3_feed_closed)
+                },
+                {name: '进氧阀', status: scadaData.w6_kettle3_oxygen_open > 0 ? '开' : '关'},
+                {
+                    name: '催化剂阀',
+                    status: toValveStatus(scadaData.w6_kettle3_catalyst_open, scadaData.w6_kettle3_catalyst_closed)
+                },
+                {
+                    name: '放料阀',
+                    status: toValveStatus(scadaData.w6_kettle3_discharge_open, scadaData.w6_kettle3_discharge_closed)
+                },
+            ] satisfies ValveStatus[],
+        },
+        {
+            id: 'F0101D',
+            pressure: scadaData.w6_kettle4_pressure,
+            valves: [
+                {
+                    name: '连锁料阀',
+                    status: toValveStatus(scadaData.w6_kettle4_link_feed_open, scadaData.w6_kettle4_link_feed_closed)
+                },
+                {
+                    name: '进料阀',
+                    status: toValveStatus(scadaData.w6_kettle4_feed_open, scadaData.w6_kettle4_feed_closed)
+                },
+                {name: '进氧阀', status: scadaData.w6_kettle4_oxygen_open > 0 ? '开' : '关'},
+                {
+                    name: '催化剂阀',
+                    status: toValveStatus(scadaData.w6_kettle4_catalyst_open, scadaData.w6_kettle4_catalyst_closed)
+                },
+                {
+                    name: '放料阀',
+                    status: toValveStatus(scadaData.w6_kettle4_discharge_open, scadaData.w6_kettle4_discharge_closed)
+                },
+            ] satisfies ValveStatus[],
+        },
+    ]), [scadaData]);
+
     return (
         <section className="workshop-six-main-screen" aria-label="聚合硫酸铁主画面">
             <div className="workshop-six-main-pipes" aria-hidden="true">
@@ -145,18 +209,20 @@ function WorkshopSixMainScreen() {
             <div className="workshop-six-main-screen__tanks">
                 {mainTanks.map((tank) => (
                     <div key={tank.id} className="workshop-six-main-screen__tank-slot">
-                        <WorkshopSixMainTank id={tank.id} pressure={tank.pressure}/>
+                        <WorkshopSixMainTank id={tank.id} pressure={tank.pressure} valves={tank.valves}/>
                     </div>
                 ))}
             </div>
             <aside className="workshop-six-main-screen__metrics">
                 <div className="workshop-six-main-metric">
-                    <span className="workshop-six-main-metric__label">液氨温度</span>
-                    <span className="workshop-six-main-metric__value">35.7°C</span>
+                    <span className="workshop-six-main-metric__label">釜1氧气流量</span>
+                    <span
+                        className="workshop-six-main-metric__value">{formatMetricValue(scadaData.w6_kettle1_oxygen_flow)} m3</span>
                 </div>
                 <div className="workshop-six-main-metric">
                     <span className="workshop-six-main-metric__label">稀硫酸液位</span>
-                    <span className="workshop-six-main-metric__value">3.38 m</span>
+                    <span
+                        className="workshop-six-main-metric__value">{formatMetricValue(scadaData.w6_dilute_sulfuric_level)} m</span>
                 </div>
             </aside>
         </section>
@@ -166,18 +232,54 @@ function WorkshopSixMainScreen() {
 function WorkshopSixBody({
                              activeRegionIndex,
                              onActiveRegionIndexChange,
+                             scadaData,
                          }: {
     activeRegionIndex: number;
     onActiveRegionIndexChange: (index: number) => void;
+    scadaData: WorkshopRuntimeData['scadaData'];
 }) {
+    const levelOneGroups = React.useMemo<LevelTank[][]>(() => ([
+        [
+            {id: 'sulfuric-1', label: '1# 硫酸罐', level: scadaData.w6_sulfuric1_level, max: 8, variant: 'cone'},
+            {id: 'sulfuric-2', label: '2# 硫酸罐', level: scadaData.w6_sulfuric2_level, max: 8, variant: 'cone'},
+            {id: 'sulfuric-3', label: '3# 硫酸罐', level: scadaData.w6_sulfuric3_level, max: 8, variant: 'cone'},
+        ],
+        [
+            {id: 'sulfuric-4', label: '4# 硫酸罐', level: scadaData.w6_sulfuric4_level, max: 8, variant: 'cone'},
+            {id: 'hcl-1', label: '1# 盐酸罐', level: scadaData.w6_hcl1_level, max: 8, variant: 'storage'},
+            {id: 'hcl-2', label: '2# 盐酸罐', level: scadaData.w6_hcl2_level, max: 8, variant: 'storage'},
+        ],
+    ]), [scadaData]);
+
+    const levelTwoGroups = React.useMemo<LevelTank[][]>(() => ([
+        [
+            {id: 'sulfuric-5', label: '5# 硫酸罐', level: scadaData.w6_sulfuric5_level, max: 8, variant: 'cone'},
+            {id: 'sulfuric-6', label: '6# 硫酸罐', level: scadaData.w6_sulfuric6_level, max: 8, variant: 'cone'},
+            {id: 'sulfuric-7', label: '7# 硫酸罐', level: scadaData.w6_sulfuric7_level, max: 8, variant: 'cone'},
+        ],
+        [
+            {
+                id: 'dilute-sulfuric',
+                label: '稀硫酸罐',
+                level: scadaData.w6_dilute_sulfuric_level,
+                max: 8,
+                variant: 'storage'
+            },
+            {
+                id: 'underground-level',
+                label: '地下罐',
+                level: scadaData.w6_underground_level,
+                max: 8,
+                variant: 'underground'
+            },
+            {id: 'hcl-1-repeat', label: '1# 盐酸罐', level: scadaData.w6_hcl1_level, max: 8, variant: 'storage'},
+        ],
+    ]), [scadaData]);
+
     const slides = [
         {
             id: 'main',
-            content: (
-                <div className="workshop-six-body__main">
-                    <WorkshopSixMainScreen/>
-                </div>
-            ),
+            content: <div className="workshop-six-body__main"><WorkshopSixMainScreen scadaData={scadaData}/></div>
         },
         {id: 'level-1-a', content: <WorkshopSixLevelGroup tanks={levelOneGroups[0]}/>},
         {id: 'level-1-b', content: <WorkshopSixLevelGroup tanks={levelOneGroups[1]}/>},
@@ -189,10 +291,7 @@ function WorkshopSixBody({
 
     return (
         <div className="workshop-six-body">
-            <div
-                className="workshop-six-body__track"
-                style={{transform: `translateX(-${bodyTrackIndex * 100}%)`}}
-            >
+            <div className="workshop-six-body__track" style={{transform: `translateX(-${bodyTrackIndex * 100}%)`}}>
                 {reversedSlides.map((slide) => (
                     <div key={slide.id} className="workshop-six-body__slide">
                         {slide.content}
@@ -272,8 +371,11 @@ export function WorkshopSixView({
                     activeRegionIndex={activeRegionIndex}
                     onActiveRegionIndexChange={setActiveRegionIndex}
                 />
-                <WorkshopSixBody activeRegionIndex={activeRegionIndex}
-                                 onActiveRegionIndexChange={setActiveRegionIndex}/>
+                <WorkshopSixBody
+                    activeRegionIndex={activeRegionIndex}
+                    onActiveRegionIndexChange={setActiveRegionIndex}
+                    scadaData={scadaData}
+                />
             </main>
         </>
     );

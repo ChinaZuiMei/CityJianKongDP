@@ -12,7 +12,7 @@ type WorkshopMqttEntry = {
 };
 
 const MQTT_TOPIC_DEFAULTS = {
-    JL_OLD: '/sensor/jl_old/pub',
+    JL_OLD: '/JH/sensor/JLLC/pub',
     XJLYW: '/JH/sensor/XJLYW/pub',
     XJLFY: '/JH/sensor/XJLFY/pub',
     JLXCGZ: '/JH/sensor/JLXCGZ/pub',

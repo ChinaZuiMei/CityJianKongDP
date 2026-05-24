@@ -12,8 +12,8 @@ import './WorkshopSixSidePanels.css';
 export function WorkshopSixLeftPanels({data}: { data: ScadaData }) {
     return (
         <>
-            <WorkshopSixLeftFlowPanel/>
-            <WorkshopSixLeftLevelPanel/>
+            <WorkshopSixLeftFlowPanel data={data}/>
+            <WorkshopSixLeftLevelPanel data={data}/>
             <WorkshopSixLeftLoadingPanel data={data}/>
         </>
     );
@@ -22,10 +22,9 @@ export function WorkshopSixLeftPanels({data}: { data: ScadaData }) {
 export function WorkshopSixRightPanels({data}: { data: ScadaData }) {
     return (
         <>
-            <WorkshopSixRightTemperaturePanel/>
-            <WorkshopSixRightExternalPanel/>
+            <WorkshopSixRightTemperaturePanel data={data}/>
+            <WorkshopSixRightExternalPanel data={data}/>
             <WorkshopSixRightLoadingPanel data={data}/>
         </>
     );
 }
-

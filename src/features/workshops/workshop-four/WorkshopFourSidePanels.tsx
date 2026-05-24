@@ -12,7 +12,7 @@ import './WorkshopFourSidePanels.css';
 export function WorkshopFourLeftPanels({data}: { data: ScadaData }) {
     return (
         <>
-            <WorkshopFourLeftFlowPanel/>
+            <WorkshopFourLeftFlowPanel data={data}/>
             <WorkshopFourLeftLevelPanel/>
             <WorkshopFourLeftLoadingPanel data={data}/>
         </>
@@ -22,7 +22,7 @@ export function WorkshopFourLeftPanels({data}: { data: ScadaData }) {
 export function WorkshopFourRightPanels({data}: { data: ScadaData }) {
     return (
         <>
-            <WorkshopFourRightFlowPanel/>
+            <WorkshopFourRightFlowPanel data={data}/>
             <WorkshopFourRightExternalPanel/>
             <WorkshopFourRightLoadingPanel data={data}/>
         </>

@@ -2,9 +2,12 @@ import React from 'react';
 import type {ScadaData} from '../../dashboard/model/types';
 import loadingTruckImage from '../../../images/油罐车.png';
 import {
+    getWorkshopFiveExternalValues,
+    getWorkshopFiveFlowValues,
     WORKSHOP_FIVE_LEFT_PANEL_CONFIG,
     WORKSHOP_FIVE_RIGHT_PANEL_CONFIG,
     getWorkshopFiveLoadingValues,
+    getWorkshopFiveTemperatureValues,
 } from './workshopFiveSidePanelBindings';
 import {
     createWorkshopFiveExternalBarOption,
@@ -50,11 +53,12 @@ export function WorkshopFiveStaticLevelSidePanel({labels, values, title, subtitl
     );
 }
 
-export function WorkshopFiveLoadingSidePanel({data, panelConfig}: {
+export function WorkshopFiveLoadingSidePanel({data, panelConfig, line = 1}: {
     data: ScadaData;
-    panelConfig: { title: string; subtitle: string; meta: readonly [string, string] }
+    panelConfig: { title: string; subtitle: string; meta: readonly [string, string] };
+    line?: 1 | 2;
 }) {
-    const loading = React.useMemo(() => getWorkshopFiveLoadingValues(data), [data]);
+    const loading = React.useMemo(() => getWorkshopFiveLoadingValues(data, line), [data, line]);
     const option = React.useMemo(() => createWorkshopFiveLoadingBarOption(loading.instant, loading.total), [loading.instant, loading.total]);
     return (
         <WorkshopFiveSidePanelShell title={panelConfig.title} subtitle={panelConfig.subtitle} variant="loading">
@@ -127,9 +131,10 @@ export function WorkshopFiveStaticTemperatureSidePanel({
 const left = WORKSHOP_FIVE_LEFT_PANEL_CONFIG;
 const right = WORKSHOP_FIVE_RIGHT_PANEL_CONFIG;
 
-export function WorkshopFiveLeftFlowPanel() {
+export function WorkshopFiveLeftFlowPanel({data}: { data: ScadaData }) {
+    const flow = React.useMemo(() => getWorkshopFiveFlowValues(data), [data]);
     return <WorkshopFiveFixedFlowSidePanel title={left.flow.title} subtitle={left.flow.subtitle}
-                                           instant={left.flow.instant} total={left.flow.total}/>;
+                                           instant={flow.instant} total={flow.total}/>;
 }
 
 export function WorkshopFiveLeftLevelPanel() {
@@ -148,25 +153,26 @@ export function WorkshopFiveLeftLoadingPanel({data}: { data: ScadaData }) {
     return <WorkshopFiveLoadingSidePanel data={data} panelConfig={left.loading}/>;
 }
 
-export function WorkshopFiveRightTemperaturePanel() {
+export function WorkshopFiveRightTemperaturePanel({data}: { data: ScadaData }) {
+    const values = React.useMemo(() => getWorkshopFiveTemperatureValues(data), [data]);
     return (
         <WorkshopFiveStaticTemperatureSidePanel
             title={right.temperature.title}
             subtitle={right.temperature.subtitle}
             labels={right.temperature.labels}
-            values={right.temperature.values}
+            values={values}
         />
     );
 }
 
-export function WorkshopFiveRightExternalPanel() {
+export function WorkshopFiveRightExternalPanel({data}: { data: ScadaData }) {
+    const values = React.useMemo(() => getWorkshopFiveExternalValues(data), [data]);
     return <WorkshopFiveStaticExternalSidePanel title={right.external.title} subtitle={right.external.subtitle}
-                                                labels={[...right.external.labels]} values={[...right.external.values]}
+                                                labels={[...right.external.labels]} values={values}
                                                 meta={right.external.meta}/>;
 }
 
 export function WorkshopFiveRightLoadingPanel({data}: { data: ScadaData }) {
-    return <WorkshopFiveLoadingSidePanel data={data} panelConfig={right.loading}/>;
+    return <WorkshopFiveLoadingSidePanel data={data} panelConfig={right.loading} line={2}/>;
 }
-
 

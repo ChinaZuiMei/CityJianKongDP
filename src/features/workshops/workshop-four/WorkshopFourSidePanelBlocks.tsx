@@ -4,7 +4,9 @@ import loadingTruckImage from '../../../images/油罐车.png';
 import {
     WORKSHOP_FOUR_LEFT_PANEL_CONFIG,
     WORKSHOP_FOUR_RIGHT_PANEL_CONFIG,
+    getWorkshopFourLeftFlowValues,
     getWorkshopFourLoadingValues,
+    getWorkshopFourRightFlowValues,
 } from './workshopFourSidePanelBindings';
 import {
     createWorkshopFourExternalBarOption,
@@ -97,9 +99,10 @@ export function WorkshopFourStaticExternalSidePanel({labels, values, title, subt
 const left = WORKSHOP_FOUR_LEFT_PANEL_CONFIG;
 const right = WORKSHOP_FOUR_RIGHT_PANEL_CONFIG;
 
-export function WorkshopFourLeftFlowPanel() {
+export function WorkshopFourLeftFlowPanel({data}: { data: ScadaData }) {
+    const flow = React.useMemo(() => getWorkshopFourLeftFlowValues(data), [data]);
     return <WorkshopFourFixedFlowSidePanel title={left.flow.title} subtitle={left.flow.subtitle}
-                                           instant={left.flow.instant} total={left.flow.total}/>;
+                                           instant={flow.instant} total={flow.total}/>;
 }
 
 export function WorkshopFourLeftLevelPanel() {
@@ -112,9 +115,10 @@ export function WorkshopFourLeftLoadingPanel({data}: { data: ScadaData }) {
     return <WorkshopFourLoadingSidePanel data={data} panelConfig={left.loading}/>;
 }
 
-export function WorkshopFourRightFlowPanel() {
+export function WorkshopFourRightFlowPanel({data}: { data: ScadaData }) {
+    const flow = React.useMemo(() => getWorkshopFourRightFlowValues(data), [data]);
     return <WorkshopFourFixedFlowSidePanel title={right.flow.title} subtitle={right.flow.subtitle}
-                                           instant={right.flow.instant} total={right.flow.total}/>;
+                                           instant={flow.instant} total={flow.total}/>;
 }
 
 export function WorkshopFourRightExternalPanel() {

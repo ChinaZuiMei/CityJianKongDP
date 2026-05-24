@@ -12,7 +12,7 @@ import './WorkshopFiveSidePanels.css';
 export function WorkshopFiveLeftPanels({data}: { data: ScadaData }) {
     return (
         <>
-            <WorkshopFiveLeftFlowPanel/>
+            <WorkshopFiveLeftFlowPanel data={data}/>
             <WorkshopFiveLeftLevelPanel/>
             <WorkshopFiveLeftLoadingPanel data={data}/>
         </>
@@ -22,8 +22,8 @@ export function WorkshopFiveLeftPanels({data}: { data: ScadaData }) {
 export function WorkshopFiveRightPanels({data}: { data: ScadaData }) {
     return (
         <>
-            <WorkshopFiveRightTemperaturePanel/>
-            <WorkshopFiveRightExternalPanel/>
+            <WorkshopFiveRightTemperaturePanel data={data}/>
+            <WorkshopFiveRightExternalPanel data={data}/>
             <WorkshopFiveRightLoadingPanel data={data}/>
         </>
     );

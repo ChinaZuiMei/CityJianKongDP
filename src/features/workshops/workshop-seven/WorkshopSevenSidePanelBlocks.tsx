@@ -2,9 +2,12 @@ import React from 'react';
 import type {ScadaData} from '../../dashboard/model/types';
 import loadingTruckImage from '../../../images/油罐车.png';
 import {
+    getWorkshopSevenExternalValues,
+    getWorkshopSevenFlowValues,
     WORKSHOP_SEVEN_LEFT_PANEL_CONFIG,
     WORKSHOP_SEVEN_RIGHT_PANEL_CONFIG,
     getWorkshopSevenLoadingValues,
+    getWorkshopSevenTemperatureValues,
 } from './workshopSevenSidePanelBindings';
 import {
     createWorkshopSevenExternalBarOption,
@@ -127,9 +130,10 @@ export function WorkshopSevenStaticTemperatureSidePanel({
 const left = WORKSHOP_SEVEN_LEFT_PANEL_CONFIG;
 const right = WORKSHOP_SEVEN_RIGHT_PANEL_CONFIG;
 
-export function WorkshopSevenLeftFlowPanel() {
+export function WorkshopSevenLeftFlowPanel({data}: { data: ScadaData }) {
+    const flow = React.useMemo(() => getWorkshopSevenFlowValues(data), [data]);
     return <WorkshopSevenFixedFlowSidePanel title={left.flow.title} subtitle={left.flow.subtitle}
-                                            instant={left.flow.instant} total={left.flow.total}/>;
+                                            instant={flow.instant} total={flow.total}/>;
 }
 
 export function WorkshopSevenLeftLevelPanel() {
@@ -148,25 +152,26 @@ export function WorkshopSevenLeftLoadingPanel({data}: { data: ScadaData }) {
     return <WorkshopSevenLoadingSidePanel data={data} panelConfig={left.loading}/>;
 }
 
-export function WorkshopSevenRightTemperaturePanel() {
+export function WorkshopSevenRightTemperaturePanel({data}: { data: ScadaData }) {
+    const values = React.useMemo(() => getWorkshopSevenTemperatureValues(data), [data]);
     return (
         <WorkshopSevenStaticTemperatureSidePanel
             title={right.temperature.title}
             subtitle={right.temperature.subtitle}
             labels={right.temperature.labels}
-            values={right.temperature.values}
+            values={values}
         />
     );
 }
 
-export function WorkshopSevenRightExternalPanel() {
+export function WorkshopSevenRightExternalPanel({data}: { data: ScadaData }) {
+    const values = React.useMemo(() => getWorkshopSevenExternalValues(data), [data]);
     return <WorkshopSevenStaticExternalSidePanel title={right.external.title} subtitle={right.external.subtitle}
-                                                 labels={[...right.external.labels]} values={[...right.external.values]}
+                                                 labels={[...right.external.labels]} values={values}
                                                  meta={right.external.meta}/>;
 }
 
 export function WorkshopSevenRightLoadingPanel({data}: { data: ScadaData }) {
     return <WorkshopSevenLoadingSidePanel data={data} panelConfig={right.loading}/>;
 }
-
 

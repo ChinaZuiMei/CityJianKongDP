@@ -4,12 +4,13 @@ import {AlarmPanel, ScrollDashboard} from '../dashboard';
 import {WorkshopSevenLeftPanels, WorkshopSevenRightPanels} from './workshop-seven';
 import type {WorkshopRuntimeData} from './types';
 import tankImage from '../../mingfanImg/罐子.png';
+import {formatMetricValue} from '../../utils/formatMetricValue';
 
 type WorkshopSevenTank = {
     id: string;
-    pressure: string;
-    temperature: string;
-    current: string;
+    pressure: number;
+    temperature: number;
+    current: number;
 };
 
 type WorkshopRegionHeader = {
@@ -17,29 +18,6 @@ type WorkshopRegionHeader = {
     title: string;
     subtitle: string;
 };
-
-const tankGroups: WorkshopSevenTank[][] = [
-    [
-        {id: 'F0101A', pressure: '0.00 Mpa', temperature: '0.0°C', current: '0.0A'},
-        {id: 'F0101F', pressure: '0.28 Mpa', temperature: '140.5°C', current: '0.0A'},
-    ],
-    [
-        {id: 'F0101B', pressure: '-0.20 Mpa', temperature: '0.0°C', current: '0.0A'},
-        {id: 'F0101G', pressure: '0.29 Mpa', temperature: '142.3°C', current: '9.4A'},
-    ],
-    [
-        {id: 'F0101C', pressure: '-0.20 Mpa', temperature: '0.0°C', current: '0.0A'},
-        {id: 'F0101H', pressure: '0.27 Mpa', temperature: '0.0°C', current: '0.0A'},
-    ],
-    [
-        {id: 'F0101D', pressure: '0.28 Mpa', temperature: '133.0°C', current: '9.4A'},
-        {id: 'F0101I', pressure: '0.28 Mpa', temperature: '145.9°C', current: '0.0A'},
-    ],
-    [
-        {id: 'F0101E', pressure: '-0.20 Mpa', temperature: '0.0°C', current: '0.0A'},
-        {id: 'F0101J', pressure: '-0.20 Mpa', temperature: '0.0°C', current: '0.0A'},
-    ],
-];
 
 export function WorkshopSevenView({
                                       scadaData,
@@ -57,6 +35,79 @@ export function WorkshopSevenView({
     const [rightPanelCollapsed, setRightPanelCollapsed] = React.useState(false);
     const [activeTankGroupIndex, setActiveTankGroupIndex] = React.useState(0);
     const [tankGroupDirection, setTankGroupDirection] = React.useState(1);
+
+    const tankGroups = React.useMemo<WorkshopSevenTank[][]>(() => ([
+        [
+            {
+                id: 'F0101A',
+                pressure: scadaData.w7_reactor1_pressure,
+                temperature: scadaData.w7_reactor1_temp,
+                current: scadaData.w7_reactor1_current
+            },
+            {
+                id: 'F0101F',
+                pressure: scadaData.w7_reactor6_pressure,
+                temperature: scadaData.w7_reactor6_temp,
+                current: scadaData.w7_reactor6_current
+            },
+        ],
+        [
+            {
+                id: 'F0101B',
+                pressure: scadaData.w7_reactor2_pressure,
+                temperature: scadaData.w7_reactor2_temp,
+                current: scadaData.w7_reactor2_current
+            },
+            {
+                id: 'F0101G',
+                pressure: scadaData.w7_reactor7_pressure,
+                temperature: scadaData.w7_reactor7_temp,
+                current: scadaData.w7_reactor7_current
+            },
+        ],
+        [
+            {
+                id: 'F0101C',
+                pressure: scadaData.w7_reactor3_pressure,
+                temperature: scadaData.w7_reactor3_temp,
+                current: scadaData.w7_reactor3_current
+            },
+            {
+                id: 'F0101H',
+                pressure: scadaData.w7_reactor8_pressure,
+                temperature: scadaData.w7_reactor8_temp,
+                current: scadaData.w7_reactor8_current
+            },
+        ],
+        [
+            {
+                id: 'F0101D',
+                pressure: scadaData.w7_reactor4_pressure,
+                temperature: scadaData.w7_reactor4_temp,
+                current: scadaData.w7_reactor4_current
+            },
+            {
+                id: 'F0101I',
+                pressure: scadaData.w7_reactor9_pressure,
+                temperature: scadaData.w7_reactor9_temp,
+                current: scadaData.w7_reactor9_current
+            },
+        ],
+        [
+            {
+                id: 'F0101E',
+                pressure: scadaData.w7_reactor5_pressure,
+                temperature: scadaData.w7_reactor5_temp,
+                current: scadaData.w7_reactor5_current
+            },
+            {
+                id: 'F0101J',
+                pressure: scadaData.w7_reactor10_pressure,
+                temperature: scadaData.w7_reactor10_temp,
+                current: scadaData.w7_reactor10_current
+            },
+        ],
+    ]), [scadaData]);
 
     React.useEffect(() => {
         if (tankGroups.length <= 1) return undefined;
@@ -77,7 +128,7 @@ export function WorkshopSevenView({
         }, 3000);
 
         return () => window.clearInterval(timer);
-    }, [tankGroupDirection]);
+    }, [tankGroupDirection, tankGroups.length]);
 
     const reversedTankGroups = [...tankGroups].reverse();
     const tankTrackIndex = tankGroups.length - 1 - activeTankGroupIndex;
@@ -143,9 +194,9 @@ export function WorkshopSevenView({
                                                 <img src={tankImage} alt={tank.id}
                                                      className="workshop-seven-tank-card__image" draggable="false"/>
                                                 <div className="workshop-seven-tank-card__metrics">
-                                                    <span>{tank.pressure}</span>
-                                                    <span>{tank.temperature}</span>
-                                                    <span>{tank.current}</span>
+                                                    <span>{formatMetricValue(tank.pressure)} Mpa</span>
+                                                    <span>{formatMetricValue(tank.temperature)}°C</span>
+                                                    <span>{formatMetricValue(tank.current)} A</span>
                                                 </div>
                                             </article>
                                         ))}

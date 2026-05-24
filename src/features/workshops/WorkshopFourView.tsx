@@ -5,6 +5,7 @@ import {WorkshopFourLeftPanels, WorkshopFourRightPanels} from './workshop-four';
 import type {WorkshopRuntimeData} from './types';
 import tankImage from '../../mingfanImg/罐子.png';
 import shipImage from '../../mingfanImg/chaungjian.png';
+import {formatMetricValue} from '../../utils/formatMetricValue';
 
 const regionHeaders = [
     {id: 'main-1', title: '主画面-区域1', subtitle: 'MAIN SCREEN - AREA 1', alarmRegionId: 'main' as const},
@@ -12,63 +13,34 @@ const regionHeaders = [
     {id: 'output', title: '产量区域', subtitle: 'OUTPUT AREA'},
 ];
 
-const mainTankGroups = [
-    [
-        {id: 'FO101A', current: '0.0 A', temperature: '66.0°C', pressure: '0.00 Mpa'},
-        {id: 'FO101B', current: '0.0 A', temperature: '38.6°C', pressure: '0.00 Mpa'},
-        {id: 'FO101C', current: '0.0 A', temperature: '39.2°C', pressure: '-0.00 Mpa'},
-    ],
-    [
-        {id: 'FO101D', current: '0.0 A', temperature: '40.8°C', pressure: '0.00 Mpa'},
-        {id: 'FO101E', current: '0.0 A', temperature: '48.6°C', pressure: '-0.00 Mpa'},
-        {id: 'FO101F', current: '0.0 A', temperature: '33.5°C', pressure: '-0.00 Mpa'},
-    ],
-];
-
-const productionGroups = [
-    {id: 'output-1', title: '产线1包装统计', quantity: '3896 P'},
-];
-
-function WorkshopFourTankCard({
-                                  id,
-                                  current,
-                                  temperature,
-                                  pressure,
-                              }: {
+type WorkshopFourTankMetric = {
     id: string;
-    current: string;
-    temperature: string;
-    pressure: string;
-}) {
+    current: number;
+    temperature: number;
+    pressure: number;
+};
+
+function WorkshopFourTankCard({id, current, temperature, pressure}: WorkshopFourTankMetric) {
     return (
         <article className="workshop-five-tank-card">
             <img src={tankImage} alt={id} className="workshop-five-tank-card__image" draggable="false"/>
             <div className="workshop-five-tank-card__code">{id}</div>
             <div className="workshop-five-tank-card__metrics">
-                <div className="workshop-five-tank-card__metric">{current}</div>
-                <div className="workshop-five-tank-card__metric">{temperature}</div>
-                <div className="workshop-five-tank-card__metric">{pressure}</div>
+                <div className="workshop-five-tank-card__metric">{formatMetricValue(current)} A</div>
+                <div className="workshop-five-tank-card__metric">{formatMetricValue(temperature)}°C</div>
+                <div className="workshop-five-tank-card__metric">{formatMetricValue(pressure)} Mpa</div>
             </div>
         </article>
     );
 }
 
-function WorkshopFourMainScreen({
-                                    tanks,
-                                }: {
-    tanks: typeof mainTankGroups[number];
-}) {
+function WorkshopFourMainScreen({tanks}: { tanks: WorkshopFourTankMetric[] }) {
     return (
         <section className="workshop-five-screen" aria-label="聚铝新厂喷雾干燥主画面">
             <div className="workshop-five-screen__tank-grid">
                 {tanks.map((tank) => (
                     <div key={tank.id} className="workshop-five-screen__tank-slot">
-                        <WorkshopFourTankCard
-                            id={tank.id}
-                            current={tank.current}
-                            temperature={tank.temperature}
-                            pressure={tank.pressure}
-                        />
+                        <WorkshopFourTankCard {...tank} />
                     </div>
                 ))}
             </div>
@@ -76,21 +48,15 @@ function WorkshopFourMainScreen({
     );
 }
 
-function WorkshopFourOutputScreen({
-                                      title,
-                                      quantity,
-                                  }: {
-    title: string;
-    quantity: string;
-}) {
+function WorkshopFourOutputScreen({quantity}: { quantity: number }) {
     return (
-        <section className="workshop-five-output" aria-label={title}>
+        <section className="workshop-five-output" aria-label="喷雾干燥包装统计">
             <div className="workshop-five-output__meta">
-                <div className="workshop-five-output__info-box">{title}</div>
-                <div className="workshop-five-output__info-box">当前数量: {quantity}</div>
+                <div className="workshop-five-output__info-box">产线1包装统计</div>
+                <div className="workshop-five-output__info-box">当前数量: {formatMetricValue(quantity)} P</div>
             </div>
             <div className="workshop-five-output__ship-wrap">
-                <img src={shipImage} alt={title} className="workshop-five-output__ship" draggable="false"/>
+                <img src={shipImage} alt="产线1包装统计" className="workshop-five-output__ship" draggable="false"/>
             </div>
         </section>
     );
@@ -99,24 +65,59 @@ function WorkshopFourOutputScreen({
 function WorkshopFourBody({
                               activeRegionIndex,
                               onActiveRegionIndexChange,
+                              scadaData,
                           }: {
     activeRegionIndex: number;
     onActiveRegionIndexChange: (index: number) => void;
+    scadaData: WorkshopRuntimeData['scadaData'];
 }) {
+    const mainTankGroups = React.useMemo<WorkshopFourTankMetric[][]>(() => ([
+        [
+            {
+                id: 'FO101A',
+                current: scadaData.w4_reactor1_current,
+                temperature: scadaData.w4_reactor1_temp,
+                pressure: scadaData.w4_reactor1_pressure
+            },
+            {
+                id: 'FO101B',
+                current: scadaData.w4_reactor2_current,
+                temperature: scadaData.w4_reactor2_temp,
+                pressure: scadaData.w4_reactor2_pressure
+            },
+            {
+                id: 'FO101C',
+                current: scadaData.w4_reactor3_current,
+                temperature: scadaData.w4_reactor3_temp,
+                pressure: scadaData.w4_reactor3_pressure
+            },
+        ],
+        [
+            {
+                id: 'FO101D',
+                current: scadaData.w4_reactor4_current,
+                temperature: scadaData.w4_reactor4_temp,
+                pressure: scadaData.w4_reactor4_pressure
+            },
+            {
+                id: 'FO101E',
+                current: scadaData.w4_reactor5_current,
+                temperature: scadaData.w4_reactor5_temp,
+                pressure: scadaData.w4_reactor5_pressure
+            },
+            {
+                id: 'FO101F',
+                current: scadaData.w4_reactor6_current,
+                temperature: scadaData.w4_reactor6_temp,
+                pressure: scadaData.w4_reactor6_pressure
+            },
+        ],
+    ]), [scadaData]);
+
     const slides = [
-        {
-            id: 'main-1',
-            content: <WorkshopFourMainScreen tanks={mainTankGroups[0]}/>,
-        },
-        {
-            id: 'main-2',
-            content: <WorkshopFourMainScreen tanks={mainTankGroups[1]}/>,
-        },
-        {
-            id: 'output',
-            content: <WorkshopFourOutputScreen title={productionGroups[0].title}
-                                               quantity={productionGroups[0].quantity}/>,
-        },
+        {id: 'main-1', content: <WorkshopFourMainScreen tanks={mainTankGroups[0]}/>},
+        {id: 'main-2', content: <WorkshopFourMainScreen tanks={mainTankGroups[1]}/>},
+        {id: 'output', content: <WorkshopFourOutputScreen quantity={scadaData.w4_output_packaging}/>},
     ];
 
     const reversedSlides = [...slides].reverse();
@@ -204,8 +205,11 @@ export function WorkshopFourView({
                     activeRegionIndex={activeRegionIndex}
                     onActiveRegionIndexChange={setActiveRegionIndex}
                 />
-                <WorkshopFourBody activeRegionIndex={activeRegionIndex}
-                                  onActiveRegionIndexChange={setActiveRegionIndex}/>
+                <WorkshopFourBody
+                    activeRegionIndex={activeRegionIndex}
+                    onActiveRegionIndexChange={setActiveRegionIndex}
+                    scadaData={scadaData}
+                />
             </main>
         </>
     );

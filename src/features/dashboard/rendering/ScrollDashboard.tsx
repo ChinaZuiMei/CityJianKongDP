@@ -5,7 +5,7 @@ import {ExternalEquipmentScreen} from '../screens/ExternalEquipmentScreen';
 import {MainScreen} from '../screens/MainScreen';
 import {TankAreaScreen} from '../screens/TankAreaScreen';
 
-type RegionId = 'main' | 'tanks' | 'oldPlant' | 'drum';
+type RegionId = 'main' | 'tanks' | 'oldPlant' | 'drum' | 'output' | string;
 
 type RegionAlarm = {
     key: string;
@@ -71,6 +71,7 @@ export const ScrollDashboard = ({
                                     headerRegions: customHeaderRegions,
                                     activeRegionIndex: controlledActiveRegionIndex,
                                     onActiveRegionIndexChange,
+                                    resolveAlarmRegion,
                                 }: {
     data: ScadaData;
     alarmData: AlarmData;
@@ -81,6 +82,7 @@ export const ScrollDashboard = ({
     headerRegions?: HeaderRegion[];
     activeRegionIndex?: number;
     onActiveRegionIndexChange?: (index: number) => void;
+    resolveAlarmRegion?: (alarmName: string) => RegionId | null;
 }) => {
     const outerClassName = sidePanelPreviewEnabled ? 'pl-[420px] pr-[420px]' : '';
     const scale = 0.92;
@@ -130,30 +132,36 @@ export const ScrollDashboard = ({
         },
     ]), [alarmData, data]);
 
+    const alarmRegionIds = useMemo(() => {
+        if (resolveAlarmRegion && customHeaderRegions?.length) {
+            const ids = customHeaderRegions
+                .map((region) => region.alarmRegionId)
+                .filter((id): id is RegionId => Boolean(id));
+            return [...new Set(ids)];
+        }
+        return ['main', 'tanks', 'oldPlant', 'drum'] as RegionId[];
+    }, [customHeaderRegions, resolveAlarmRegion]);
+
     const alarmsByRegion = useMemo(() => {
-        const grouped: Record<RegionId, RegionAlarm[]> = {
-            main: [],
-            tanks: [],
-            oldPlant: [],
-            drum: [],
-        };
+        const grouped = Object.fromEntries(alarmRegionIds.map((id) => [id, [] as RegionAlarm[]])) as Record<RegionId, RegionAlarm[]>;
 
         Object.entries(alarmData).forEach(([alarmName, isActive]) => {
             if (!isActive) return;
-            const regionId = getRegionForAlarm(alarmName);
-            if (!regionId) return;
+            const regionId = resolveAlarmRegion?.(alarmName) ?? getRegionForAlarm(alarmName);
+            if (!regionId || !grouped[regionId]) return;
 
             const mapping = ALARM_MAPPING[alarmName];
+            const headerRegion = customHeaderRegions?.find((region) => region.alarmRegionId === regionId);
             grouped[regionId].push({
                 key: alarmName,
                 title: formatAlarmDisplayName(alarmName),
-                label: mapping?.label ?? regions.find((region) => region.id === regionId)?.title ?? '未知设备',
+                label: mapping?.label ?? headerRegion?.title ?? regions.find((region) => region.id === regionId)?.title ?? '未知设备',
                 level: alarmName.includes('高') ? '高优先' : alarmName.includes('低') ? '低优先' : '活动中',
             });
         });
 
         return grouped;
-    }, [alarmData, regions]);
+    }, [alarmData, alarmRegionIds, customHeaderRegions, regions, resolveAlarmRegion]);
 
     const defaultHeaderRegions = useMemo<HeaderRegion[]>(
         () => regions.map((region) => ({

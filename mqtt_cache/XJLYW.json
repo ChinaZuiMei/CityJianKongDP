@@ -1,8 +1,8 @@
 {
   "workshopId": "XJLYW",
   "workshopName": "新聚铝液位",
-  "timestamp": "2026-05-24 08:46:21",
-  "timestampMs": 1779583581876,
+  "timestamp": "2026-05-24 10:49:27",
+  "timestampMs": 1779590967830,
   "data": {
     "1#盐酸罐液位低报警": {
       "value": false,
@@ -77,39 +77,39 @@
       "unit": null
     },
     "1#盐酸罐液位值": {
-      "value": 6.473,
+      "value": 6.333,
       "unit": "M"
     },
     "2#盐酸罐液位值": {
-      "value": 6.185,
+      "value": 6.181,
       "unit": "M"
     },
     "3#盐酸罐液位值": {
-      "value": 3.562,
+      "value": 4.14,
       "unit": "M"
     },
     "4#盐酸罐液位值": {
-      "value": 6.549,
+      "value": 6.592,
       "unit": "M"
     },
     "5#盐酸罐液位值": {
-      "value": 6.662,
+      "value": 6.399,
       "unit": "M"
     },
     "1#泄漏检测值": {
-      "value": -0.046,
+      "value": -0.056,
       "unit": "ppm"
     },
     "2#泄漏检测值": {
-      "value": -0.02,
+      "value": -0.023,
       "unit": "ppm"
     },
     "3#泄漏检测值": {
-      "value": 0.023,
+      "value": 0.02,
       "unit": "ppm"
     },
     "4#泄漏检测值": {
-      "value": -0.02,
+      "value": -0.023,
       "unit": "ppm"
     },
     "1#盐酸罐液位低报警设定值": {

@@ -2,9 +2,13 @@ import React from 'react';
 import type {ScadaData} from '../../dashboard/model/types';
 import loadingTruckImage from '../../../images/油罐车.png';
 import {
+    getWorkshopSixExternalValues,
+    getWorkshopSixFlowValues,
+    getWorkshopSixLevelValues,
     WORKSHOP_SIX_LEFT_PANEL_CONFIG,
     WORKSHOP_SIX_RIGHT_PANEL_CONFIG,
     getWorkshopSixLoadingValues,
+    getWorkshopSixTemperatureValues,
 } from './workshopSixSidePanelBindings';
 import {
     createWorkshopSixExternalBarOption,
@@ -50,11 +54,12 @@ export function WorkshopSixStaticLevelSidePanel({labels, values, title, subtitle
     );
 }
 
-export function WorkshopSixLoadingSidePanel({data, panelConfig}: {
+export function WorkshopSixLoadingSidePanel({data, panelConfig, mode = 'loading'}: {
     data: ScadaData;
-    panelConfig: { title: string; subtitle: string; meta: readonly [string, string] }
+    panelConfig: { title: string; subtitle: string; meta: readonly [string, string] };
+    mode?: 'loading' | 'batch';
 }) {
-    const loading = React.useMemo(() => getWorkshopSixLoadingValues(data), [data]);
+    const loading = React.useMemo(() => getWorkshopSixLoadingValues(data, mode), [data, mode]);
     const option = React.useMemo(() => createWorkshopSixLoadingBarOption(loading.instant, loading.total), [loading.instant, loading.total]);
     return (
         <WorkshopSixSidePanelShell title={panelConfig.title} subtitle={panelConfig.subtitle} variant="loading">
@@ -127,18 +132,20 @@ export function WorkshopSixStaticTemperatureSidePanel({
 const left = WORKSHOP_SIX_LEFT_PANEL_CONFIG;
 const right = WORKSHOP_SIX_RIGHT_PANEL_CONFIG;
 
-export function WorkshopSixLeftFlowPanel() {
+export function WorkshopSixLeftFlowPanel({data}: { data: ScadaData }) {
+    const flow = React.useMemo(() => getWorkshopSixFlowValues(data), [data]);
     return <WorkshopSixFixedFlowSidePanel title={left.flow.title} subtitle={left.flow.subtitle}
-                                          instant={left.flow.instant} total={left.flow.total}/>;
+                                          instant={flow.instant} total={flow.total}/>;
 }
 
-export function WorkshopSixLeftLevelPanel() {
+export function WorkshopSixLeftLevelPanel({data}: { data: ScadaData }) {
+    const values = React.useMemo(() => getWorkshopSixLevelValues(data), [data]);
     return (
         <WorkshopSixStaticLevelSidePanel
             title={left.level.title}
             subtitle={left.level.subtitle}
             labels={[...left.level.labels]}
-            values={[...left.level.values]}
+            values={values}
             meta={['聚合硫酸铁液位', '单位 / m']}
         />
     );
@@ -148,24 +155,25 @@ export function WorkshopSixLeftLoadingPanel({data}: { data: ScadaData }) {
     return <WorkshopSixLoadingSidePanel data={data} panelConfig={left.loading}/>;
 }
 
-export function WorkshopSixRightTemperaturePanel() {
+export function WorkshopSixRightTemperaturePanel({data}: { data: ScadaData }) {
+    const values = React.useMemo(() => getWorkshopSixTemperatureValues(data), [data]);
     return (
         <WorkshopSixStaticTemperatureSidePanel
             title={right.temperature.title}
             subtitle={right.temperature.subtitle}
             labels={right.temperature.labels}
-            values={right.temperature.values}
+            values={values}
         />
     );
 }
 
-export function WorkshopSixRightExternalPanel() {
+export function WorkshopSixRightExternalPanel({data}: { data: ScadaData }) {
+    const values = React.useMemo(() => getWorkshopSixExternalValues(data), [data]);
     return <WorkshopSixStaticExternalSidePanel title={right.external.title} subtitle={right.external.subtitle}
-                                               labels={[...right.external.labels]} values={[...right.external.values]}
+                                               labels={[...right.external.labels]} values={values}
                                                meta={right.external.meta}/>;
 }
 
 export function WorkshopSixRightLoadingPanel({data}: { data: ScadaData }) {
-    return <WorkshopSixLoadingSidePanel data={data} panelConfig={right.loading}/>;
+    return <WorkshopSixLoadingSidePanel data={data} panelConfig={right.loading} mode="batch"/>;
 }
-
