@@ -134,13 +134,8 @@ export function useDashboardRuntime() {
     }, []);
 
     const fetchWorkshopMqtt = useCallback(async (workshopId: string, mqttPolicyEndpoint: string) => {
-        const endpoint = `${mqttPolicyEndpoint}?workshopId=${encodeURIComponent(workshopId)}&_t=${Date.now()}`;
-        const response = await fetch(endpoint, {cache: 'no-store'});
-        const result = (await response.json()) as MqttApiResponse;
-        const payloadEnvelope = result.data;
-        const payload = payloadEnvelope?.data;
-
-        if (result.success === false || !payload) {
+        const workshopDefinition = workshops.find((workshop) => workshop.id === workshopId);
+        const markDisconnected = () => {
             setWorkshopSnapshots((previous) => ({
                 ...previous,
                 [workshopId]: {
@@ -148,28 +143,52 @@ export function useDashboardRuntime() {
                     connected: false,
                 },
             }));
-            return;
-        }
+        };
 
-        setWorkshopSnapshots((previous) => {
-            const last = previous[workshopId] ?? EMPTY_SNAPSHOT;
-            const timestampMs = payloadEnvelope?.timestampMs;
-
-            if (last.lastUpdatedAt === timestampMs && last.connected) {
-                return previous;
+        try {
+            const endpoint = `${mqttPolicyEndpoint}?workshopId=${encodeURIComponent(workshopId)}&_t=${Date.now()}`;
+            const response = await fetch(endpoint, {cache: 'no-store'});
+            if (!response.ok) {
+                markDisconnected();
+                return;
             }
 
-            return {
-                ...previous,
-                [workshopId]: applyMqttPayload(
-                    workshopId,
-                    payload,
-                    last,
-                    timestampMs,
-                ),
-            };
-        });
-    }, []);
+            const result = (await response.json()) as MqttApiResponse;
+            const payloadEnvelope = result.data;
+            const payload = payloadEnvelope?.data;
+
+            if (
+                result.success === false
+                || !payload
+                || !matchesWorkshopMeta(workshopDefinition, payloadEnvelope?.workshopId, payloadEnvelope?.workshopName)
+            ) {
+                markDisconnected();
+                return;
+            }
+
+            setWorkshopSnapshots((previous) => {
+                const last = previous[workshopId] ?? EMPTY_SNAPSHOT;
+                const timestampMs = payloadEnvelope?.timestampMs;
+
+                if (last.lastUpdatedAt === timestampMs && last.connected) {
+                    return previous;
+                }
+
+                return {
+                    ...previous,
+                    [workshopId]: applyMqttPayload(
+                        workshopId,
+                        payload,
+                        last,
+                        timestampMs,
+                    ),
+                };
+            });
+        } catch (error) {
+            console.error(`获取 ${workshopId} MQTT 数据失败:`, error);
+            markDisconnected();
+        }
+    }, [workshops]);
 
     useEffect(() => {
         const mqttPolicy = getRefreshPolicy(dataMode === 'mock' ? 'mqtt-mock' : 'mqtt-live', dataMode);

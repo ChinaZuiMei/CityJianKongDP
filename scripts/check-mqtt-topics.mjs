@@ -1,12 +1,13 @@
+import '../loadEnv.ts';
 import mqtt from 'mqtt';
-import {WORKSHOP_MQTT_TOPICS} from '../mqttTopics.config.ts';
+import {getWorkshopMqttTopics} from '../mqttTopics.config.ts';
 
 const mqttUrl = process.env.MQTT_URL || 'ws://47.115.212.129:8083/mqtt';
 const mqttUsername = process.env.MQTT_USERNAME || 'zdzn';
 const mqttPassword = process.env.MQTT_PASSWORD || 'zdzn@1234';
 const waitMs = Number(process.env.MQTT_CHECK_WAIT_MS || 12000);
 
-const topics = WORKSHOP_MQTT_TOPICS.map((item) => ({
+const topics = getWorkshopMqttTopics().map((item) => ({
     workshopName: item.workshopName,
     topic: item.topic,
 }));

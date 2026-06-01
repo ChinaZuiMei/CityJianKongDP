@@ -24,6 +24,28 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const appEnv = loadedAppEnv;
 
+/** 生产环境默认不连库；本地开发默认连库。显式 DB_ENABLE=true/false 可覆盖 */
+function resolveDbEnabled(): boolean {
+    if (process.env.DB_ENABLE === 'true') return true;
+    if (process.env.DB_ENABLE === 'false') return false;
+    return process.env.NODE_ENV !== 'production';
+}
+
+const dbEnabled = resolveDbEnabled();
+
+/** 生产环境静态资源目录：优先 dist/，否则使用项目根（线上常把 dist 内容直接放到 web/） */
+function resolveStaticRoot(): string {
+    const cwd = process.cwd();
+    const distDir = path.join(cwd, 'dist');
+    if (fs.existsSync(path.join(distDir, 'index.html'))) {
+        return distDir;
+    }
+    if (fs.existsSync(path.join(cwd, 'index.html'))) {
+        return cwd;
+    }
+    return distDir;
+}
+
 function payloadMatchesWorkshop(
     payload: { workshopId?: string; workshopName?: string },
     workshopEntry: { topicCode: string; workshopName: string },
@@ -52,11 +74,15 @@ async function startServer() {
   app.use(cors());
   app.use(express.json());
 
-  // 初始化数据库
-  try {
-    await initDatabase();
-  } catch (error) {
-    console.error('数据库初始化失败，请检查配置');
+    // 数据库（大屏实时监控可关闭：.env.local 设置 DB_ENABLE=false）
+    if (dbEnabled) {
+        try {
+            await initDatabase();
+        } catch (error) {
+            console.error('数据库初始化失败，请检查配置');
+        }
+    } else {
+        console.log(`ℹ️  数据库已关闭（NODE_ENV=${process.env.NODE_ENV ?? '未设置'}，生产默认不连库；需入库请设 DB_ENABLE=true）`);
   }
 
   // 连接 MQTT 并保存数据
@@ -104,15 +130,15 @@ async function startServer() {
             console.log(`💾 车间缓存: mqtt_cache/${workshopEntry.topicCode}.json`);
         }
 
-      // 保存传感器数据到数据库
-      await saveSensorData(payload);
-      console.log('✅ 传感器数据已保存到数据库');
+        // 可选：写入数据库（DB_ENABLE=false 时跳过）
+        if (dbEnabled) {
+            await saveSensorData(payload);
+            console.log('✅ 传感器数据已保存到数据库');
 
-      // 保存报警记录到数据库
-      const alarmCount = await saveAlarmRecords(payload);
-
-      if (alarmCount > 0) {
-        console.log(`⚠️  检测到 ${alarmCount} 个活动报警`);
+            const alarmCount = await saveAlarmRecords(payload);
+            if (alarmCount > 0) {
+                console.log(`⚠️  检测到 ${alarmCount} 个活动报警（已入库）`);
+            }
       }
 
       console.log('-----------------------------------');
@@ -123,11 +149,21 @@ async function startServer() {
 
   // API 路由
   app.get("/api/health", (req, res) => {
-    res.json({ status: "ok", message: "Industrial SCADA Backend Ready" });
+      res.json({
+          status: "ok",
+          message: "Industrial SCADA Backend Ready",
+          apiVersion: "2026-06-01-workshop-cache-v2",
+          features: ["per-workshop-mqtt-cache", "workshop-id-guard"],
+          database: dbEnabled ? "enabled" : "disabled",
+      });
   });
 
   // 获取最新传感器数据
   app.get("/api/sensor/latest", async (req, res) => {
+      if (!dbEnabled) {
+          res.json({success: true, data: null});
+          return;
+      }
     try {
       const data = await getLatestSensorData();
       res.json({ success: true, data });
@@ -138,6 +174,10 @@ async function startServer() {
 
   // 获取活动报警列表
   app.get("/api/alarms/active", async (req, res) => {
+      if (!dbEnabled) {
+          res.json({success: true, data: []});
+          return;
+      }
     try {
       const alarms = await getActiveAlarms();
       res.json({ success: true, data: alarms });
@@ -148,6 +188,10 @@ async function startServer() {
 
   // 获取历史数据
   app.get("/api/sensor/history", async (req, res) => {
+      if (!dbEnabled) {
+          res.json({success: true, data: []});
+          return;
+      }
     try {
       const { startTime, endTime, limit } = req.query;
       const parsedLimit = typeof limit === 'string' ? Number(limit) : 100;
@@ -216,10 +260,11 @@ async function startServer() {
     });
     app.use(vite.middlewares);
   } else {
-    const distPath = path.join(process.cwd(), 'dist');
-    app.use(express.static(distPath));
+      const staticRoot = resolveStaticRoot();
+      console.log(`📂 静态资源目录: ${staticRoot}`);
+      app.use(express.static(staticRoot));
     app.get('*', (req, res) => {
-      res.sendFile(path.join(distPath, 'index.html'));
+        res.sendFile(path.join(staticRoot, 'index.html'));
     });
   }
 
@@ -236,7 +281,8 @@ async function startServer() {
       console.log(`🌐 局域网访问: ${networkUrl}`);
     }
     console.log(`📊 API 文档: ${localUrl}/api/health`);
-    console.log(`💾 MQTT 数据文件: mqtt_latest_data.json\n`);
+      console.log(`💾 MQTT 数据文件: mqtt_latest_data.json`);
+      console.log(`🗄️  数据库: ${dbEnabled ? '已启用' : '已关闭（仅 MQTT 缓存）'}\n`);
   });
 
   server.on("error", (error: NodeJS.ErrnoException) => {

@@ -1,16 +1,12 @@
+import '../loadEnv.ts';
 import mqtt from 'mqtt';
 import fs from 'fs';
 import path from 'path';
 import {fileURLToPath} from 'url';
-import dotenv from 'dotenv';
-import {WORKSHOP_MQTT_TOPICS} from '../mqttTopics.config.ts';
+import {getWorkshopMqttTopics} from '../mqttTopics.config.ts';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, '..');
-
-for (const envFile of ['.env', '.env.local', '.env.dev']) {
-    dotenv.config({path: path.join(projectRoot, envFile), override: true});
-}
 
 const mqttUrl = process.env.MQTT_URL || 'ws://47.115.212.129:8083/mqtt';
 const mqttUsername = process.env.MQTT_USERNAME || 'zdzn';
@@ -19,7 +15,7 @@ const waitMs = Number(process.env.MQTT_CAPTURE_WAIT_MS || 120000);
 const outDir = path.resolve(projectRoot, 'docs/mqtt-samples');
 const docPath = path.resolve(projectRoot, 'docs/MQTT各主题数据样例.md');
 
-const configuredTopics = WORKSHOP_MQTT_TOPICS.map((item) => ({
+const configuredTopics = getWorkshopMqttTopics().map((item) => ({
     workshopId: item.workshopId,
     workshopName: item.workshopName,
     topicCode: item.topicCode,
