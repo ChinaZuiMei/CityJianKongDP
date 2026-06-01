@@ -32,75 +32,74 @@ function topicFromEnv(envKey: keyof typeof MQTT_TOPIC_DEFAULTS): string {
     return normalizeMqttTopic(value || MQTT_TOPIC_DEFAULTS[envKey]);
 }
 
-/** 车间 ↔ MQTT 主题完整映射表（共 8 个车间） */
-export const WORKSHOP_MQTT_TOPICS: WorkshopMqttEntry[] = [
+const WORKSHOP_MQTT_DEFINITIONS = [
     {
         workshopId: 'workshop-01',
         workshopName: '聚铝老厂',
         topicCode: 'JL_OLD',
         envKey: 'MQTT_TOPIC_JL_OLD',
-        topic: topicFromEnv('JL_OLD'),
     },
     {
         workshopId: 'workshop-02',
         workshopName: '新聚铝液位',
         topicCode: 'XJLYW',
         envKey: 'MQTT_TOPIC_XJLYW',
-        topic: topicFromEnv('XJLYW'),
     },
     {
         workshopId: 'workshop-03',
         workshopName: '新聚铝反应',
         topicCode: 'XJLFY',
         envKey: 'MQTT_TOPIC_XJLFY',
-        topic: topicFromEnv('XJLFY'),
     },
     {
         workshopId: 'workshop-04',
         workshopName: '聚铝新厂干燥',
         topicCode: 'JLXCGZ',
         envKey: 'MQTT_TOPIC_JLXCGZ',
-        topic: topicFromEnv('JLXCGZ'),
     },
     {
         workshopId: 'workshop-05',
         workshopName: '低铁硫酸铝',
         topicCode: 'DTLSL',
         envKey: 'MQTT_TOPIC_DTLSL',
-        topic: topicFromEnv('DTLSL'),
     },
     {
         workshopId: 'workshop-06',
         workshopName: '聚合硫酸铁',
         topicCode: 'JLLST',
         envKey: 'MQTT_TOPIC_JLLST',
-        topic: topicFromEnv('JLLST'),
     },
     {
         workshopId: 'workshop-07',
         workshopName: '液体硫酸铝',
         topicCode: 'YTLSL',
         envKey: 'MQTT_TOPIC_YTLSL',
-        topic: topicFromEnv('YTLSL'),
     },
     {
         workshopId: 'workshop-08',
         workshopName: '明矾车间',
         topicCode: 'MFCJ',
         envKey: 'MQTT_TOPIC_MFCJ',
-        topic: topicFromEnv('MFCJ'),
     },
-];
+] as const;
+
+/** 车间 ↔ MQTT 主题完整映射表（共 8 个车间，运行时读取 env） */
+export function getWorkshopMqttTopics(): WorkshopMqttEntry[] {
+    return WORKSHOP_MQTT_DEFINITIONS.map((item) => ({
+        ...item,
+        topic: topicFromEnv(item.topicCode),
+    }));
+}
 
 export function resolveMqttTopics(): string[] {
-    return WORKSHOP_MQTT_TOPICS.map((item) => item.topic);
+    return getWorkshopMqttTopics().map((item) => item.topic);
 }
 
 export function findWorkshopByTopic(topic: string): WorkshopMqttEntry | undefined {
     const normalized = normalizeMqttTopic(topic);
-    return WORKSHOP_MQTT_TOPICS.find((item) => normalizeMqttTopic(item.topic) === normalized);
+    return getWorkshopMqttTopics().find((item) => normalizeMqttTopic(item.topic) === normalized);
 }
 
 export function findWorkshopTopic(workshopId: string): string | undefined {
-    return WORKSHOP_MQTT_TOPICS.find((item) => item.workshopId === workshopId)?.topic;
+    return getWorkshopMqttTopics().find((item) => item.workshopId === workshopId)?.topic;
 }

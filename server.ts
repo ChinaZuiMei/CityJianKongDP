@@ -1,3 +1,4 @@
+import "./loadEnv.js";
 import express from "express";
 import { createServer as createViteServer } from "vite";
 import path from "path";
@@ -5,7 +6,6 @@ import { fileURLToPath } from "url";
 import cors from "cors";
 import mqtt from "mqtt";
 import fs from "fs";
-import dotenv from "dotenv";
 import os from "os";
 import {
   initDatabase,
@@ -15,26 +15,14 @@ import {
   getActiveAlarms,
   getHistoryData
 } from "./db.config.js";
-import {findWorkshopByTopic, resolveMqttTopics, WORKSHOP_MQTT_TOPICS} from "./mqttTopics.config.js";
+import {findWorkshopByTopic, getWorkshopMqttTopics, resolveMqttTopics} from "./mqttTopics.config.js";
+import {loadedAppEnv} from "./loadEnv.js";
 
 const mqttCacheDir = path.join(process.cwd(), "mqtt_cache");
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const appEnv = process.env.APP_ENV || "local";
-const envFiles = [
-  ".env",
-  ".env.local",
-  `.env.${appEnv}`,
-  `.env.${appEnv}.local`,
-];
-
-for (const envFile of envFiles) {
-  dotenv.config({
-    path: path.resolve(__dirname, envFile),
-    override: true,
-  });
-}
+const appEnv = loadedAppEnv;
 
 function payloadMatchesWorkshop(
     payload: { workshopId?: string; workshopName?: string },
@@ -83,7 +71,7 @@ async function startServer() {
     console.log(`🌍 当前环境: ${appEnv}`);
     console.log(`🔗 MQTT 地址: ${mqttUrl}`);
       console.log(`📡 MQTT 主题 (${mqttTopics.length}):`);
-      WORKSHOP_MQTT_TOPICS.forEach((item) => console.log(`   - ${item.workshopName}: ${item.topic}`));
+      getWorkshopMqttTopics().forEach((item) => console.log(`   - ${item.workshopName}: ${item.topic}`));
       mqttClient.subscribe(mqttTopics, (err) => {
       if (!err) {
         console.log('✅ 服务器已订阅 MQTT 主题');
@@ -177,7 +165,7 @@ async function startServer() {
     try {
         const workshopId = typeof req.query.workshopId === 'string' ? req.query.workshopId : undefined;
         if (workshopId) {
-            const workshopEntry = WORKSHOP_MQTT_TOPICS.find((item) => item.workshopId === workshopId);
+            const workshopEntry = getWorkshopMqttTopics().find((item) => item.workshopId === workshopId);
             if (!workshopEntry) {
                 res.json({success: false, message: `未知车间: ${workshopId}`});
                 return;
